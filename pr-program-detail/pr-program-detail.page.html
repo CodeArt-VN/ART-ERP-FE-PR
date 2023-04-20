@@ -1,0 +1,116 @@
+<ion-header>
+  <app-detail-toolbar [page]="this"></app-detail-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+  <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">      
+      <div class="row-full shadow full-screen">
+        <ion-toolbar color="primary">
+          <ion-title>Thiết kế chương trình</ion-title>
+        </ion-toolbar>
+        <ion-grid fixed>
+          <form [formGroup]="formGroup">
+              <ion-row >
+                <ion-col size="12" size-xl="12">
+                  <ion-row>
+                    <ion-col size="12" size-xl="6">
+                      <div class="c-control">
+                        <label class="c-label" for="Type" >Type</label>
+                        <input class="c-input" id="Type" type="text" formControlName="Type">
+                      </div>
+                     
+                      <div class="c-control">
+                        <label class="c-label" for="Name" >Tên chương trình</label>
+                        <input (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name">
+                      </div>
+                      <div class="c-control">
+                        <ion-row >
+                          <ion-col size="6" style="padding: 0px !important;">                       
+                                <label class="c-label" for="FromDate" >Bắt đầu</label>
+                                <input class="c-input" id="FromDate" formControlName="FromDate" type="date" >
+                            </ion-col>
+                            <ion-col size="6" style="padding: 0px !important;"> 
+                                <label class="c-label" for="ToDate">Kết thúc</label>
+                                <input class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
+                            </ion-col>
+                        </ion-row>
+                      </div> 
+                      <div class="c-control">
+                        <label class="c-label" for="Status" >Status</label>
+                        <input class="c-input" id="Status" type="text" formControlName="Status">
+                      </div>
+                      <div class="c-control">
+                        <label class="c-label" for="MaxValue" >Max Value</label>
+                        <input class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
+                      </div>
+                      <div class="c-control">
+                        <label class="c-label" for="Value" > Value</label>
+                        <input class="c-input" id="Value" type="text" formControlName="Value">
+                      </div>
+                      
+                     
+                    </ion-col>
+                    <ion-col size="12" size-xl="6">
+                      <div class="c-control">
+                        <label class="c-label" for="NumberOfCoupon" > NumberOfCoupon</label>
+                        <input class="c-input" id="NumberOfCoupon" type="text" formControlName="NumberOfCoupon">
+                      </div>
+                      <div class="c-control">
+                        <label class="c-label" for="MaxUsagePerCustomer" > MaxUsagePerCustomer</label>
+                        <input class="c-input" id="MaxUsagePerCustomer" type="text" formControlName="MaxUsagePerCustomer">
+                      </div>
+                      <ion-list>
+                        <ion-item lines="none" >
+                          <ion-label>Public Program</ion-label>
+                          <ion-toggle formControlName="IsPublic"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsAutoApply</ion-label>
+                          <ion-toggle formControlName="IsAutoApply"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsApplyAllProduct</ion-label>
+                          <ion-toggle formControlName="IsApplyAllProduct"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsApplyAllCustomer</ion-label>
+                          <ion-toggle formControlName="IsApplyAllCustomer"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsByPercent</ion-label>
+                          <ion-toggle formControlName="IsByPercent"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsDiscount</ion-label>
+                          <ion-toggle formControlName="IsDiscount"></ion-toggle>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>IsItemPromotion</ion-label>
+                          <ion-toggle formControlName="IsItemPromotion"></ion-toggle>
+                        </ion-item>
+                      </ion-list>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="c-control">
+                        <div class="c-input clickable" (click)="condition('ITEM')">
+                          <ion-label>Sản phẩm áp dụng</ion-label>
+                          <ion-text class="ion-float-right">Tất cả sản phẩm</ion-text>
+                        </div>                                     
+                      </div>
+                      <div class="c-control">
+                        <div class="c-input clickable" (click)="condition('CONTACT')">
+                          <ion-label>Đối tượng áp dụng</ion-label>
+                          <ion-text class="ion-float-right">Tất cả đối tượng</ion-text>
+                        </div>                                     
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+          </form>
+        </ion-grid>
+      </div>
+  </div>
+</ion-content>

@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{Condition.Title}}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button title="{{'erp.app.components.list-toolbar.add' | translate}}" (click)="addConditionForm()">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+      <ion-button title="{{'erp.app.pages.sale.sale-order.merge.close-modal' | translate}}" (click)="closeModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+  <div class="table-contain">
+    <section class="table">
+      <form [formGroup]="formGroup">
+      <ng-container formArrayName="ConditionForm">                       
+        <div class="row"  *ngFor="let c of ConditionForm.controls; let i=index">
+          <ng-container [formGroup]="c" > 
+              <div class="cell" hidden>
+                <input type="text" formControlName="IDParent" class="c-input">
+              </div>        
+              <div class="cell" [ngClass]="{pl: c.get('IDParent').value != null}">
+                <ng-select appendTo="#promotion-design" formControlName="Attribute" class="c-input"  bindLabel="Name" placeholder="Attribute"></ng-select>
+              </div>
+              <div class="cell">
+                <ng-select appendTo="#promotion-design" formControlName="Operator" class="c-input" bindLabel="name" placeholder="Operator"></ng-select>
+              </div>  
+              <div class="cell">
+                <input type="text" formControlName="Condition" class="c-input" placeholder="Condition">
+              </div>               
+              <div class="ion-float-right">
+                <ion-button (click)="removeConditionForm(i)" fill="outline" slot="end" size="small"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+                <ion-button (click)="addConditionForm(i)" fill="outline" class="ion-float-right" size="small"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+              </div>                                                 
+          </ng-container> 
+        </div>
+      </ng-container>  
+      </form>
+    </section>
+  </div>        
+</ion-content>
+
