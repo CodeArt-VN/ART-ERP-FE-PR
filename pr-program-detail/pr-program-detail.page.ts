@@ -67,7 +67,7 @@ export class PRProgramDetailPage extends PageBase {
       if(Type=="ITEM"){
         title = "Sản phẩm áp dụng";
       }else if(Type=="CONTACT"){
-        title = "Đối tượng áp dụng";
+        title = "Khách hàng áp dụng";
       }
       const modal = await this.modalController.create({
           component: ConditionPage,
@@ -78,7 +78,7 @@ export class PRProgramDetailPage extends PageBase {
             Condition:{
               Type:Type,
               Title:title,    
-              IDProgram:this.item.id,         
+              IDProgram:this.item.Id,         
             }
           }
       });

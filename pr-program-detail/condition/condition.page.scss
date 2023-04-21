@@ -7,3 +7,9 @@
 .pl{
     padding-left: 15px !important;
 }
+.border {
+    margin-left: 3px;
+    margin-right: 3px;
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 10px;
+}
