@@ -14,7 +14,7 @@ import { lib } from 'src/app/services/static/global-functions';
   templateUrl: './pr-program-detail.page.html',
   styleUrls: ['./pr-program-detail.page.scss'],
 })
-export class PRProgramDetailPage extends PageBase {  
+export class PRProgramDetailPage extends PageBase {
   constructor(
     public pageProvider: PR_ProgramProvider,
     public branchProvider: BRA_BranchProvider,
@@ -35,9 +35,9 @@ export class PRProgramDetailPage extends PageBase {
           IDBranch:[this.env.selectedBranch],
           Name:[''],
           Type:[''],
-          Status:[],
-          FromDate: [''],
-          ToDate: [''],
+          Status:[''],
+          FromDate: ['',Validators.required],
+          ToDate: ['',Validators.required],
           IsPublic: [false],
           IsAutoApply: [false],
           IsApplyAllProduct: [false],
@@ -63,6 +63,9 @@ export class PRProgramDetailPage extends PageBase {
       super.loadedData();
     }
     async condition(Type:string) {
+      if(this.id == 0){
+        return false;
+      }
       let title = "";
       if(Type=="ITEM"){
         title = "Sản phẩm áp dụng";

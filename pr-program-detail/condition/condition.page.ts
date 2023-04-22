@@ -19,6 +19,8 @@ export class ConditionPage extends PageBase{
   AttributeOption;
   OperatorOption;
   Count = 0;
+  Data = [];
+  showData = false;
   constructor(
     public pageProvider: PR_ProgramConditionProvider, 
     public itemProvider: WMS_ItemProvider, 
@@ -49,14 +51,16 @@ export class ConditionPage extends PageBase{
     if(this.Condition.Type == "ITEM"){
       this.AttributeOption = [
         {Id:"IDBranch",Name:"Chi nhánh",Type:"select"},
-        {Id:"Keyword",Name:"Từ khóa",Type:"string"},
+        {Id:"Name",Name:"Tên sản phẩm",Type:"string"},
+        {Id:"Code",Name:"Mã sản phẩm",Type:"string"},
         {Id:"IDItemGroup",Name:"Nhóm sản phẩm",Type:"select"},     
       ]
     }
     else{
       this.AttributeOption = [
         {Id:"IDBranch",Name:"Chi nhánh",Type:"select"},
-        {Id:"Keyword",Name:"Từ khóa",Type:"string"},
+        {Id:"Name",Name:"Tên khách hàng",Type:"string"},
+        {Id:"Code",Name:"Mã khách hàng",Type:"string"},
       ]
     }
     this.OperatorOption = [
@@ -178,6 +182,8 @@ export class ConditionPage extends PageBase{
       if(this.Condition.Type == "ITEM"){
         this.itemProvider.read(query).then(result=>{
           this.Count = result['count'];
+          this.Data = result['data'];
+          console.log(this.Data);
         }).catch(err=>{
           console.log(err);
         })
@@ -194,7 +200,7 @@ export class ConditionPage extends PageBase{
   }
   pathQuery():any{
     let query:any = {
-      Take: 100,
+      Take:100,
       Skip: 0,
     };
     this.items.forEach((i:any)=>{

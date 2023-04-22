@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content appScrollbarTheme class="ion-padding">
+<ion-content appScrollbarTheme class="ion-padding" *ngIf="!showData">
   <app-page-message [itemsLength]="ConditionForm.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
   <div id="pr-program" style="position: absolute; z-index: 30005;"></div>
   <div class="table-contain">
@@ -41,14 +41,38 @@
     </section>
   </div>        
   <ng-container *ngIf="items?.length>0">
-    <ion-item lines="none" class="border ion-margin-top" >
+    <ion-item lines="none" class="border ion-margin-top" (click)="showData=!showData">
       <ion-text>Tìm thấy</ion-text>
       <ion-label slot="end">{{Count}} 
         <ion-text *ngIf="Condition.Type=='ITEM'">Sản phẩm</ion-text>
         <ion-text *ngIf="Condition.Type=='CONTACT'">Khách hàng</ion-text>
       </ion-label>
     </ion-item>
-    <ion-button expand="block">Áp dụng</ion-button>
+    
   </ng-container>
 </ion-content>
 
+<ion-content appScrollbarTheme class="header-table" *ngIf="showData">
+	<div *ngIf="Data.length && pageConfig.showSpinner==false">
+    <ion-button expand="block" fill="outline" (click)="showData=!showData">Back</ion-button>
+		<section class="table">
+			<ion-virtual-scroll [items]="Data" approxItemHeight="27px">
+				<ng-container *virtualItem="let i; let itemBounds = bounds; let j = index;">
+					<div class="row" [ngClass]="{odd: j % 2 != 0}" [ngClass]="{selected: i.checked}">				
+						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-id cell">
+							{{i.Id}}
+						</div>
+						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-name cell">
+							{{i.Name}}
+						</div>						
+					</div>
+				</ng-container>
+			</ion-virtual-scroll>
+		</section>
+	</div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block">Áp dụng</ion-button>
+  </ion-toolbar>
+</ion-footer>
