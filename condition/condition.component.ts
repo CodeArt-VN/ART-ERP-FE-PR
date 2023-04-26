@@ -10,17 +10,16 @@ import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, W
 
 @Component({
   selector: 'app-condition',
-  templateUrl: './condition.page.html',
-  styleUrls: ['./condition.page.scss'],
+  templateUrl: './condition.component.html',
+  styleUrls: ['./condition.component.scss'],
 })
-export class ConditionPage extends PageBase{
+export class ConditionComponent extends PageBase{
   ConditionForm;
   Condition;
   AttributeOption;
   OperatorOption;
   Count = 0;
   Data = [];
-  showData = false;
   constructor(
     public pageProvider: PR_ProgramConditionProvider, 
     public itemProvider: WMS_ItemProvider, 
@@ -43,24 +42,24 @@ export class ConditionPage extends PageBase{
     });
   }
   loadData(event?: any): void {
-    Object.assign(this.query, {Type:this.Condition.Type});
+    Object.assign(this.query, {Type:this.Condition.Type,IDProgram:this.Condition.IDProgram});
     super.loadData();
   }
   loadedData(event?): void {
     super.loadedData();
     if(this.Condition.Type == "ITEM"){
-      this.AttributeOption = [
-        {Id:"IDBranch",Name:"Chi nhánh",Type:"select"},
+      this.AttributeOption = [  
         {Id:"Name",Name:"Tên sản phẩm",Type:"string"},
         {Id:"Code",Name:"Mã sản phẩm",Type:"string"},
         {Id:"IDItemGroup",Name:"Nhóm sản phẩm",Type:"select"},     
       ]
     }
     else{
-      this.AttributeOption = [
-        {Id:"IDBranch",Name:"Chi nhánh",Type:"select"},
+      this.AttributeOption = [      
         {Id:"Name",Name:"Tên khách hàng",Type:"string"},
         {Id:"Code",Name:"Mã khách hàng",Type:"string"},
+        {Id:"IDBusinessPartnerGroup",Name:"Nhóm khách hàng",Type:"select"},
+        {Id:"IsStaff",Name:"Nhân viên",Type:"string"},
       ]
     }
     this.OperatorOption = [
@@ -69,7 +68,7 @@ export class ConditionPage extends PageBase{
       {Id:" ",Name:"Chứa"},
     ];
     this.pathValueCondition();
-    this.getData();
+    this.countData();
   }
   pathValueCondition(){
     this.items.forEach(i=>{
@@ -105,7 +104,7 @@ export class ConditionPage extends PageBase{
     if(Id){ 
         this.deleteItem(i);    
         this.items.splice(i, 1);   
-        this.getData();         
+        this.countData();         
     }
     else{
       this.ConditionForm.removeAt(i);
@@ -146,7 +145,7 @@ export class ConditionPage extends PageBase{
                   let index = this.items.findIndex(i=>i.Id == this.item.Id);
                   this.items[index] = savedItem;
                 }
-                this.getData();                
+                this.countData();                
                 this.submitAttempt = false;
                 
             }).catch(err => {          
@@ -176,33 +175,17 @@ export class ConditionPage extends PageBase{
         });
     }
   }
-  private getData() {
+  private countData() {
     if(this.items.length > 0){
-      let query = this.pathQuery();
-      if(this.Condition.Type == "ITEM"){
-        this.itemProvider.read(query).then(result=>{
-          this.Count = result['count'];
-          this.Data = result['data'];
-          console.log(this.Data);
-        }).catch(err=>{
-          console.log(err);
-        })
+      let pathapi = "ListItem";
+      if(this.Condition.Type =="CONTACT"){
+        pathapi = "ListContact";
       }
-      else if(this.Condition.Type =="CONTACT") {
-        this.contactProvider.read(query).then(result=>{
-          this.Count = result['count'];
-        }).catch(err=>{
-          console.log(err);
-        })
-      }
-    }
-    
+      this.requestData(pathapi);
+    }  
   }
-  pathQuery():any{
-    let query:any = {
-      Take:100,
-      Skip: 0,
-    };
+  setQuery():any{
+    let query:any = {};
     this.items.forEach((i:any)=>{
       let Attribute = i.Attribute;
       let option = this.AttributeOption.find(o=>o.Id == i.Attribute);
@@ -215,6 +198,34 @@ export class ConditionPage extends PageBase{
       }
       query[Attribute.toString()] = i.Value;
     });
+    console.log(query);
     return query;
+  }
+  applyData(){
+    // if(this.items.length > 0 && this.Condition.TypeProgram =="Voucher"){
+    //   let pathapi = "ApplyItem";
+    //   if(this.Condition.Type =="CONTACT"){
+    //     pathapi = "ApplyContact";
+    //   }
+    //   let apiPath = { method: "POST", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
+    //   let request = {
+    //     IDProgram: this.Condition.IDProgram,
+    //     Ids:this.Data.map(s=>s.Id),
+    //   }
+    //   this.commonService.connect(apiPath.method, apiPath.url(),request).toPromise()
+    //   .then((result:any)=>{console.log(result)})
+    //   .catch(err=>{console.log(err)})
+    // }  
+    return this.modalController.dismiss(this.Data,this.Condition.Type);
+  }
+  requestData(pathapi){
+      let apiPath = { method: "GET", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
+      let query = this.setQuery();
+      this.commonService.connect(apiPath.method, apiPath.url(),query).toPromise()
+      .then((result:any)=>{
+        this.Count = result.length;
+        this.Data = result;
+      })
+      .catch(err=>{console.log(err)})
   }
 }

@@ -5,11 +5,11 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { PR_ProgramProvider } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-pr-program',
-  templateUrl: './pr-program.page.html',
-  styleUrls: ['./pr-program.page.scss'],
+  selector: 'app-pr-voucher-policy',
+  templateUrl: './pr-voucher-policy.page.html',
+  styleUrls: ['./pr-voucher-policy.page.scss'],
 })
-export class PRProgramPage extends PageBase {
+export class PRVoucherPolicyPage extends PageBase {
 
   constructor( 
     public pageProvider: PR_ProgramProvider,
@@ -20,7 +20,8 @@ export class PRProgramPage extends PageBase {
     public env: EnvService,
     public navCtrl: NavController
     ) {
-        super();        
+        super(); 
+        Object.assign(this.query, {Type:"Voucher"});       
     }
 
 }

@@ -66,3 +66,27 @@ ion-checkbox::part(container) {
 .br-bottom{
     border-bottom: 1px solid #ccc;
 }
+.table {
+    width: 100%;
+    
+    .col-name {
+        max-width: 500px !important;
+        min-width: 500px !important;
+    }  
+    .col-uom {    
+        max-width: 110px !important;   
+        min-width: 110px !important;
+    }  
+    .col-price {    
+        max-width: 150px !important;   
+        min-width: 150px !important;
+    }  
+    .col-value {
+        max-width: 150px !important;
+        min-width: 150px !important;
+    }  
+    .col-discount {
+        max-width: 200px !important;
+        min-width: 200px !important;
+    }  
+}

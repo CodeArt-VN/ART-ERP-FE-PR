@@ -10,14 +10,15 @@ import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 
 @Component({
-  selector: 'app-pr-program-detail',
-  templateUrl: './pr-program-detail.page.html',
-  styleUrls: ['./pr-program-detail.page.scss'],
+  selector: 'app-pr-voucher-policy-detail',
+  templateUrl: './pr-voucher-policy-detail.page.html',
+  styleUrls: ['./pr-voucher-policy-detail.page.scss'],
 })
-export class PRProgramDetailPage extends PageBase {
+export class PRVoucherPolicyDetailPage extends PageBase {
   Discounts=[];
   Bonus=[];
   ListItem = [];
+  ListContact = [];
 
   constructor(
     public pageProvider: PR_ProgramProvider,
@@ -37,21 +38,22 @@ export class PRProgramDetailPage extends PageBase {
         this.formGroup = formBuilder.group({
           Id: new FormControl({ value: '', disabled: true }),
           IDBranch:[this.env.selectedBranch],
-          Name:[''],
-          Type:[''],
-          Status:[''],
+          Name:['',Validators.required],
+          Code:['',Validators.required],
+          Type:new FormControl({ value: '', disabled: true }),
+          Status:new FormControl({ value: '', disabled: true }),
           FromDate: ['',Validators.required],
           ToDate: ['',Validators.required],
           IsPublic: [false],
           IsAutoApply: [false],
           IsApplyAllProduct: [false],
           IsApplyAllCustomer: [false],
-          MinOrderValue: [0],
+          MinOrderValue: [10000],
           IsByPercent: [false],
-          MaxValue:[0],
-          Value:[0],
-          NumberOfCoupon:[0],
-          MaxUsagePerCustomer:[0],
+          MaxValue:[0,Validators.required],
+          Value:['',Validators.required],
+          NumberOfCoupon:['',Validators.required],
+          MaxUsagePerCustomer:[''],
           IsDiscount:[false],
           IsItemPromotion:[false],
           IsDisabled:[false],
@@ -62,13 +64,17 @@ export class PRProgramDetailPage extends PageBase {
     }
     loadedData(event) {
       if (this.item?.Id) {
-          this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
-          this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+        this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
+        this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+      }else{
+        this.formGroup.controls.Status.setValue('New');
+        this.formGroup.controls.Type.setValue('Voucher');
       }
       super.loadedData();
     }
     async condition(Type:string) {
       if(this.id == 0){
+        this.env.showMessage("Vui lòng nhập thông tin phía trên","warning");
         return false;
       }
       let title = "";
@@ -87,27 +93,33 @@ export class PRProgramDetailPage extends PageBase {
               Type:Type,
               Title:title,    
               IDProgram:this.item.Id, 
-              TypeProgram: "Discount",        
+              TypeProgram: "Voucher",          
             }
           }
       });
       await modal.present();
-      const { data  } = await modal.onWillDismiss();
-      this.ListItem = data;
-      this.addLevelDiscount();
-    }
-    addLevelDiscount(){
-      let discount = {
-        Name:"Hạn mức",
-        ListItem: this.ListItem,
+      const { data, role} = await modal.onWillDismiss();
+      if(role == "ITEM"){
+        this.ListItem = data;
       }
-      this.Discounts.push(discount);
-    }
-    addLevelBonus(){
-      let bonus = {
-        Name:"Hạn mức",
-        ListItem: this.ListItem,
+      else if(role == "CONTACT"){
+        this.ListContact = data;
       }
-      this.Bonus.push(bonus);
+      
+      
+    }
+    async saveChange(){
+      if (!this.item?.Id){        
+        this.formGroup.controls.Status.markAsDirty();       
+        this.formGroup.controls.Type.markAsDirty();
+      }
+      if (this.formGroup.valid) {
+        super.saveChange2();
+      }
+    }
+    generateCodeVoucher(){
+      let code = lib.generateUID();
+      this.formGroup.controls.Code.patchValue(code);
+      this.saveChange();
     }
 }

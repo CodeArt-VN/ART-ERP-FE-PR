@@ -3,113 +3,208 @@
 </ion-header>
 
 <ion-content appScrollbarTheme class="ion-padding">
+  <div id="pr-program" style="position: absolute; z-index: 30005;"></div>
   <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">      
       <div class="row-full shadow full-screen">
         <ion-toolbar color="primary">
           <ion-title>Thiết kế chương trình</ion-title>
         </ion-toolbar>
         <ion-grid fixed>
-          <form [formGroup]="formGroup">
+          
               <ion-row >
                 <ion-col size="12" size-xl="12">
-                  <ion-row>
-                    <ion-col size="12" size-xl="6">
-                      <div class="c-control">
-                        <label class="c-label" for="Type" >Type</label>
-                        <input class="c-input" id="Type" type="text" formControlName="Type">
-                      </div>
-                     
-                      <div class="c-control">
-                        <label class="c-label" for="Name" >Tên chương trình</label>
-                        <input (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name">
-                      </div>
-                      <div class="c-control">
-                        <ion-row >
-                          <ion-col size="6" style="padding: 0px !important;">                       
-                                <label class="c-label" for="FromDate" >Bắt đầu</label>
-                                <input class="c-input" id="FromDate" formControlName="FromDate" type="date" >
-                            </ion-col>
-                            <ion-col size="6" style="padding: 0px !important;"> 
-                                <label class="c-label" for="ToDate">Kết thúc</label>
-                                <input class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
-                            </ion-col>
-                        </ion-row>
-                      </div> 
-                      <div class="c-control">
-                        <label class="c-label" for="Status" >Status</label>
-                        <input class="c-input" id="Status" type="text" formControlName="Status">
-                      </div>
-                      <div class="c-control">
-                        <label class="c-label" for="MaxValue" >Max Value</label>
-                        <input class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
-                      </div>
-                      <div class="c-control">
-                        <label class="c-label" for="Value" > Value</label>
-                        <input class="c-input" id="Value" type="text" formControlName="Value">
-                      </div>
+                  <form [formGroup]="formGroup">
+                    <ion-row>
+                      <ion-col size="12" size-xl="6">
+                        <div class="c-control">
+                          <label class="c-label" for="Type" >Type</label>
+                          <input class="c-input" id="Type" type="text" formControlName="Type">
+                        </div>
                       
-                     
-                    </ion-col>
-                    <ion-col size="12" size-xl="6">
-                      <div class="c-control">
-                        <label class="c-label" for="NumberOfCoupon" > NumberOfCoupon</label>
-                        <input class="c-input" id="NumberOfCoupon" type="text" formControlName="NumberOfCoupon">
-                      </div>
-                      <div class="c-control">
-                        <label class="c-label" for="MaxUsagePerCustomer" > MaxUsagePerCustomer</label>
-                        <input class="c-input" id="MaxUsagePerCustomer" type="text" formControlName="MaxUsagePerCustomer">
-                      </div>
-                      <ion-list>
-                        <ion-item lines="none" >
-                          <ion-label>Public Program</ion-label>
-                          <ion-toggle formControlName="IsPublic"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsAutoApply</ion-label>
-                          <ion-toggle formControlName="IsAutoApply"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsApplyAllProduct</ion-label>
-                          <ion-toggle formControlName="IsApplyAllProduct"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsApplyAllCustomer</ion-label>
-                          <ion-toggle formControlName="IsApplyAllCustomer"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsByPercent</ion-label>
-                          <ion-toggle formControlName="IsByPercent"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsDiscount</ion-label>
-                          <ion-toggle formControlName="IsDiscount"></ion-toggle>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>IsItemPromotion</ion-label>
-                          <ion-toggle formControlName="IsItemPromotion"></ion-toggle>
-                        </ion-item>
-                      </ion-list>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row>
+                        <div class="c-control">
+                          <label class="c-label" for="Name" >Tên chương trình</label>
+                          <input (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name">
+                        </div>
+                        <div class="c-control">
+                          <ion-row >
+                            <ion-col size="6" style="padding: 0px !important;">                       
+                                  <label class="c-label" for="FromDate" >Bắt đầu</label>
+                                  <input class="c-input" id="FromDate" formControlName="FromDate" type="date" >
+                              </ion-col>
+                              <ion-col size="6" style="padding: 0px !important;"> 
+                                  <label class="c-label" for="ToDate">Kết thúc</label>
+                                  <input class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
+                              </ion-col>
+                          </ion-row>
+                        </div> 
+                        <div class="c-control">
+                          <label class="c-label" for="Status" >Status</label>
+                          <input class="c-input" id="Status" type="text" formControlName="Status">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="MaxValue" >Max Value</label>
+                          <input class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Value" > Value</label>
+                          <input class="c-input" id="Value" type="text" formControlName="Value">
+                        </div>
+                        
+                      
+                      </ion-col>
+                      <ion-col size="12" size-xl="6">
+                        <div class="c-control">
+                          <label class="c-label" for="NumberOfCoupon" > NumberOfCoupon</label>
+                          <input class="c-input" id="NumberOfCoupon" type="text" formControlName="NumberOfCoupon">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="MaxUsagePerCustomer" > MaxUsagePerCustomer</label>
+                          <input class="c-input" id="MaxUsagePerCustomer" type="text" formControlName="MaxUsagePerCustomer">
+                        </div>
+                        <ion-list>
+                          <ion-item lines="none" >
+                            <ion-label>Public Program</ion-label>
+                            <ion-toggle formControlName="IsPublic"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsAutoApply</ion-label>
+                            <ion-toggle formControlName="IsAutoApply"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsApplyAllProduct</ion-label>
+                            <ion-toggle formControlName="IsApplyAllProduct"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsApplyAllCustomer</ion-label>
+                            <ion-toggle formControlName="IsApplyAllCustomer"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsByPercent</ion-label>
+                            <ion-toggle formControlName="IsByPercent"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsDiscount</ion-label>
+                            <ion-toggle (click)="saveChange()" formControlName="IsDiscount"></ion-toggle>
+                          </ion-item>
+                          <ion-item lines="none">
+                            <ion-label>IsItemPromotion</ion-label>
+                            <ion-toggle (click)="saveChange()" formControlName="IsItemPromotion"></ion-toggle>
+                          </ion-item>
+                        </ion-list>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="c-control">
+                          <div class="c-input clickable"  (click)="condition('ITEM')">
+                            <ion-label>Sản phẩm áp dụng</ion-label>
+                            <ion-text class="ion-float-right">Tất cả sản phẩm</ion-text>
+                          </div>                                     
+                        </div>
+                        <div class="c-control">
+                          <div class="c-input clickable" (click)="condition('CONTACT')">
+                            <ion-label>Khách hàng áp dụng</ion-label>
+                            <ion-text class="ion-float-right">Tất cả khách hàng</ion-text>
+                          </div>                                     
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </form>           
+                  <ion-row *ngIf="formGroup.controls.IsDiscount.value">
                     <ion-col size="12">
-                      <div class="c-control">
-                        <div class="c-input clickable"  (click)="condition('ITEM')">
-                          <ion-label>Sản phẩm áp dụng</ion-label>
-                          <ion-text class="ion-float-right">Tất cả sản phẩm</ion-text>
-                        </div>                                     
-                      </div>
-                      <div class="c-control">
-                        <div class="c-input clickable" (click)="condition('CONTACT')">
-                          <ion-label>Khách hàng áp dụng</ion-label>
-                          <ion-text class="ion-float-right">Tất cả khách hàng</ion-text>
-                        </div>                                     
-                      </div>
-                    </ion-col>
+                      <ion-toolbar color="primary">
+                        <ion-text slot="start">Điều kiện chiếc khấu</ion-text>
+                      </ion-toolbar>
+                      <div class="table-contain" >
+
+                        <section class="table" style="min-width: 480px;" *ngFor="let d of Discounts; let dj = index;">
+                            <ion-toolbar>
+                              <ion-title>Hạn mức {{dj+1}}</ion-title>
+                            </ion-toolbar>
+                            <header class="bold" style="padding-right: 0;">                             
+                                
+                                <div class="col-name cell">Sản phẩm</div>
+                                <div class="col-uom cell">Đơn vi</div>
+                                <div class="col-price cell">Giá bán</div>
+                                <div class="col-value cell">Giá trị</div>                            
+                                <div class="col-discount cell">Giá trị khuyến mãi</div>                         
+                            </header>
+                            <div class="row" *ngFor="let i of d.ListItem; let j = index;">
+                            
+                              <div class="col-name cell">
+                                <input  type="text" class="c-input" disabled value="{{i.Name}}">
+                              </div>
+                              <div class="col-uom cell">
+                                <ng-select  [clearable]="false"  appendTo="#pr-program"  class="c-input" [items]="i.ItemUoms"  bindLabel="Name" bindValue="Id" placeholder="Đơn vị"></ng-select>
+                              </div>
+                              <div class="col-price cell">
+                                {{i.ItemUoms[0].PriceList?.Price  | number: '1.0-0'}} đ                        
+                              </div>
+                              <div class="col-value cell">
+                                <input  type="text" class="c-input" placeholder="Từ (&#8805;)">
+                              </div>                            
+                              <div class="col-discount cell">
+                                <input  type="text" class="c-input" placeholder="Giá trị chiết khấu (%)">
+                              </div>                               
+                            </div>
+                        </section>                      
+                      </div>     
+                    </ion-col>    
+                    <ion-col size="12" size-xl="4" offset-xl="4">
+                      <ion-button color="primary" fill="outline" expand="block" (click)="addLevelDiscount()">
+                        <ion-icon name="add-circle-outline" ></ion-icon>Thêm hạng mức</ion-button>
+                    </ion-col>                            
                   </ion-row>
+                  <ion-row *ngIf="formGroup.controls.IsItemPromotion.value">
+                    <ion-col size="12">
+                      <ion-toolbar color="primary">
+                        <ion-text>Điều kiện tặng hàng</ion-text>
+                      </ion-toolbar>
+                      <div class="table-contain" >
+
+                        <section class="table" style="min-width: 480px;" *ngFor="let b of Bonus; let bj = index;">
+                            <ion-toolbar>
+                              <ion-title>Hạn mức {{bj+1}}</ion-title>
+                            </ion-toolbar>
+                            <header class="bold" style="padding-right: 0;">                             
+                                
+                                <div class="col-name cell">Sản phẩm</div>
+                                <div class="col-uom cell">Đơn vị</div>
+                                <div class="col-price cell">Giá bán</div>
+                                <div class="col-value cell">Giá trị</div>                            
+                                <div class="col-discount cell">Giá trị khuyến mãi</div>                         
+                            </header>
+                            <div class="row" *ngFor="let i of b.ListItem; let j = index;">
+                            
+                              <div class="col-name cell">
+                                <input  type="text" class="c-input" disabled value="{{i.Name}}">
+                              </div>
+                              <div class="col-uom cell">
+                                <ng-select  [clearable]="false"  appendTo="#pr-program"  class="c-input" [items]="i.ItemUoms"  bindLabel="Name" bindValue="Id" placeholder="Đơn vị"></ng-select>
+                              </div>
+                              <div class="col-price cell">
+                                {{i.ItemUoms[0].PriceList?.Price  | number: '1.0-0'}} đ                        
+                              </div>
+                              <div class="col-value cell">
+                                <input  type="text" class="c-input" placeholder="Từ (&#8805;)">
+                              </div>                            
+                              <div class="col-discount cell">
+                                <input  type="text" class="c-input" placeholder="Giá trị chiết khấu (%)">
+                              </div>                               
+                            </div>
+                        </section>                      
+                      </div>     
+                    </ion-col>    
+                    <ion-col size="12" size-xl="4" offset-xl="4">
+                      <ion-button color="primary" fill="outline" expand="block" (click)="addLevelBonus()">
+                        <ion-icon name="add-circle-outline"></ion-icon>Thêm hạng mức</ion-button>
+                    </ion-col>                            
+                  </ion-row> 
+                  
                 </ion-col>
               </ion-row>
-          </form>
+          
         </ion-grid>
       </div>
   </div>

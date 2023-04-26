@@ -1,0 +1,141 @@
+<ion-header>
+  <app-detail-toolbar [page]="this"></app-detail-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+  <div id="pr-program" style="position: absolute; z-index: 30005;"></div>
+  <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">      
+      <div class="row-full shadow full-screen">
+        <ion-toolbar color="primary">
+          <ion-title>Thiết kế Voucher</ion-title>
+        </ion-toolbar>
+        <ion-grid fixed>
+          
+              <ion-row >
+                <ion-col size="12" size-xl="12">
+                  <form [formGroup]="formGroup">
+                    <ion-row>
+                      <ion-col size="12" size-xl="6">
+                        <div class="c-control">
+                          <label class="c-label" for="Type" >Loại</label>
+                          <input class="c-input" id="Type" type="text" formControlName="Type">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Status" >Trạng thái</label>
+                          <input class="c-input" id="Status" type="text" formControlName="Status">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Name" >Tên Voucher</label>
+                          <input autocomplete="off" (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Code">
+                            <ion-text class="ion-float-left">Mã Voucher</ion-text>
+                            <ion-text color="primary" (click)="generateCodeVoucher()" class="ion-float-right clickable ">Tạo mã bất kỳ <ion-icon  title="Tạo mã ngẫu nhiên" name="alert-circle-outline"></ion-icon></ion-text>
+                          </label>
+                          <input autocomplete="off" (change)="saveChange()" class="c-input" id="Code" type="text" formControlName="Code">
+                        </div>
+                        
+                        <div class="c-control">
+                          <label class="c-label" for="NumberOfCoupon" >Số lượng voucher</label>
+                          <input (change)="saveChange()" class="c-input" id="NumberOfCoupon" type="number" formControlName="NumberOfCoupon">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="MaxUsagePerCustomer" > Số lượng voucher áp dụng tối đa cho mỗi khách hàng</label>
+                          <input (change)="saveChange()" class="c-input" id="MaxUsagePerCustomer" type="number" formControlName="MaxUsagePerCustomer">
+                        </div>
+                        <div class="c-control">
+                          <ion-row >
+                            <ion-col size="6" style="padding: 0px !important;">                       
+                                  <label class="c-label" for="FromDate" >Bắt đầu</label>
+                                  <input (change)="saveChange()" class="c-input" id="FromDate" formControlName="FromDate" type="date" >
+                              </ion-col>
+                              <ion-col size="6" style="padding: 0px !important;"> 
+                                  <label class="c-label" for="ToDate">Kết thúc</label>
+                                  <input (change)="saveChange()" class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
+                              </ion-col>
+                          </ion-row>
+                        </div> 
+                        <!-- <div class="c-control">
+                          <label class="c-label" for="MaxValue" >MaxValue</label>
+                          <input class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Value"> Value</label>
+                          <input class="c-input" id="Value" type="text" formControlName="Value">
+                        </div> -->
+                        
+                      
+                      </ion-col>
+                      <ion-col size="12" size-xl="6">                     
+                        <div class="c-control">
+                          <label class="c-label" for="MinOrderValue" > Giá trị đơn hàng tối thiểu</label>
+                          <input mask="separator.0" thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" (change)="saveChange()" class="c-input" id="MinOrderValue" type="text" formControlName="MinOrderValue">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="Value">
+                            <ion-text class="ion-float-left">Được giảm</ion-text> 
+                            <span class="ion-float-right ion-padding-right">
+                              
+                              <ion-toggle class="ion-float-right ion-margin-left" (ionChange)="saveChange()" formControlName="IsByPercent"></ion-toggle>
+                              <ion-text class="ion-float-right" > Giảm theo (%) </ion-text>
+                              
+                            </span> 
+                          </label>
+                          <input mask="separator.0" thousandSeparator="," [allowNegativeNumbers]="true" [suffix]="formGroup.controls.IsByPercent.value ? ' %' : ' ₫'" (change)="saveChange()" class="c-input" id="Value" type="text" formControlName="Value">
+                        </div>
+                        <div class="c-control">
+                          <label class="c-label" for="MaxValue"> Được giảm tối đa</label>
+                          <input [readonly]="!formGroup.controls.IsByPercent.value"  mask="separator.0" thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" (change)="saveChange()" class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
+                        </div>
+                        <div class="c-control">
+                          <ion-label>Chế độ hiển thị</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <ion-label>Công khai</ion-label>
+                            <span class="ion-float-right">
+                              <ion-toggle  (ionChange)="saveChange()" formControlName="IsPublic"></ion-toggle>
+                            </span>                          
+                          </div>                                     
+                        </div>
+                        <div class="c-control">
+                          <ion-label>Chế độ áp dụng</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <ion-label>Auto</ion-label>
+                            <span class="ion-float-right">
+                              <ion-toggle  (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
+                            </span>                          
+                          </div>                                     
+                        </div>
+                        <div class="c-control">
+                          <ion-label>Sản phẩm áp dụng</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <span >
+                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle> <ion-text class="ion-float-left">Tất cả</ion-text>
+                            </span>
+                            
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right">Tất cả sản phẩm</ion-button>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">{{ListItem.length}} Sản phẩm</ion-button>
+                          </div>                                     
+                        </div>
+                        <div class="c-control">
+                          <ion-label>Khách hàng áp dụng</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <span>
+                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle> <ion-text class="ion-float-left">Tất cả</ion-text>
+                            </span>
+                            
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả khách hàng</ion-button>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">{{ListContact.length}} Khách hàng</ion-button>
+                          </div>                                     
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  
+                  </form>                            
+                </ion-col>
+              </ion-row>
+          
+        </ion-grid>
+      </div>
+  </div>
+</ion-content>
