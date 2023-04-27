@@ -74,13 +74,8 @@
                         </div>
                         <div class="c-control">
                           <label class="c-label" for="Value">
-                            <ion-text class="ion-float-left">Được giảm</ion-text> 
-                            <span class="ion-float-right ion-padding-right">
-                              
-                              <ion-toggle class="ion-float-right ion-margin-left" (ionChange)="saveChange()" formControlName="IsByPercent"></ion-toggle>
-                              <ion-text class="ion-float-right" > Giảm theo (%) </ion-text>
-                              
-                            </span> 
+                              <ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsByPercent"></ion-toggle> 
+                              <ion-text class="ion-float-left"><span style="padding-left: 10px;">Được giảm theo (%)</span></ion-text>                           
                           </label>
                           <input mask="separator.0" thousandSeparator="," [allowNegativeNumbers]="true" [suffix]="formGroup.controls.IsByPercent.value ? ' %' : ' ₫'" (change)="saveChange()" class="c-input" id="Value" type="text" formControlName="Value">
                         </div>
@@ -109,23 +104,29 @@
                         <div class="c-control">
                           <ion-label>Sản phẩm áp dụng</ion-label>
                           <div class="c-input" style="margin-top: 7px;">
-                            <span >
-                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle> <ion-text class="ion-float-left">Tất cả</ion-text>
-                            </span>
-                            
+                            <span>
+                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle>
+                              <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
+                            </span>                            
                             <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right">Tất cả sản phẩm</ion-button>
-                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">{{ListItem.length}} Sản phẩm</ion-button>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">
+                              <ion-text *ngIf="ListItem.length <= 0">Sản phẩm cụ thể</ion-text>
+                              <ion-text *ngIf="ListItem.length > 0">{{ListItem.length}} Sản phẩm</ion-text>
+                            </ion-button>
                           </div>                                     
                         </div>
                         <div class="c-control">
                           <ion-label>Khách hàng áp dụng</ion-label>
                           <div class="c-input" style="margin-top: 7px;">
                             <span>
-                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle> <ion-text class="ion-float-left">Tất cả</ion-text>
-                            </span>
-                            
+                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle> 
+                              <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
+                            </span>                          
                             <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả khách hàng</ion-button>
-                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">{{ListContact.length}} Khách hàng</ion-button>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
+                              <ion-text *ngIf="ListContact.length > 0">{{ListContact.length}} Khách hàng</ion-text>
+                              <ion-text *ngIf="ListContact.length <= 0">Khách hàng cụ thể</ion-text>
+                            </ion-button>
                           </div>                                     
                         </div>
                       </ion-col>

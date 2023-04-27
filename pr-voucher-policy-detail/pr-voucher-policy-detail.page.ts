@@ -113,6 +113,10 @@ export class PRVoucherPolicyDetailPage extends PageBase {
         this.formGroup.controls.Status.markAsDirty();       
         this.formGroup.controls.Type.markAsDirty();
       }
+      if(this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.Value.value > 99){
+        this.formGroup.controls.Value.patchValue(0);   
+        this.formGroup.controls.Value.markAsDirty();    
+      }
       if (this.formGroup.valid) {
         super.saveChange2();
       }
