@@ -6,7 +6,7 @@ import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
 import { ApiSetting } from 'src/app/services/static/api-setting';
-import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, WMS_ItemProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, WMS_ItemProvider } from 'src/app/services/static/services.service';
 
 @Component({
   selector: 'app-condition',
@@ -21,7 +21,9 @@ export class ConditionComponent extends PageBase{
   Count = 0;
   Data = [];
   constructor(
-    public pageProvider: PR_ProgramConditionProvider, 
+    public pageProvider: PR_ProgramConditionProvider,
+    public programPartnerProvider: PR_ProgramPartnerProvider,
+    public programItemProvider: PR_ProgramItemProvider,
     public itemProvider: WMS_ItemProvider, 
     public contactProvider: CRM_ContactProvider, 
     public env: EnvService,
@@ -201,21 +203,37 @@ export class ConditionComponent extends PageBase{
     console.log(query);
     return query;
   }
-  applyData(){
-    // if(this.items.length > 0 && this.Condition.TypeProgram =="Voucher"){
-    //   let pathapi = "ApplyItem";
-    //   if(this.Condition.Type =="CONTACT"){
-    //     pathapi = "ApplyContact";
-    //   }
-    //   let apiPath = { method: "POST", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
-    //   let request = {
-    //     IDProgram: this.Condition.IDProgram,
-    //     Ids:this.Data.map(s=>s.Id),
-    //   }
-    //   this.commonService.connect(apiPath.method, apiPath.url(),request).toPromise()
-    //   .then((result:any)=>{console.log(result)})
-    //   .catch(err=>{console.log(err)})
-    // }  
+  async applyData(){
+    if(this.items.length > 0 && this.Condition.TypeProgram =="Voucher"){
+      let pathapi = "ApplyItem";
+      if(this.Condition.Type =="CONTACT"){
+        pathapi = "ApplyContact";
+      }
+      if(this.Condition.Type =="CONTACT"){
+        const ProgramContact = await this.programPartnerProvider.read({IDProgram:this.Condition.IDProgram}).then(resutl=>{
+          return resutl;
+        });
+        if(ProgramContact['count']>0){
+          await this.programPartnerProvider.delete(ProgramContact['data']);
+        }
+      }
+      if(this.Condition.Type =="ITEM"){
+        const ProgramItem = await this.programItemProvider.read({IDProgram:this.Condition.IDProgram}).then(resutl=>{
+          return resutl;
+        });
+        if(ProgramItem['count']>0){
+          await this.programItemProvider.delete(ProgramItem['data']);
+        }
+      }
+      let apiPath = { method: "POST", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
+      let request = {
+        IDProgram: this.Condition.IDProgram,
+        Ids:this.Data.map(s=>s.Id),
+      }
+      this.commonService.connect(apiPath.method, apiPath.url(),request).toPromise()
+      .then((result:any)=>{console.log(result)})
+      .catch(err=>{console.log(err)})
+    }  
     return this.modalController.dismiss(this.Data,this.Condition.Type);
   }
   requestData(pathapi){

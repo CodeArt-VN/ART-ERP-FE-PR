@@ -5,7 +5,7 @@ import { AlertController, LoadingController, ModalController, NavController } fr
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
-import { BRA_BranchProvider, PR_ProgramProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, PR_ProgramProvider } from 'src/app/services/static/services.service';
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 
@@ -22,6 +22,8 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 
   constructor(
     public pageProvider: PR_ProgramProvider,
+    public programPartnerProvider: PR_ProgramPartnerProvider,
+    public programItemProvider: PR_ProgramItemProvider,
     public branchProvider: BRA_BranchProvider,
     public env: EnvService,
     public navCtrl: NavController,
@@ -66,6 +68,12 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       if (this.item?.Id) {
         this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
         this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+        this.programItemProvider.read({IDProgram:this.item.Id}).then(result=>{
+          this.ListItem = result['data'];
+        });
+        this.programPartnerProvider.read({IDProgram:this.item.Id}).then(result=>{
+          this.ListContact = result['data'];
+        })
       }else{
         this.formGroup.controls.Status.setValue('New');
         this.formGroup.controls.Type.setValue('Voucher');
