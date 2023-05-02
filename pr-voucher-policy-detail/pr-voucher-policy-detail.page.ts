@@ -42,6 +42,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
           IDBranch:[this.env.selectedBranch],
           Name:['',Validators.required],
           Code:['',Validators.required],
+          Remark:[''],
           Type:new FormControl({ value: '', disabled: true }),
           Status:new FormControl({ value: '', disabled: true }),
           FromDate: ['',Validators.required],

@@ -55,17 +55,7 @@
                                   <input (change)="saveChange()" class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
                               </ion-col>
                           </ion-row>
-                        </div> 
-                        <!-- <div class="c-control">
-                          <label class="c-label" for="MaxValue" >MaxValue</label>
-                          <input class="c-input" id="MaxValue" type="text" formControlName="MaxValue">
-                        </div>
-                        <div class="c-control">
-                          <label class="c-label" for="Value"> Value</label>
-                          <input class="c-input" id="Value" type="text" formControlName="Value">
-                        </div> -->
-                        
-                      
+                        </div>                 
                       </ion-col>
                       <ion-col size="12" size-xl="6">                     
                         <div class="c-control">
@@ -129,6 +119,12 @@
                             </ion-button>
                           </div>                                     
                         </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="c-control">
+                          <label class="c-label" for="Remark">Mô tả chính sách Voucher</label>
+                          <textarea (change)="saveChange()" rows="3" class="c-input" id="Remark" formControlName="Remark" type="textarea"></textarea>
+                      </div>
                       </ion-col>
                     </ion-row>
                   
