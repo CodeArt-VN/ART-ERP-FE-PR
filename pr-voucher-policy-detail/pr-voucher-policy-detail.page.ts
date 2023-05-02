@@ -75,6 +75,9 @@ export class PRVoucherPolicyDetailPage extends PageBase {
         this.programPartnerProvider.read({IDProgram:this.item.Id}).then(result=>{
           this.ListContact = result['data'];
         })
+        if(this.item.Status != 'New'){
+          this.formGroup.disable();
+        }
       }else{
         this.formGroup.controls.Status.setValue('New');
         this.formGroup.controls.Type.setValue('Voucher');
@@ -125,7 +128,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       if(this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.Value.value > 99){
         this.formGroup.controls.Value.patchValue(0);   
         this.formGroup.controls.Value.markAsDirty();    
-      }
+      }      
       if (this.formGroup.valid) {
         super.saveChange2();
       }
@@ -133,6 +136,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
     generateCodeVoucher(){
       let code = lib.generateUID();
       this.formGroup.controls.Code.patchValue(code);
+      this.formGroup.controls.Code.markAsDirty();  
       this.saveChange();
     }
 }
