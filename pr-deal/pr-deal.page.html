@@ -20,14 +20,14 @@
 			<div class="col-money cell">
 				Giá sau giảm
 			</div>
-			<div class="col-sale cell">
+			<!-- <div class="col-sale cell">
 				Đã bán
 			</div>
 			<div class="col-max cell" (click)="sortToggle('MaxPerOrder')">
 				Giới hạn 
 				<ion-icon class="min-btn" *ngIf="sort.MaxPerOrder" [name]="sort.MaxPerOrder == 'MaxPerOrder'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.MaxPerOrder" name="search" color="primary"></ion-icon>
-			</div>
+			</div> -->
 			<div class="col-date cell" >
 				Thời gian áp dụng			
 			</div>
@@ -86,13 +86,12 @@
 							<div *ngIf="i.IsByPercent">{{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100  | number: '1.0-0'}} đ</div>
 							<div *ngIf="i.IsByPercent == false">{{i.Price  | number: '1.0-0'}} đ</div>
 						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-sale cell">
+						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-sale cell">
 							<i *ngIf="i.CountSale == null">0</i> <i>{{i.CountSale}}</i> /<sub>{{i.Quantity}} SP</sub>
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-max cell">
-							<i>{{i.MaxPerOrder}}</i>/<sub>đơn</sub> 
-							
-						</div>
+						</div> -->
+						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-max cell">
+							<i>{{i.MaxPerOrder}}</i>/<sub>đơn</sub> 							
+						</div> -->
 						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
 							{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
 						</div>
