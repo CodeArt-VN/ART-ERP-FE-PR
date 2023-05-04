@@ -33,25 +33,3 @@
         max-width: 90px !important;
     } 
 }
-
-.header-box {
-    .header-name {
-        .total {
-            .c-control {
-                margin-bottom: 7px;
-            }
-
-            .c-input {
-                text-align: right;
-                color: var(--ion-color-primary);
-            }
-
-            .c-control .c-label {
-                position: absolute;
-                line-height: 3.8rem;
-                margin-left: 9px;
-                width: auto;
-            }
-        }
-    }
-}

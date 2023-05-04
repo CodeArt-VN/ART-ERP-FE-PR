@@ -1,5 +1,5 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveDeal)="changeStatus('Approved')" (disapproveDeal)="changeStatus('Rejected')" (submitDealForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
 	<section class="table">
 		<header class="bold">
 			<div class="col-checkbox cell"></div>
@@ -9,31 +9,11 @@
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Id" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-name cell">
-				Sản phẩm				
+				Tên chương trình				
 			</div>
-			<div class="col-UoM cell">
-				Đơn vị
-			</div>
-			<div class="col-money cell">
-				Giá bán
-			</div>
-			<div class="col-money cell">
-				Giá sau giảm
-			</div>
-			<!-- <div class="col-sale cell">
-				Đã bán
-			</div>
-			<div class="col-max cell" (click)="sortToggle('MaxPerOrder')">
-				Giới hạn 
-				<ion-icon class="min-btn" *ngIf="sort.MaxPerOrder" [name]="sort.MaxPerOrder == 'MaxPerOrder'?'arrow-down': 'arrow-up'"></ion-icon>
-				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.MaxPerOrder" name="search" color="primary"></ion-icon>
-			</div> -->
 			<div class="col-date cell" >
 				Thời gian áp dụng			
-			</div>
-			<div class="col-time cell" >
-				Khung giờ			
-			</div>
+			</div>			
 			<div class="col-status cell" >
 				Trạng thái		
 			</div>				
@@ -70,35 +50,16 @@
 						<div class="col-checkbox cell">
 							<input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox">
 						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-id cell">
+						<div (click)="nav('pr-program/'+i.Id,'forward')" class="col-id cell">
 							{{i.Id}}
 						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-name cell">
-							{{i.ItemName}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-UoM cell">
-							{{i.ItemUoMName}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
-							{{i.OriginalPrice | number: '1.0-0'}} đ
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
-							<div *ngIf="i.IsByPercent">{{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100  | number: '1.0-0'}} đ</div>
-							<div *ngIf="i.IsByPercent == false">{{i.Price  | number: '1.0-0'}} đ</div>
-						</div>
-						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-sale cell">
-							<i *ngIf="i.CountSale == null">0</i> <i>{{i.CountSale}}</i> /<sub>{{i.Quantity}} SP</sub>
-						</div> -->
-						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-max cell">
-							<i>{{i.MaxPerOrder}}</i>/<sub>đơn</sub> 							
-						</div> -->
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
+						<div (click)="nav('pr-program/'+i.Id,'forward')" class="col-name cell">
+							{{i.Name}}
+						</div>					
+						<div (click)="nav('pr-program/'+i.Id,'forward')" class="col-date cell">
 							{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-time cell">
-							{{i.FromHour}} - {{i.ToHour}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-status cell">
+						</div>					
+						<div (click)="nav('pr-program/'+i.Id,'forward')" class="col-status cell">
 							{{i.Status}}
 						</div>
 					</div>
