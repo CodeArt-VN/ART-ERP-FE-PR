@@ -75,9 +75,9 @@ export class PRVoucherPolicyDetailPage extends PageBase {
         this.programPartnerProvider.read({IDProgram:this.item.Id}).then(result=>{
           this.ListContact = result['data'];
         })
-        if(this.item.Status != 'New'){
-          this.formGroup.disable();
-        }
+        // if(this.item.Status != 'New'){
+        //   this.formGroup.disable();
+        // }
       }else{
         this.formGroup.controls.Status.setValue('New');
         this.formGroup.controls.Type.setValue('Voucher');

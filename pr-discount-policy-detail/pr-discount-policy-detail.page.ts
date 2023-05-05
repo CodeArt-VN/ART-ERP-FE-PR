@@ -5,7 +5,7 @@ import { AlertController, LoadingController, ModalController, NavController } fr
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
-import { BRA_BranchProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, PR_ProgramProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, PR_ProgramConditionProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, PR_ProgramProvider } from 'src/app/services/static/services.service';
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 
@@ -19,11 +19,12 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   Bonus=[];
   ListItem = [];
   ListContact = [];
-
+  ConditionRevard = [];
   constructor(
     public pageProvider: PR_ProgramProvider,
     public programPartnerProvider: PR_ProgramPartnerProvider,
     public programItemProvider: PR_ProgramItemProvider,
+    public programConditionProvider: PR_ProgramConditionProvider,
     public branchProvider: BRA_BranchProvider,
     public env: EnvService,
     public navCtrl: NavController,
@@ -72,6 +73,9 @@ export class PRDiscountPolicyDetailPage extends PageBase {
         this.programItemProvider.read({IDProgram:this.item.Id}).then(result=>{
           this.ListItem = result['data'];
         });
+        this.programConditionProvider.read({IDProgram:this.item.Id,Type:"Reward",IsDeleted:false, IDParent:null}).then(result=>{
+          this.ConditionRevard = result['data'];
+        });
         this.programPartnerProvider.read({IDProgram:this.item.Id}).then(result=>{
           this.ListContact = result['data'];
         })
@@ -80,7 +84,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
         }
       }else{
         this.formGroup.controls.Status.setValue('New');
-        this.formGroup.controls.Type.setValue('Voucher');
+        this.formGroup.controls.Type.setValue('Discount');
       }
       super.loadedData();
     }
@@ -105,7 +109,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
               Type:Type,
               Title:title,    
               IDProgram:this.item.Id, 
-              TypeProgram: "Voucher",          
+              TypeProgram: "Discount",          
             }
           }
       });
@@ -139,5 +143,25 @@ export class PRDiscountPolicyDetailPage extends PageBase {
       this.formGroup.controls.Code.markAsDirty();  
       this.saveChange();
     }
-
+    addLevelDiscount(event){
+      let condition = {
+        IDProgram:this.item.Id,
+        IDParent:null,
+        Name:event.target.value,
+        IsDisable:false,
+        IsDeleted:false,
+        Type:"Reward",
+        Attribute:"",
+        Operator:"",
+        Amount:0,
+      }
+      this.programConditionProvider.save(condition).then(result=>{
+        this.ConditionRevard.push(result);
+        event.target.value = null;
+      });
+    }
+    removeLevel(i,c){
+      this.programConditionProvider.delete(c);
+      this.ConditionRevard.splice(i,1);
+    }
 }
