@@ -116,9 +116,14 @@ export class ConditionComponent extends PageBase{
     
     let Id = form.controls.Id.value;
     if(Id){ 
+      if(this.pageConfig.canDelete){
         this.deleteItem(i);    
         this.items.splice(i, 1);   
-        this.countData();         
+        this.countData();    
+      }
+      else{
+        this.env.showTranslateMessage('Bạn không có quyền xóa','warning');
+      }
     }
     else{
       this.ConditionForm.removeAt(i);
