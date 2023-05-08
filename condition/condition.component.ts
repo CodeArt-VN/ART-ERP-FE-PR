@@ -44,7 +44,11 @@ export class ConditionComponent extends PageBase{
     });
   }
   loadData(event?: any): void {
+    
     Object.assign(this.query, {Type:this.Condition.Type,IDProgram:this.Condition.IDProgram});
+    if(this.Condition.IDParent){
+      Object.assign(this.query, {IDParent:this.Condition.IDParent});
+    }
     super.loadData();
   }
   loadedData(event?): void {
@@ -54,6 +58,11 @@ export class ConditionComponent extends PageBase{
         {Id:"Name",Name:"Tên sản phẩm",Type:"string"},
         {Id:"Code",Name:"Mã sản phẩm",Type:"string"},
         {Id:"IDItemGroup",Name:"Nhóm sản phẩm",Type:"select"},     
+      ]
+    }
+    else if(this.Condition.Type == "REWARD"){
+      this.AttributeOption = [  
+        {Id:"ValueOrder",Name:"Giá trị đơn hàng", Type:"string"},
       ]
     }
     else{
@@ -88,10 +97,13 @@ export class ConditionComponent extends PageBase{
     })
   }
   addConditionForm(IDParent = null, level = 0) {
+    if(this.Condition.IDParent){
+      IDParent =  this.Condition.IDParent
+    }
     let group = this.formBuilder.group({ 
       Id: [''],
       IDProgram:[this.Condition.IDProgram],
-      IDParent:[''],
+      IDParent:[IDParent],
       Attribute: [null,Validators.required],
       Type:[this.Condition.Type],
       Operator: [null,Validators.required],     
@@ -189,41 +201,27 @@ export class ConditionComponent extends PageBase{
   setQuery():any{
     let query:any = {};
     this.items.forEach((i:any)=>{
-      let Attribute = i.Attribute;
-      let option = this.AttributeOption.find(o=>o.Id == i.Attribute);
-      let value = i.Value;
-      if(option.Type == "select"){
-        value = parseInt(value);
+      if(i.Type != "REWARD"){
+        let Attribute = i.Attribute;
+        let option = this.AttributeOption.find(o=>o.Id == i.Attribute);
+        let value = i.Value;
+        if(option.Type == "select"){
+          value = parseInt(value);
+        }
+        if(i.Operator!=" "){
+          Attribute = Attribute+"_"+i.Operator;
+        }
+        query[Attribute.toString()] = i.Value;
       }
-      if(i.Operator!=" "){
-        Attribute = Attribute+"_"+i.Operator;
-      }
-      query[Attribute.toString()] = i.Value;
+      
     });
-    console.log(query);
     return query;
   }
   async applyData(){
-    if(this.items.length > 0 && this.Condition.TypeProgram =="Voucher"){
+    if(this.items.length > 0){
       let pathapi = "ApplyItem";
       if(this.Condition.Type =="CONTACT"){
         pathapi = "ApplyContact";
-      }
-      if(this.Condition.Type =="CONTACT"){
-        const ProgramContact = await this.programPartnerProvider.read({IDProgram:this.Condition.IDProgram}).then(resutl=>{
-          return resutl;
-        });
-        if(ProgramContact['count']>0){
-          await this.programPartnerProvider.delete(ProgramContact['data']);
-        }
-      }
-      if(this.Condition.Type =="ITEM"){
-        const ProgramItem = await this.programItemProvider.read({IDProgram:this.Condition.IDProgram}).then(resutl=>{
-          return resutl;
-        });
-        if(ProgramItem['count']>0){
-          await this.programItemProvider.delete(ProgramItem['data']);
-        }
       }
       let apiPath = { method: "POST", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
       let request = {
@@ -237,13 +235,15 @@ export class ConditionComponent extends PageBase{
     return this.modalController.dismiss(this.Data,this.Condition.Type);
   }
   requestData(pathapi){
-      let apiPath = { method: "GET", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
-      let query = this.setQuery();
-      this.commonService.connect(apiPath.method, apiPath.url(),query).toPromise()
-      .then((result:any)=>{
-        this.Count = result.length;
-        this.Data = result;
-      })
-      .catch(err=>{console.log(err)})
+      if(this.Condition.Type !="REWARD"){
+        let apiPath = { method: "GET", url: function(){return ApiSetting.apiDomain("PR/ProgramCondition/"+pathapi)}};
+        let query = this.setQuery();
+        this.commonService.connect(apiPath.method, apiPath.url(),query).toPromise()
+        .then((result:any)=>{
+          this.Count = result.length;
+          this.Data = result;
+        })
+        .catch(err=>{console.log(err)})
+      }
   }
 }

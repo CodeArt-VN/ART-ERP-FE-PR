@@ -39,7 +39,7 @@
       </form>
     </section>
   </div>        
-  <ng-container *ngIf="items?.length>0">
+  <ng-container *ngIf="items?.length>0 && Condition.Type != 'REWARD'">
     <ion-item lines="none" class="border ion-margin-top">
       <ion-text>Tìm thấy</ion-text>
       <ion-label slot="end">{{Count}} 
@@ -50,7 +50,7 @@
     
   </ng-container>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="Condition.Type != 'REWARD'">
   <ion-toolbar>
     <ion-button expand="block" (click)="applyData()">Áp dụng</ion-button>
   </ion-toolbar>
