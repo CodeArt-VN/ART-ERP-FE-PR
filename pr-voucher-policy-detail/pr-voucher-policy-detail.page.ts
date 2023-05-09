@@ -134,7 +134,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       }
     }
     generateCodeVoucher(){
-      let code = lib.generateUID();
+      let code = lib.generateCode().toUpperCase();
       this.formGroup.controls.Code.patchValue(code);
       this.formGroup.controls.Code.markAsDirty();  
       this.saveChange();
