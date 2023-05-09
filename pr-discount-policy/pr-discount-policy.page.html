@@ -1,5 +1,5 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveVoucher)="changeStatus('Approved')" (disapproveVoucher)="changeStatus('Rejected')" (submitVoucherForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveDiscount)="changeStatus('Approved')" (disapproveDiscount)="changeStatus('Rejected')" (submitDiscountForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
 	<section class="table">
 		<header class="bold">
 			<div class="col-checkbox cell"></div>

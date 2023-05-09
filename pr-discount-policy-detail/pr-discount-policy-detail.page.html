@@ -94,55 +94,57 @@
                             <ion-button fill="none" size="small" (click)="removeLevel(i,c)"><ion-icon color="danger" name="trash-outline"></ion-icon> </ion-button>
                           </ion-item>
                         </div> 
-                        <section class="table" style="min-width: 480px;">
-                          <header class="bold" style="padding-right: 0;">     
-                            <div class="col-order cell">Theo ĐH</div>
-                            <div class="col-type cell">Loại</div>                                                                         
-                            <div class="col-name cell">Sản phẩm</div>
-                            <div class="col-uom cell">Đơn vị</div>
-                            <div class="col-quantity cell">Số lượng</div>
-                            <div class="col-amount cell">Số tiền giảm</div>                            
-                            <div class="col-percent cell">Theo %</div>
-                            <div class="col-maxvalue cell">Giảm tối đa</div>
-                            <div class="col-btn cell"></div>                         
-                          </header>
-                          <div class="row" *ngFor="let r of c.Rewards; let j = index;">
-                            <div class="col-order cell">
-                              <ion-toggle (ionChange)="changeByOrder(r)" [disabled]="!r.ChooseIsRewardByOrder" [(ngModel)]="r.IsRewardByOrder"></ion-toggle> 
-                            </div>
-                            <div class="col-type cell">
-                              <ng-select (change)="changeType(r)"  required="true" [(ngModel)]="r.Type" [clearable]="false" appendTo="#pr-program-discount"  class="c-input"  [items]="TypeReward"  bindLabel="Name" bindValue="Id" placeholder="Loại"></ng-select>
-                            </div>
-                            
-                            <div class="col-name cell">
-                              <ng-select [disabled]="!r.ChooseItem" [required]="r.ChooseItem" appendTo="#pr-program-discount" [(ngModel)]="r.IDItem" (change)="changedIDItem(i,j, $event, true)" [clearable]="false" class="c-input"  [items]="r._ItemDataSource | async" [typeahead]="r._ItemSearchInput" [loading]="r._ItemSearchLoading" [virtualScroll]="true" bindLabel="Name" bindValue="Id"  placeholder="Sản phẩm">
-                                <ng-template ng-label-tmp let-i="item">                                 
-                                  {{i.Name}}
-                                </ng-template>                                                                           
-                              </ng-select>
+                        <div class="table-contain">
+                          <section class="table" style="min-width: 1110px;">
+                            <header class="bold" style="padding-right: 0;">     
+                              <div class="col-order cell">Theo ĐH</div>
+                              <div class="col-type cell">Loại</div>                                                                         
+                              <div class="col-name cell">Sản phẩm</div>
+                              <div class="col-uom cell">Đơn vị</div>
+                              <div class="col-quantity cell">Số lượng</div>
+                              <div class="col-amount cell">Số tiền giảm</div>                            
+                              <div class="col-percent cell">Theo %</div>
+                              <div class="col-maxvalue cell">Giảm tối đa</div>
+                              <div class="col-btn cell"></div>                         
+                            </header>
+                            <div class="row" *ngFor="let r of c.Rewards; let j = index;">
+                              <div class="col-order cell">
+                                <ion-toggle (ionChange)="changeByOrder(r)" [disabled]="!r.ChooseIsRewardByOrder" [(ngModel)]="r.IsRewardByOrder"></ion-toggle> 
+                              </div>
+                              <div class="col-type cell">
+                                <ng-select (change)="changeType(r)"  required="true" [(ngModel)]="r.Type" [clearable]="false" appendTo="#pr-program-discount"  class="c-input"  [items]="TypeReward"  bindLabel="Name" bindValue="Id" placeholder="Loại"></ng-select>
+                              </div>
                               
-                            </div>
-                            <div class="col-uom cell">
-                              <ng-select [disabled]="!r.ChooseItemUoM" [required]="r.ChooseItemUoM" [(ngModel)]="r.IDItemUoM" [clearable]="false"  appendTo="#pr-program-discount"  class="c-input" [items]="r._UoMs"   bindLabel="Name" bindValue="Id" placeholder="Đơn vị"></ng-select>
-                            </div>
-                            <div class="col-quantity cell">
-                              <input [style]="{'border-color': r.ChooseQuantity && r.PromotionQuantity == 0?'red !important': null}"  [disabled]="!r.ChooseQuantity"  id="PromotionQuantity" [(ngModel)]="r.PromotionQuantity" type="number"  class="c-input" placeholder="Số lượng">
-                            </div>
-                            <div class="col-amount cell">                           
-                              <input [style]="{'border-color': r.ChooseAmount && r.DiscountAmount == 0?'red !important': null}" [disabled]="!r.ChooseAmount" [(ngModel)]="r.DiscountAmount" placeholder="Số tiền giảm" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" class="c-input" id="DiscountAmount" type="text">
-                            </div>                            
-                            <div class="col-percent cell">
-                              <input [style]="{'border-color': r.ChoosePercent && r.DiscountPercent == 0?'red !important': null}" [disabled]="!r.ChoosePercent" [required]="r.ChoosePercent" [(ngModel)]="r.DiscountPercent" placeholder="Phần trăm giảm" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" %" class="c-input" id="DiscountPercent" type="text">                       
-                            </div>  
-                            <div class="col-maxvalue cell">
-                              <input [style]="{'border-color': r.ChooseMaxValue && r.MaxAmount == 0?'red !important': null}" [disabled]="!r.ChooseMaxValue"  [(ngModel)]="r.MaxAmount" type="text" class="c-input" placeholder="Giảm tối đa" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" id="MaxValue">
-                            </div>  
-                            <div class="col-btn cell">
-                              <ion-button title="lưu lại" fill="none" size="small" (click)="saveReward(r)"><ion-icon color="primary" name="save-outline"></ion-icon></ion-button> 
-                              <ion-button title="Xóa" fill="none" *ngIf="r.Id != 0" size="small" (click)="deleteReward(i,j,r)"><ion-icon color="danger" name="trash-outline"></ion-icon></ion-button>
-                            </div>         
-                          </div> 
-                        </section>
+                              <div class="col-name cell">
+                                <ng-select [disabled]="!r.ChooseItem" [required]="r.ChooseItem" appendTo="#pr-program-discount" [(ngModel)]="r.IDItem" (change)="changedIDItem(i,j, $event, true)" [clearable]="false" class="c-input"  [items]="r._ItemDataSource | async" [typeahead]="r._ItemSearchInput" [loading]="r._ItemSearchLoading" [virtualScroll]="true" bindLabel="Name" bindValue="Id"  placeholder="Sản phẩm">
+                                  <ng-template ng-label-tmp let-i="item">                                 
+                                    {{i.Name}}
+                                  </ng-template>                                                                           
+                                </ng-select>
+                                
+                              </div>
+                              <div class="col-uom cell">
+                                <ng-select [disabled]="!r.ChooseItemUoM" [required]="r.ChooseItemUoM" [(ngModel)]="r.IDItemUoM" [clearable]="false"  appendTo="#pr-program-discount"  class="c-input" [items]="r._UoMs"   bindLabel="Name" bindValue="Id" placeholder="Đơn vị"></ng-select>
+                              </div>
+                              <div class="col-quantity cell">
+                                <input [style]="{'border-color': r.ChooseQuantity && r.PromotionQuantity == 0?'red !important': null}"  [disabled]="!r.ChooseQuantity"  id="PromotionQuantity" [(ngModel)]="r.PromotionQuantity" type="number"  class="c-input" placeholder="Số lượng">
+                              </div>
+                              <div class="col-amount cell">                           
+                                <input [style]="{'border-color': r.ChooseAmount && r.DiscountAmount == 0?'red !important': null}" [disabled]="!r.ChooseAmount" [(ngModel)]="r.DiscountAmount" placeholder="Số tiền giảm" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" class="c-input" id="DiscountAmount" type="text">
+                              </div>                            
+                              <div class="col-percent cell">
+                                <input [style]="{'border-color': r.ChoosePercent && r.DiscountPercent == 0?'red !important': null}" [disabled]="!r.ChoosePercent" [required]="r.ChoosePercent" [(ngModel)]="r.DiscountPercent" placeholder="Phần trăm giảm" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" %" class="c-input" id="DiscountPercent" type="text">                       
+                              </div>  
+                              <div class="col-maxvalue cell">
+                                <input [style]="{'border-color': r.ChooseMaxValue && r.MaxAmount == 0?'red !important': null}" [disabled]="!r.ChooseMaxValue"  [(ngModel)]="r.MaxAmount" type="text" class="c-input" placeholder="Giảm tối đa" mask="separator.0"  thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" id="MaxValue">
+                              </div>  
+                              <div class="col-btn cell">
+                                <ion-button title="lưu lại" fill="none" size="small" (click)="saveReward(r)"><ion-icon color="primary" name="save-outline"></ion-icon></ion-button> 
+                                <ion-button title="Xóa" fill="none" *ngIf="r.Id != 0" size="small" (click)="deleteReward(i,j,r)"><ion-icon color="danger" name="trash-outline"></ion-icon></ion-button>
+                              </div>         
+                            </div> 
+                          </section>
+                      ` </div>
                         <div class="ion-text-center">
                           <ion-button title="thêm phần thưởng" fill="outline"  (click)="addReward(i)"><ion-icon name="add"></ion-icon> Thêm phần thưởng</ion-button>
                         </div>                      
