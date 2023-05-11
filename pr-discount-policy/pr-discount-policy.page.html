@@ -1,5 +1,5 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveVoucher)="changeStatus('Approved')" (disapproveVoucher)="changeStatus('Rejected')" (submitVoucherForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveDiscount)="changeStatus('Approved')" (disapproveDiscount)="changeStatus('Rejected')" (submitDiscountForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
 	<section class="table">
 		<header class="bold">
 			<div class="col-checkbox cell"></div>
@@ -9,7 +9,6 @@
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Id" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="cell">Tên Discount</div>
-      <div class="cell">Giá trị đơn hàng tối thiểu</div>
 			<div class="cell">Thời gian áp dụng</div>  		
 			<div class="cell">Trạng thái</div>	
 		</header>
@@ -53,14 +52,12 @@
 						<div (click)="nav('pr-discount-policy/'+i.Id,'forward')" class="cell">
 							{{i.Name}}
 						</div>	
-            <div class="cell">						
-              <ion-text *ngIf="i.MinOrderValue" color="primary">{{i.MinOrderValue | number: '1.0-0'}} đ</ion-text>
-						</div>				
+										
 						<div class="cell">
-              <ion-text color="primary">{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}</ion-text>
+              				<ion-text color="primary">{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}</ion-text>
 						</div>					
 						<div class="cell">
-              <ion-text>{{i.Status}}</ion-text>
+              				<ion-text>{{i.Status}}</ion-text>
 						</div>
 					</div>
 				</ng-container>

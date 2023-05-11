@@ -99,9 +99,9 @@
                               <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
                             </span>                            
                             <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right">Tất cả sản phẩm</ion-button>
-                            <ion-button [disabled]="item?.Status != 'New'" size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">
-                              <ion-text *ngIf="ListItem.length <= 0">Sản phẩm cụ thể</ion-text>
-                              <ion-text *ngIf="ListItem.length > 0">{{ListItem.length}} Sản phẩm</ion-text>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">
+                              <ion-text *ngIf="NumberItem <= 0">Sản phẩm cụ thể</ion-text>
+                              <ion-text *ngIf="NumberItem > 0">{{NumberItem}} Sản phẩm</ion-text>
                             </ion-button>
                           </div>                                     
                         </div>
@@ -113,9 +113,9 @@
                               <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
                             </span>                          
                             <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả khách hàng</ion-button>
-                            <ion-button [disabled]="item?.Status != 'New'" size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
-                              <ion-text *ngIf="ListContact.length > 0">{{ListContact.length}} Khách hàng</ion-text>
-                              <ion-text *ngIf="ListContact.length <= 0">Khách hàng cụ thể</ion-text>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
+                              <ion-text *ngIf="NumberPartner > 0">{{NumberPartner}} Khách hàng</ion-text>
+                              <ion-text *ngIf="NumberPartner <= 0">Khách hàng cụ thể</ion-text>
                             </ion-button>
                           </div>                                     
                         </div>

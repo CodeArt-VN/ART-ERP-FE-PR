@@ -8,6 +8,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { BRA_BranchProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, PR_ProgramProvider } from 'src/app/services/static/services.service';
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
+import { ApiSetting } from 'src/app/services/static/api-setting';
 
 @Component({
   selector: 'app-pr-voucher-policy-detail',
@@ -17,8 +18,8 @@ import { ConditionComponent } from '../condition/condition.component';
 export class PRVoucherPolicyDetailPage extends PageBase {
   Discounts=[];
   Bonus=[];
-  ListItem = [];
-  ListContact = [];
+  NumberPartner = 0;
+  NumberItem = 0;
 
   constructor(
     public pageProvider: PR_ProgramProvider,
@@ -69,12 +70,8 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       if (this.item?.Id) {
         this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
         this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
-        this.programItemProvider.read({IDProgram:this.item.Id}).then(result=>{
-          this.ListItem = result['data'];
-        });
-        this.programPartnerProvider.read({IDProgram:this.item.Id}).then(result=>{
-          this.ListContact = result['data'];
-        })
+        this.countPartner(this.item.Id);
+        this.countItem(this.item.Id);
         // if(this.item.Status != 'New'){
         //   this.formGroup.disable();
         // }
@@ -97,7 +94,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       }
       const modal = await this.modalController.create({
           component: ConditionComponent,
-          swipeToClose: true,
+          canDismiss: true,
           backdropDismiss: true,
           cssClass: 'modal-change-table',
           componentProps: {
@@ -112,10 +109,10 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       await modal.present();
       const { data, role} = await modal.onWillDismiss();
       if(role == "ITEM"){
-        this.ListItem = data;
+        this.NumberItem = data.length;
       }
       else if(role == "CONTACT"){
-        this.ListContact = data;
+        this.NumberPartner = data.length;
       }
       
       
@@ -138,5 +135,21 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       this.formGroup.controls.Code.patchValue(code);
       this.formGroup.controls.Code.markAsDirty();  
       this.saveChange();
+    }
+    countPartner(id){
+      let apiPath = { method: "GET", url: function(id){return ApiSetting.apiDomain("PR/Program/CountPartner/") + id}};
+      this.commonService.connect(apiPath.method, apiPath.url(id),null).toPromise()
+      .then((result:any)=>{
+        this.NumberPartner = result;
+      })
+      .catch(err=>{console.log(err)})
+    }
+    countItem(id){
+      let apiPath = { method: "GET", url: function(id){return ApiSetting.apiDomain("PR/Program/CountItem/") + id}};
+      this.commonService.connect(apiPath.method, apiPath.url(id),null).toPromise()
+      .then((result:any)=>{
+        this.NumberItem = result;
+      })
+      .catch(err=>{console.log(err)})
     }
 }

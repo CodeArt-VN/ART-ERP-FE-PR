@@ -43,10 +43,10 @@ export class PRDealDetailPage extends PageBase {
             FromHour: ['', Validators.required],
             ToHour: ['', Validators.required],
             IsByPercent: [false],
-            DiscountByPercent: new FormControl({ value: 0, disabled: true }),
+            DiscountByPercent: new FormControl({ value: '', disabled: true }),
             Quantity:[''],
             MaxPerOrder:[''],
-            Price:[0],
+            Price:['',Validators.required],
             OriginalPrice:new FormControl({ value: '', disabled: true }),
             Code: [''],
             Name: [''],
@@ -140,20 +140,32 @@ export class PRDealDetailPage extends PageBase {
 		}
 	}
     IsByPercent(){
-        if(this.formGroup.controls.IsByPercent.value == false){
+
+        if(this.formGroup.controls.IsByPercent.value == true){
             this.formGroup.controls.DiscountByPercent.enable();
+            this.formGroup.controls.DiscountByPercent.setValidators([Validators.required]);
+            this.formGroup.controls.DiscountByPercent.patchValue(null);
             this.formGroup.controls.Price.patchValue(0);
-            this.formGroup.controls.Price.markAsDirty();    
+            this.formGroup.controls.Price.markAsDirty();
+            this.formGroup.controls.DiscountByPercent.markAsDirty();           
+            
             this.formGroup.controls.Price.disable();
         }else{
-            this.formGroup.controls.DiscountByPercent.patchValue(0);
-            this.formGroup.controls.DiscountByPercent.markAsDirty();        
-            this.formGroup.controls.DiscountByPercent.disable();
             this.formGroup.controls.Price.enable();
+            this.formGroup.controls.Price.setValidators([Validators.required]);
+            this.formGroup.controls.Price.patchValue(null);
+            this.formGroup.controls.DiscountByPercent.patchValue(0);
+            this.formGroup.controls.DiscountByPercent.markAsDirty();
+            this.formGroup.controls.Price.markAsDirty();        
+            
+            this.formGroup.controls.DiscountByPercent.disable();
         }
-        
+        this.saveChange();
     }
     async saveChange() { 
+        if (!this.formGroup.valid) {
+            return false;
+        }
         if(this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.DiscountByPercent.value == 0){
             this.env.showTranslateMessage('Vui lòng nhập % giảm giá', 'warning');
             return false;
@@ -170,6 +182,10 @@ export class PRDealDetailPage extends PageBase {
             this.env.showTranslateMessage('Sản phẩm chưa có giá bán', 'warning');
             return false;
         }   
+        if(this.formGroup.controls.Price.value > this.formGroup.controls.OriginalPrice.value){
+            this.env.showTranslateMessage('Giá sau giảm không được lớn hơn giá gốc', 'warning');
+            return false;
+        } 
         if(Date.parse('01/01/2011 '+this.formGroup.controls.FromHour.value) > Date.parse('01/01/2011 '+ this.formGroup.controls.ToHour.value)){
             this.env.showTranslateMessage('Giờ bắt đầu phải nhỏ hơn giờ kết thúc', 'warning');
             return false;
@@ -178,7 +194,6 @@ export class PRDealDetailPage extends PageBase {
             this.env.showTranslateMessage('ngày kết thúc phải lớn hơn ngày bắt đầu', 'warning');
             return false;
         }
-
         super.saveChange2();
     }
 }
