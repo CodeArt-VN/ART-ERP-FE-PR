@@ -2,11 +2,13 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
+import { Subject, of } from 'rxjs';
+import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
 import { ApiSetting } from 'src/app/services/static/api-setting';
-import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, WMS_ItemProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, WMS_ItemGroupProvider, WMS_ItemProvider } from 'src/app/services/static/services.service';
 
 @Component({
   selector: 'app-condition',
@@ -16,8 +18,10 @@ import { BRA_BranchProvider, CRM_ContactProvider, PR_ProgramConditionProvider, P
 export class ConditionComponent extends PageBase{
   ConditionForm;
   Condition;
-  AttributeOption;
-  OperatorOption;
+  AttributeOption = [];
+  OperatorOptionString;
+  OperatorOptionSelect;
+  OperatorOptionBool;
   Count = 0;
   Data = [];
   constructor(
@@ -25,6 +29,7 @@ export class ConditionComponent extends PageBase{
     public programPartnerProvider: PR_ProgramPartnerProvider,
     public programItemProvider: PR_ProgramItemProvider,
     public itemProvider: WMS_ItemProvider, 
+    public itemGroupProvider: WMS_ItemGroupProvider, 
     public contactProvider: CRM_ContactProvider, 
     public env: EnvService,
     public navCtrl: NavController,
@@ -50,39 +55,54 @@ export class ConditionComponent extends PageBase{
       Object.assign(this.query, {IDParent:this.Condition.IDParent});
     }
     super.loadData();
+    // this.env.getStatus('PaymentStatus').then(data => {this.statusList = data});
+    // this.env.getType('PaymentType').then(data=>{this.typeList = data;});  
   }
   loadedData(event?): void {
     super.loadedData();
     if(this.Condition.Type == "ITEM"){
-      this.AttributeOption = [  
-        {Id:"Name",Name:"Tên sản phẩm",Type:"string"},
-        {Id:"Code",Name:"Mã sản phẩm",Type:"string"},
-        {Id:"IDItemGroup",Name:"Nhóm sản phẩm",Type:"select"},     
-      ]
+      this.env.getType('PRItemCondition').then(data=>{this.AttributeOption = data});
     }
-    else if(this.Condition.Type == "REWARD"){
-      this.AttributeOption = [  
-        {Id:"ValueOrder",Name:"Giá trị đơn hàng", Type:"string"},
-      ]
+    if(this.Condition.Type == "CONTACT"){
+      this.env.getType('PRBusinessPartnerCondition').then(data=>{this.AttributeOption = data});
     }
-    else{
-      this.AttributeOption = [      
-        {Id:"Name",Name:"Tên khách hàng",Type:"string"},
-        {Id:"Code",Name:"Mã khách hàng",Type:"string"},
-        {Id:"IDBusinessPartnerGroup",Name:"Nhóm khách hàng",Type:"select"},
-        {Id:"IsStaff",Name:"Nhân viên",Type:"string"},
-      ]
+    if(this.Condition.Type == "REWARD"){
+      this.env.getType('PRRewardCondition').then(data=>{this.AttributeOption = data});
     }
-    this.OperatorOption = [
+    this.OperatorOptionString = [
       {Id:"eq",Name:"Bằng với"},
       {Id:"ne",Name:"Khác với"},
       {Id:" ",Name:"Chứa"},
+    ];
+    this.OperatorOptionSelect = [
+      {Id:" ",Name:"Bằng với"},
+      {Id:"ne",Name:"Khác với"},
+    ];
+    this.OperatorOptionBool = [
+      {Id:" ",Name:"Là"},
     ];
     this.pathValueCondition();
     this.countData();
   }
   pathValueCondition(){
     this.items.forEach(i=>{
+      let OperatorOption;
+      if(i.Remark == "string"){
+        OperatorOption = this.OperatorOptionString;
+      }
+      if(i.Remark == "select"){
+        OperatorOption = this.OperatorOptionSelect;
+      }
+      if(i.Remark == "bool"){
+        OperatorOption = this.OperatorOptionBool;
+        if(i.Value == "False"){
+          i.Value = false
+        }
+        if(i.Value == "True"){
+          i.Value = true;
+        }
+      }
+      let searchInput$ = new Subject<string>();
       let group = this.formBuilder.group({ 
         Id: [i.Id],
         IDProgram:[i.IDProgram],
@@ -92,6 +112,15 @@ export class ConditionComponent extends PageBase{
         Operator: [i.Operator,Validators.required],     
         Amount:[i.Amount],       
         Value:[i.Value,Validators.required],  
+        Remark:[i.Remark],
+        _OperatorOption: [OperatorOption],
+        _ItemSearchLoading: [false],
+        _ItemSearchInput: [searchInput$],
+        _ItemDataSource: [searchInput$.pipe(distinctUntilChanged(),
+                  tap(() => group.controls._ItemSearchLoading.setValue(true)),
+                  switchMap(term => this.itemGroupProvider.search({ Take: 20, Skip: 0, Keyword: term})
+                      .pipe(catchError(() => of([])), tap(() => group.controls._ItemSearchLoading.setValue(false))))
+              )],
       }); 
       this.ConditionForm.push(group);
     })
@@ -100,6 +129,7 @@ export class ConditionComponent extends PageBase{
     if(this.Condition.IDParent){
       IDParent =  this.Condition.IDParent
     }
+    let searchInput$ = new Subject<string>();
     let group = this.formBuilder.group({ 
       Id: [''],
       IDProgram:[this.Condition.IDProgram],
@@ -108,7 +138,16 @@ export class ConditionComponent extends PageBase{
       Type:[this.Condition.Type],
       Operator: [null,Validators.required],     
       Amount:[0],       
-      Value:['',Validators.required],  
+      Value:['',Validators.required], 
+      Remark:['string'],  
+      _OperatorOption: [this.OperatorOptionString],
+      _ItemSearchLoading: [false],
+      _ItemSearchInput: [searchInput$],
+      _ItemDataSource: [searchInput$.pipe(distinctUntilChanged(),
+                tap(() => group.controls._ItemSearchLoading.setValue(true)),
+                switchMap(term => this.itemGroupProvider.search({ Take: 20, Skip: 0, Keyword: term})
+                    .pipe(catchError(() => of([])), tap(() => group.controls._ItemSearchLoading.setValue(false))))
+            )],
     }); 
     this.ConditionForm.push(group);
   }
@@ -130,6 +169,25 @@ export class ConditionComponent extends PageBase{
     }
    
   }
+  changeAttributeOption(form : FormGroup){
+    let option = this.AttributeOption.find(o=>o.Code == form.controls.Attribute.value);
+    form.controls.Remark.patchValue(option.Remark);
+    form.controls.Remark.markAsDirty();
+    if(option.Remark =="string"){
+      form.controls._OperatorOption.setValue(this.OperatorOptionString);
+    }
+    if(option.Remark =="select"){
+      form.controls._OperatorOption.setValue(this.OperatorOptionSelect);
+      form.controls.Operator.setValue(" ");
+      form.controls.Operator.markAsDirty();
+    }
+    if(option.Remark =="bool"){
+      form.controls._OperatorOption.setValue(this.OperatorOptionBool);
+      form.controls.Value.setValue(true);
+      form.controls.Value.markAsDirty();
+    }
+    this.saveItemChange(form);
+  }
   saveItemChange(form : FormGroup) {
     return new Promise((resolve, reject) => {
       form.updateValueAndValidity();
@@ -140,6 +198,10 @@ export class ConditionComponent extends PageBase{
             this.submitAttempt = true;
             this.item = {};     
             Object.assign(this.item, form.value);
+            this.item.Value = this.item.Value.toString();
+            this.item._ItemSearchInput = null;
+            this.item._ItemDataSource = null;
+
             Object.keys(this.item).forEach(k => {
                 if (this.item[k] === null || this.item[k] === undefined || this.item[k] === '')
                     delete this.item[k];
@@ -208,11 +270,10 @@ export class ConditionComponent extends PageBase{
     this.items.forEach((i:any)=>{
       if(i.Type != "REWARD"){
         let Attribute = i.Attribute;
-        let option = this.AttributeOption.find(o=>o.Id == i.Attribute);
+        let option = this.AttributeOption.find(o=>o.Code == i.Attribute);
         let value = i.Value;
-        if(option.Type == "select"){
-          value = parseInt(value);
-        }
+       
+       
         if(i.Operator!=" "){
           Attribute = Attribute+"_"+i.Operator;
         }

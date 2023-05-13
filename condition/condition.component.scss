@@ -13,3 +13,35 @@
     border: 1px solid var(--ion-color-primary);
     border-radius: 10px;
 }
+ion-toggle{
+    height: 25px;
+    width: 50px;
+    --handle-width: 15px;
+    --handle-height: 15px;
+    --handle-max-height: auto;
+    --handle-spacing: 4px;
+  
+    --handle-border-radius: 6px;
+    --handle-box-shadow: none;
+}
+.col-attribute {
+    max-width: 150px;
+    min-width: 150px;
+}
+.ng-select {
+    max-height: 28px !important;
+    min-height: 28px !important;
+    .ng-select-multiple {
+        .ng-select-container {
+            .ng-value-container{
+                .ng-value{
+                    border-radius: 0rem;
+					white-space: break-spaces !important;
+					margin:0rem 0rem 0rem 0;
+    				padding: 0rem 0 0rem 0rem;
+                }
+            }
+        }
+    }
+}
+

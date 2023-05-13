@@ -21,14 +21,16 @@
       <ng-container formArrayName="ConditionForm">                       
         <div class="row"  *ngFor="let c of ConditionForm.controls; let i=index">
           <ng-container [formGroup]="c" >    
-              <div class="cell">
-                <ng-select (change)="saveItemChange(c)" [clearable]="false"  appendTo="#pr-condition" formControlName="Attribute" class="c-input" [items]="AttributeOption"  bindLabel="Name" bindValue="Id" placeholder="Lọc theo"></ng-select>           
+              <div class="cell col-attribute">
+                <ng-select (change)="changeAttributeOption(c)" [clearable]="false"  appendTo="#pr-condition" formControlName="Attribute" class="c-input" [items]="AttributeOption"  bindLabel="Name" bindValue="Code" placeholder="Lọc theo"></ng-select>           
               </div>
-              <div class="cell">
-                <ng-select (change)="saveItemChange(c)"  [clearable]="false"  appendTo="#pr-condition" formControlName="Operator" class="c-input" [items]="OperatorOption"  bindLabel="Name" bindValue="Id" placeholder="So sánh"></ng-select>           
+              <div class="cell" *ngIf="c.controls.Remark.value=='string'">
+                <ng-select (change)="saveItemChange(c)"  [clearable]="false"  appendTo="#pr-condition" formControlName="Operator" class="c-input" [items]="c.controls._OperatorOption.value" bindLabel="Name" bindValue="Id" placeholder="So sánh"></ng-select>           
               </div>  
               <div class="cell">
-                <input type="text" (change)="saveItemChange(c)" formControlName="Value" class="c-input" placeholder="Value">
+                <ng-select *ngIf="c.controls.Remark.value=='select'"  [multiple]="true" (change)="saveItemChange(c)"  [clearable]="true"  appendTo="#pr-condition" formControlName="Value" class="c-input" [items]="c.controls._ItemDataSource.value | async" [typeahead]="c.controls._ItemSearchInput.value" [loading]="c.controls._ItemSearchLoading.value" [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="Tìm "></ng-select>
+                <input *ngIf="c.controls.Remark.value=='string'" type="text" (change)="saveItemChange(c)" formControlName="Value" class="c-input" placeholder="Value">
+                <ion-toggle  class="ion-float-right" *ngIf="c.controls.Remark.value=='bool'" (ionChange)="saveItemChange(c)" formControlName="Value"></ion-toggle>
               </div>               
               <div class="ion-float-right">
                 <ion-button color="danger" (click)="removeConditionForm(i,c)" fill="outline" slot="end" size="small"><ion-icon  name="trash-outline"></ion-icon></ion-button>                
@@ -44,7 +46,7 @@
       <ion-text>Tìm thấy</ion-text>
       <ion-label slot="end">{{Count}} 
         <ion-text *ngIf="Condition.Type=='ITEM'">Sản phẩm</ion-text>
-        <ion-text *ngIf="Condition.Type=='CONTACT'">Khách hàng</ion-text>
+        <ion-text *ngIf="Condition.Type=='CONTACT'">Đối tượng</ion-text>
       </ion-label>
     </ion-item>
     

@@ -29,20 +29,24 @@
                           <input autocomplete="off" (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name">
                         </div>
                         <div class="c-control">
-                          <ion-row >
-                            <ion-col size="6" style="padding: 0px !important;">                       
-                                  <label class="c-label" for="FromDate" >Bắt đầu</label>
-                                  <input (change)="saveChange()" class="c-input" id="FromDate" formControlName="FromDate" type="date" >
-                              </ion-col>
-                              <ion-col size="6" style="padding: 0px !important;"> 
-                                  <label class="c-label" for="ToDate">Kết thúc</label>
-                                  <input (change)="saveChange()" class="c-input" id="ToDate"  formControlName="ToDate" type="date" >                          
-                              </ion-col>
-                          </ion-row>
+                          <label class="c-label" for="FromDate" >Ngày bắt đầu</label>
+                          <input (change)="saveChange()" class="c-input" id="FromDate" formControlName="FromDate" type="date" >   
                         </div>
-                                     
+                        <div class="c-control">
+                          <label class="c-label" for="ToDate">Ngày kết thúc</label>
+                          <input (change)="saveChange()" class="c-input" id="ToDate"  formControlName="ToDate" type="date" > 
+                        </div>             
                       </ion-col>
                       <ion-col size="12" size-xl="6">   
+                        <div class="c-control">
+                          <ion-label>Chế độ áp dụng</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <ion-label>Auto</ion-label>
+                            <span class="ion-float-right">
+                              <ion-toggle  (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
+                            </span>                          
+                          </div>                                     
+                        </div>
                         <div class="c-control">
                           <ion-label>Sản phẩm áp dụng</ion-label>
                           <div class="c-input" style="margin-top: 7px;">
@@ -58,16 +62,16 @@
                           </div>                                     
                         </div>
                         <div class="c-control">
-                          <ion-label>Khách hàng áp dụng</ion-label>
+                          <ion-label>Đối tượng áp dụng</ion-label>
                           <div class="c-input" style="margin-top: 7px;">
                             <span>
                               <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle> 
                               <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
                             </span>                          
-                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả khách hàng</ion-button>
+                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả đối tượng</ion-button>
                             <ion-button [disabled]="item?.Status != 'New'" size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
                               <ion-text *ngIf="NumberPartner">{{NumberPartner}} Khách hàng</ion-text>
-                              <ion-text *ngIf="NumberPartner <= 0">Khách hàng cụ thể</ion-text>
+                              <ion-text *ngIf="NumberPartner <= 0">Đối tượng cụ thể</ion-text>
                             </ion-button>
                           </div>                                     
                         </div>   

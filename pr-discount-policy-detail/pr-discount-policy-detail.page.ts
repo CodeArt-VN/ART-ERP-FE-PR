@@ -53,7 +53,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
           FromDate: ['',Validators.required],
           ToDate: ['',Validators.required],
           IsPublic: [false],
-          IsAutoApply: [false],
+          IsAutoApply: [true],
           IsApplyAllProduct: [false],
           IsApplyAllCustomer: [false],
           MinOrderValue: [''],
@@ -161,7 +161,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
       if(Type=="ITEM"){
         title = "Sản phẩm áp dụng";
       }else if(Type=="CONTACT"){
-        title = "Khách hàng áp dụng";
+        title = "Đối tượng áp dụng";
       }else if(Type=="REWARD"){
         title = "Điều kiện áp dụng " + NameLevel;
       }
