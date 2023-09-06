@@ -79,7 +79,6 @@ export class PRProgramDetailPage extends PageBase {
       }
       const modal = await this.modalController.create({
           component: ConditionComponent,
-          swipeToClose: true,
           backdropDismiss: true,
           cssClass: 'modal-change-table',
           componentProps: {
