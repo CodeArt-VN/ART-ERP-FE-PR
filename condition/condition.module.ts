@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConditionComponent } from './condition.component';
 import { ShareModule } from "../../../share.module";
-import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -18,7 +17,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
-        NgSelectModule,
         ShareModule
     ]
 })

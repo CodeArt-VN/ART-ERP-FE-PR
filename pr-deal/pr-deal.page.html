@@ -64,9 +64,7 @@
 	<app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 	<div *ngIf="items.length && pageConfig.showSpinner==false">
 		<section class="table">
-			<ion-virtual-scroll [items]="items" approxItemHeight="27px">
-				<ng-container *virtualItem="let i; let itemBounds = bounds; let j = index;">
-					<div class="row" [ngClass]="{odd: j % 2 != 0}" [ngClass]="{selected: i.checked}">
+								<div *ngFor="let i of items; let j = index;"  class="row" [ngClass]="{odd: j % 2 != 0}" [ngClass]="{selected: i.checked}">
 						<div class="col-checkbox cell">
 							<input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox">
 						</div>
@@ -86,12 +84,8 @@
 							<div *ngIf="i.IsByPercent">{{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100  | number: '1.0-0'}} đ</div>
 							<div *ngIf="i.IsByPercent == false">{{i.Price  | number: '1.0-0'}} đ</div>
 						</div>
-						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-sale cell">
-							<i *ngIf="i.CountSale == null">0</i> <i>{{i.CountSale}}</i> /<sub>{{i.Quantity}} SP</sub>
-						</div> -->
-						<!-- <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-max cell">
-							<i>{{i.MaxPerOrder}}</i>/<sub>đơn</sub> 							
-						</div> -->
+						
+						
 						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
 							{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
 						</div>
@@ -102,8 +96,7 @@
 							{{i.Status}}
 						</div>
 					</div>
-				</ng-container>
-			</ion-virtual-scroll>
+				
 		</section>
 	</div>
 	<ion-infinite-scroll color="primary" threshold="20%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
