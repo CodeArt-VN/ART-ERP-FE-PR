@@ -8,6 +8,7 @@ import { ShareModule } from 'src/app/share.module';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { RouterModule, Routes } from '@angular/router';
 import { ConditionModule } from '../condition/condition.module';
+import { FilterModalModule } from '../filter-modal/filter-modal.module';
 
 const routes: Routes = [
   {
@@ -25,6 +26,8 @@ const routes: Routes = [
     FileUploadModule,
     ShareModule,
     ConditionModule,
+    FilterModalModule,
+  
     RouterModule.forChild(routes)
   ],
   declarations: [PRProgramDetailPage]

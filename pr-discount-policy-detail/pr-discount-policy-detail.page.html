@@ -44,33 +44,38 @@
                       </ion-col>
                       <ion-col size="12" size-xl="6">   
                         <div class="c-control">
-                          <ion-label>Sản phẩm áp dụng</ion-label>
-                          <div class="c-input" style="margin-top: 7px;">
-                            <span>
-                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle>
-                              <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
-                            </span>                            
-                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right">Tất cả sản phẩm</ion-button>
-                            <ion-button [disabled]="item?.Status != 'New'" size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">
+                          <span class="no-warp">
+                            <input (change)="saveChange()" class="c-checkbox" id="IsApplyAllProduct" formControlName="IsApplyAllProduct" type="checkbox">
+                            <label class="c-label checkbox" for="IsApplyAllProduct">Áp dụng tất cả sản phẩm
+                                <span *ngIf="!formGroup.controls.IsApplyAllProduct.value"  class="ion-float-right clickable" (click)="condition('ITEM')" ion-text color="danger"></span>
+                            </label>
+                            <ion-button size="small" style="margin-top: 1px;" *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="ion-float-right clickable" (click)="condition('ITEM')">
                               <ion-text *ngIf="NumberItem <= 0">Sản phẩm cụ thể</ion-text>
                               <ion-text *ngIf="NumberItem > 0">{{NumberItem}} Sản phẩm</ion-text>
                             </ion-button>
-                          </div>                                     
+                          </span>
                         </div>
                         <div class="c-control">
-                          <ion-label>Khách hàng áp dụng</ion-label>
-                          <div class="c-input" style="margin-top: 7px;">
-                            <span>
-                              <ion-toggle class="ion-float-left"  (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle> 
-                              <ion-text class="ion-float-left" style="padding-left: 10px;">Tất cả</ion-text>
-                            </span>                          
-                            <ion-button size="small" style="margin-top: -5.5px;" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right">Tất cả khách hàng</ion-button>
-                            <ion-button [disabled]="item?.Status != 'New'" size="small" style="margin-top: -5.5px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
-                              <ion-text *ngIf="NumberPartner">{{NumberPartner}} Khách hàng</ion-text>
+                          <span class="no-warp">
+                            <input (change)="saveChange()" class="c-checkbox" id="IsApplyAllCustomer" formControlName="IsApplyAllCustomer" type="checkbox">
+                            <label class="c-label checkbox" for="IsApplyAllCustomer">Áp dụng tất cả khách hàng
+                                <span *ngIf="!formGroup.controls.IsApplyAllCustomer.value"  class="ion-float-right clickable" (click)="condition('CONTACT')" ion-text color="danger"></span>
+                            </label>
+                            <ion-button size="small" style="margin-top: 1px;" *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right clickable" (click)="condition('CONTACT')">
+                              <ion-text *ngIf="NumberPartner > 0">{{NumberPartner}} Khách hàng</ion-text>
                               <ion-text *ngIf="NumberPartner <= 0">Khách hàng cụ thể</ion-text>
                             </ion-button>
+                          </span>
+                        </div>
+                        <div class="c-control">
+                          <ion-label>Chế độ áp dụng</ion-label>
+                          <div class="c-input" style="margin-top: 7px;">
+                            <ion-label>Auto</ion-label>
+                            <span class="ion-float-right">
+                              <ion-toggle  (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
+                            </span>                          
                           </div>                                     
-                        </div>   
+                        </div>  
                         <div class="c-control">
                           <label class="c-label" for="Remark">Mô tả chính sách Discount</label>
                           <textarea (change)="saveChange()" rows="3" class="c-input" id="Remark" formControlName="Remark" type="textarea"></textarea>
@@ -80,10 +85,10 @@
                     </ion-row>                  
                   </form>  
                   <ion-row *ngIf="item.Id">
-                    <ion-col size="12">
-                      <ion-toolbar color="primary">
+                    <ion-col size="12" class="bdt-1-solid">
+                      <ion-item lines="none">
                         <ion-title >Điều kiện trả thưởng</ion-title>
-                      </ion-toolbar>
+                      </ion-item>
                     </ion-col>
                     <ion-col size="12" *ngFor="let c of ConditionReward; let i= index">
                       <div class="c-control c-input" > 

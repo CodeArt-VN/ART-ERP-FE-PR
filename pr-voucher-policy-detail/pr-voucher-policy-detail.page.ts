@@ -9,6 +9,8 @@ import { BRA_BranchProvider, PR_ProgramItemProvider, PR_ProgramPartnerProvider, 
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 import { ApiSetting } from 'src/app/services/static/api-setting';
+import { FilterModalComponent } from '../filter-modal/filter-modal.component';
+
 
 @Component({
   selector: 'app-pr-voucher-policy-detail',
@@ -93,13 +95,13 @@ export class PRVoucherPolicyDetailPage extends PageBase {
         title = "Khách hàng áp dụng";
       }
       const modal = await this.modalController.create({
-          component: ConditionComponent,
+          component: FilterModalComponent ,
           canDismiss: true,
           backdropDismiss: true,
           cssClass: 'modal-change-table',
           componentProps: {
             Condition:{
-              Type:Type,
+              Scema:Type,
               Title:title,    
               IDProgram:this.item.Id, 
               TypeProgram: "Voucher",          

@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{Condition.Title}}</ion-title>
+    <ion-buttons slot="primary">
+    
+      <ion-button title="{{'erp.app.pages.sale.sale-order.merge.close-modal' | translate}}" (click)="closeModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+  <!-- <app-page-message [itemsLength]="ConditionForm.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
+  <div id="pr-condition" style="position: absolute; z-index: 30005;"></div>
+  <div class="table-contain">
+    <section class="table"cdkDropListGroup>
+      <ng-container [ngTemplateOutlet]="recursiveTemplate" [ngTemplateOutletContext]="{ form: formGroup }"></ng-container>
+    </section>
+
+   
+  </div>        
+  <ng-container *ngIf="items?.length>0 && Condition.Type != 'REWARD'">
+    <ion-item lines="none" class="border ion-margin-top">
+      <ion-text>Tìm thấy</ion-text>
+      <ion-label slot="end">{{Count}} 
+        <ion-text *ngIf="Condition.Type=='ITEM'">Sản phẩm</ion-text>
+        <ion-text *ngIf="Condition.Type=='CONTACT'">Khách hàng</ion-text>
+      </ion-label>
+    </ion-item>
+  </ng-container>
+</ion-content>
+<ion-footer *ngIf="Condition.Type != 'REWARD'">
+  <ion-toolbar class="apply-btn">
+    <ion-button expand="block" (click)="applyData()">Áp dụng</ion-button>
+  </ion-toolbar>
+</ion-footer>
+
+
+<ng-template #recursiveTemplate  let-parent="parent" let-form="form">
+  <div [formGroup]="form" >
+    <div class="row" class="drag-box">
+      <div class="cell">
+        <ng-select (change)="changeDimension(form)" [clearable]="false" formControlName="Dimension" appendTo="#pr-condition" 
+        class="c-input" [items]="schemaDetailList" bindLabel="Name" bindValue="Code" placeholder="Lọc theo"></ng-select>
+      </div>
+      <div class="cell" >
+        <ng-select [clearable]="false" formControlName="Operator" appendTo="#pr-condition"  
+        class="c-input" [items]="form.get('Dimension')?.value == 'logical'?logicalOperators:transformOperators" bindLabel="name" bindValue="name"placeholder="So sánh"></ng-select>
+      </div>
+      <div class="cell" *ngIf="form.get('Dimension')?.value != 'logical'">
+        <input type="text" formControlName="Value" class="c-input" placeholder="Value">
+      </div>
+      <div class="ion-float-right" *ngIf="parent">
+        <ion-button color="danger" (click)="removeForm(form,parent)" fill="outline" slot="end" size="small">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  
+    <!-- Recursively render child forms -->
+    <ng-container>
+      <div class="drag-list" [id]="form.controls.UniqueId.value" [cdkDropListConnectedTo]="connectionList" cdkDropList [cdkDropListData]="form.controls.Logicals" (cdkDropListDropped)="drop($event)" *ngIf="form.controls.Logicals && form.controls.Logicals.controls.length">
+        <div cdkDrag style="padding-left:10px"*ngFor="let c of form.controls.Logicals.controls; let i = index" >
+            <ng-container [ngTemplateOutlet]="recursiveTemplate" [ngTemplateOutletContext]="{ form: c,parent:form }"> </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    <div class="row ion-justify-content-end" *ngIf="form.get('Dimension')?.value=='logical'">
+      <ion-button size="small" style="margin-bottom:20px;" title="{{'erp.app.components.list-toolbar.add' | translate}}" (click)="addNewForm(form.controls.Logicals)">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ng-template>
