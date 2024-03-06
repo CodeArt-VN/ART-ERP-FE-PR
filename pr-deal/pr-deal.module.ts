@@ -14,8 +14,8 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     ShareModule,
-    RouterModule.forChild([{ path: '', component: PRDealPage }])
+    RouterModule.forChild([{ path: '', component: PRDealPage }]),
   ],
-  declarations: [PRDealPage]
+  declarations: [PRDealPage],
 })
 export class PRDealPageModule {}

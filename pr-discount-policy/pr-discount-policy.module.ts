@@ -6,16 +6,15 @@ import { ShareModule } from 'src/app/share.module';
 import { RouterModule } from '@angular/router';
 import { PRDiscountPolicyPage } from './pr-discount-policy.page';
 
-
 @NgModule({
   imports: [
     ShareModule,
     CommonModule,
     FormsModule,
     IonicModule,
-    
-    RouterModule.forChild([{ path: '', component: PRDiscountPolicyPage }])
+
+    RouterModule.forChild([{ path: '', component: PRDiscountPolicyPage }]),
   ],
-  declarations: [PRDiscountPolicyPage]
+  declarations: [PRDiscountPolicyPage],
 })
 export class PRDiscountPolicyPageModule {}

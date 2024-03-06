@@ -12,9 +12,9 @@ import { PRVoucherPolicyPage } from './pr-voucher-policy.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    
-    RouterModule.forChild([{ path: '', component: PRVoucherPolicyPage }])
+
+    RouterModule.forChild([{ path: '', component: PRVoucherPolicyPage }]),
   ],
-  declarations: [PRVoucherPolicyPage]
+  declarations: [PRVoucherPolicyPage],
 })
 export class PRVoucherPolicyPageModule {}

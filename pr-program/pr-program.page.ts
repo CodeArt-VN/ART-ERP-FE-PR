@@ -10,17 +10,15 @@ import { PR_ProgramProvider } from 'src/app/services/static/services.service';
   styleUrls: ['./pr-program.page.scss'],
 })
 export class PRProgramPage extends PageBase {
-
-  constructor( 
+  constructor(
     public pageProvider: PR_ProgramProvider,
     public modalController: ModalController,
     public popoverCtrl: PopoverController,
     public alertCtrl: AlertController,
     public loadingController: LoadingController,
     public env: EnvService,
-    public navCtrl: NavController
-    ) {
-        super();        
-    }
-
+    public navCtrl: NavController,
+  ) {
+    super();
+  }
 }

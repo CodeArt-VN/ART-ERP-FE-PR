@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-
 import { PRProgramPage } from './pr-program.page';
 import { ShareModule } from 'src/app/share.module';
 import { RouterModule } from '@angular/router';
@@ -15,8 +14,8 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     IonicModule,
     ShareModule,
-    RouterModule.forChild([{ path: '', component: PRProgramPage }])
+    RouterModule.forChild([{ path: '', component: PRProgramPage }]),
   ],
-  declarations: [PRProgramPage]
+  declarations: [PRProgramPage],
 })
 export class PRProgramPageModule {}

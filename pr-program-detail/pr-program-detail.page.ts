@@ -15,8 +15,8 @@ import { ConditionComponent } from '../condition/condition.component';
   styleUrls: ['./pr-program-detail.page.scss'],
 })
 export class PRProgramDetailPage extends PageBase {
-  Discounts=[];
-  Bonus=[];
+  Discounts = [];
+  Bonus = [];
   ListItem = [];
 
   constructor(
@@ -31,82 +31,80 @@ export class PRProgramDetailPage extends PageBase {
     public loadingController: LoadingController,
     public commonService: CommonService,
     public modalController: ModalController,
-    ) 
-    {
-        super();
-        this.formGroup = formBuilder.group({
-          Id: new FormControl({ value: '', disabled: true }),
-          IDBranch:[this.env.selectedBranch],
-          Name:[''],
-          Type:[''],
-          Status:[''],
-          FromDate: ['',Validators.required],
-          ToDate: ['',Validators.required],
-          IsPublic: [false],
-          IsAutoApply: [false],
-          IsApplyAllProduct: [false],
-          IsApplyAllCustomer: [false],
-          MinOrderValue: [0],
-          IsByPercent: [false],
-          MaxValue:[0],
-          Value:[0],
-          NumberOfCoupon:[0],
-          MaxUsagePerCustomer:[0],
-          IsDiscount:[false],
-          IsItemPromotion:[false],
-          IsDisabled:[false],
-          IsDeleted:[false],
-          
-        });      
-        this.pageConfig.isDetailPage = true;
+  ) {
+    super();
+    this.formGroup = formBuilder.group({
+      Id: new FormControl({ value: '', disabled: true }),
+      IDBranch: [this.env.selectedBranch],
+      Name: [''],
+      Type: [''],
+      Status: [''],
+      FromDate: ['', Validators.required],
+      ToDate: ['', Validators.required],
+      IsPublic: [false],
+      IsAutoApply: [false],
+      IsApplyAllProduct: [false],
+      IsApplyAllCustomer: [false],
+      MinOrderValue: [0],
+      IsByPercent: [false],
+      MaxValue: [0],
+      Value: [0],
+      NumberOfCoupon: [0],
+      MaxUsagePerCustomer: [0],
+      IsDiscount: [false],
+      IsItemPromotion: [false],
+      IsDisabled: [false],
+      IsDeleted: [false],
+    });
+    this.pageConfig.isDetailPage = true;
+  }
+  loadedData(event) {
+    if (this.item?.Id) {
+      this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
+      this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
     }
-    loadedData(event) {
-      if (this.item?.Id) {
-          this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
-          this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
-      }
-      super.loadedData();
+    super.loadedData();
+  }
+  async condition(Type: string) {
+    if (this.id == 0) {
+      return false;
     }
-    async condition(Type:string) {
-      if(this.id == 0){
-        return false;
-      }
-      let title = "";
-      if(Type=="ITEM"){
-        title = "Sản phẩm áp dụng";
-      }else if(Type=="CONTACT"){
-        title = "Khách hàng áp dụng";
-      }
-      const modal = await this.modalController.create({
-          component: ConditionComponent,
-          backdropDismiss: true,
-          cssClass: 'modal-change-table',
-          componentProps: {
-            Condition:{
-              Type:Type,
-              Title:title,    
-              IDProgram:this.item.Id, 
-              TypeProgram: "Discount",        
-            }
-          }
-      });
-      await modal.present();
-      const { data  } = await modal.onWillDismiss();
-      this.ListItem = data;
-      this.addLevelDiscount();
+    let title = '';
+    if (Type == 'ITEM') {
+      title = 'Sản phẩm áp dụng';
+    } else if (Type == 'CONTACT') {
+      title = 'Khách hàng áp dụng';
     }
-    addLevelDiscount(){
-      let discount = {
-        Name:"Hạn mức",
-        ListItem: this.ListItem,
-      }
-      this.Discounts.push(discount);
-    }
-    addLevelBonus(){
-      let bonus = {
-        Name:"Hạn mức",
-        ListItem: this.ListItem,
-      }
-      this.Bonus.push(bonus);
-    }
+    const modal = await this.modalController.create({
+      component: ConditionComponent,
+      backdropDismiss: true,
+      cssClass: 'modal-change-table',
+      componentProps: {
+        Condition: {
+          Type: Type,
+          Title: title,
+          IDProgram: this.item.Id,
+          TypeProgram: 'Discount',
+        },
+      },
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    this.ListItem = data;
+    this.addLevelDiscount();
+  }
+  addLevelDiscount() {
+    let discount = {
+      Name: 'Hạn mức',
+      ListItem: this.ListItem,
+    };
+    this.Discounts.push(discount);
+  }
+  addLevelBonus() {
+    let bonus = {
+      Name: 'Hạn mức',
+      ListItem: this.ListItem,
+    };
+    this.Bonus.push(bonus);
+  }
 }

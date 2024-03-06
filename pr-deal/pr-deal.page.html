@@ -1,26 +1,41 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.pos.pos-menu.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (approveDeal)="changeStatus('Approved')" (disapproveDeal)="changeStatus('Rejected')" (submitDealForApproval)="changeStatus('Pending')" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)"></app-list-toolbar>
-	<section class="table">
-		<header class="bold">
-			<div class="col-checkbox cell"></div>
-			<div class="col-id cell" (click)="sortToggle('Id')">
-				{{'erp.app.pages.pos.pos-menu.id' | translate}}
-				<ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
-				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Id" name="search" color="primary"></ion-icon>
-			</div>
-			<div class="col-name cell">
-				Sản phẩm				
-			</div>
-			<div class="col-UoM cell">
-				Đơn vị
-			</div>
-			<div class="col-money cell">
-				Giá bán
-			</div>
-			<div class="col-money cell">
-				Giá sau giảm
-			</div>
-			<!-- <div class="col-sale cell">
+  <app-list-toolbar
+    pageTitle="{{'List' | translate}}"
+    [pageConfig]="pageConfig"
+    [selectedItems]="selectedItems"
+    [query]="query"
+    (approveDeal)="changeStatus('Approved')"
+    (disapproveDeal)="changeStatus('Rejected')"
+    (submitDealForApproval)="changeStatus('Pending')"
+    (add)="add()"
+    (refresh)="refresh()"
+    (export)="export()"
+    (import)="import($event)"
+    (help)="help()"
+    (unselect)="unselect()"
+    (archiveItems)="archiveItems()"
+    (deleteItems)="deleteItems()"
+    (changeBranch)="changeBranch($event)"
+  ></app-list-toolbar>
+  <section class="table">
+    <header class="bold">
+      <div class="col-checkbox cell"></div>
+      <div class="col-id cell" (click)="sortToggle('Id')">
+        {{'Id' | translate}}
+        <ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
+        <ion-icon
+          class="min-btn"
+          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+          *ngIf="query.Id"
+          name="search"
+          color="primary"
+        ></ion-icon>
+      </div>
+      <div class="col-name cell">Sản phẩm</div>
+      <div class="col-UoM cell">Đơn vị</div>
+      <div class="col-money cell">Giá bán</div>
+      <div class="col-money cell">Giá sau giảm</div>
+      <!-- <div class="col-sale cell">
 				Đã bán
 			</div>
 			<div class="col-max cell" (click)="sortToggle('MaxPerOrder')">
@@ -28,17 +43,11 @@
 				<ion-icon class="min-btn" *ngIf="sort.MaxPerOrder" [name]="sort.MaxPerOrder == 'MaxPerOrder'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.MaxPerOrder" name="search" color="primary"></ion-icon>
 			</div> -->
-			<div class="col-date cell" >
-				Thời gian áp dụng			
-			</div>
-			<div class="col-time cell" >
-				Khung giờ			
-			</div>
-			<div class="col-status cell" >
-				Trạng thái		
-			</div>				
-		</header>
-		<!-- <form (submit)="refresh()" action="#">
+      <div class="col-date cell">Thời gian áp dụng</div>
+      <div class="col-time cell">Khung giờ</div>
+      <div class="col-status cell">Trạng thái</div>
+    </header>
+    <!-- <form (submit)="refresh()" action="#">
 			<header class="filter" *ngIf="pageConfig.isShowSearch">
 				<div class="col-checkbox cell"></div>
 				<div class="col-id cell">
@@ -57,49 +66,49 @@
 				<button mat-raised-button type="submit" style="display:none">Search</button>
 			</header>
 		</form> -->
-	</section> 
+  </section>
 </ion-header>
 
 <ion-content appScrollbarTheme class="header-table">
-	<app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
-	<div *ngIf="items.length && pageConfig.showSpinner==false">
-		<section class="table">
-								<div *ngFor="let i of items; let j = index;"  class="row" [ngClass]="{odd: j % 2 != 0}" [ngClass]="{selected: i.checked}">
-						<div class="col-checkbox cell">
-							<input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox">
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-id cell">
-							{{i.Id}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-name cell">
-							{{i.ItemName}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-UoM cell">
-							{{i.ItemUoMName}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
-							{{i.OriginalPrice | number: '1.0-0'}} đ
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
-							<div *ngIf="i.IsByPercent">{{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100  | number: '1.0-0'}} đ</div>
-							<div *ngIf="i.IsByPercent == false">{{i.Price  | number: '1.0-0'}} đ</div>
-						</div>
-						
-						
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
-							{{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-time cell">
-							{{i.FromHour}} - {{i.ToHour}}
-						</div>
-						<div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-status cell">
-							{{i.Status}}
-						</div>
-					</div>
-				
-		</section>
-	</div>
-	<ion-infinite-scroll color="primary" threshold="20%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
-		<ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
-	</ion-infinite-scroll>
+  <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+  <div *ngIf="items.length && pageConfig.showSpinner==false">
+    <section class="table">
+      <div
+        *ngFor="let i of items; let j = index;"
+        class="row"
+        [ngClass]="{odd: j % 2 != 0}"
+        [ngClass]="{selected: i.checked}"
+      >
+        <div class="col-checkbox cell">
+          <input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox" />
+        </div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-id cell">{{i.Id}}</div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-name cell">{{i.ItemName}}</div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-UoM cell">{{i.ItemUoMName}}</div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
+          {{i.OriginalPrice | number: '1.0-0'}} đ
+        </div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
+          <div *ngIf="i.IsByPercent">
+            {{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100 | number: '1.0-0'}} đ
+          </div>
+          <div *ngIf="i.IsByPercent == false">{{i.Price | number: '1.0-0'}} đ</div>
+        </div>
+
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
+          {{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
+        </div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-time cell">{{i.FromHour}} - {{i.ToHour}}</div>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-status cell">{{i.Status}}</div>
+      </div>
+    </section>
+  </div>
+  <ion-infinite-scroll
+    color="primary"
+    threshold="20%"
+    (ionInfinite)="loadData($event)"
+    [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData"
+  >
+    <ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
