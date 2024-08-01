@@ -7,7 +7,7 @@
   <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
     <div class="row-full shadow full-screen">
       <ion-toolbar color="primary">
-        <ion-title>Thiết kế Voucher</ion-title>
+        <ion-title>{{'Voucher design' | translate}}</ion-title>
       </ion-toolbar>
       <ion-grid fixed>
         <ion-row>
@@ -16,15 +16,15 @@
               <ion-row>
                 <ion-col size="12" size-xl="6">
                   <div class="c-control">
-                    <label class="c-label" for="Type">Loại</label>
+                    <label class="c-label" for="Type">{{'Type' | translate}}</label>
                     <input class="c-input" id="Type" type="text" formControlName="Type" />
                   </div>
                   <div class="c-control">
-                    <label class="c-label" for="Status">Trạng thái</label>
+                    <label class="c-label" for="Status">{{'Status' | translate}}</label>
                     <input class="c-input" id="Status" type="text" formControlName="Status" />
                   </div>
                   <div class="c-control">
-                    <label class="c-label" for="Name">Tên Voucher</label>
+                    <label class="c-label" for="Name">{{'Voucher name' | translate}}</label>
                     <input
                       autocomplete="off"
                       (change)="saveChange()"
@@ -36,9 +36,10 @@
                   </div>
                   <div class="c-control">
                     <label class="c-label" for="Code">
-                      <ion-text class="ion-float-left">Mã Voucher</ion-text>
+                      <ion-text class="ion-float-left">{{'Voucher code' | translate}}</ion-text>
                       <ion-text color="primary" (click)="generateCodeVoucher()" class="ion-float-right clickable"
-                        >Tạo mã bất kỳ <ion-icon title="Tạo mã ngẫu nhiên" name="alert-circle-outline"></ion-icon
+                        >{{'Generate code' | translate}}
+                        <ion-icon title="{{'Generate code' | translate}}" name="alert-circle-outline"></ion-icon
                       ></ion-text>
                     </label>
                     <input
@@ -52,7 +53,7 @@
                   </div>
 
                   <div class="c-control">
-                    <label class="c-label" for="NumberOfCoupon">Số lượng voucher</label>
+                    <label class="c-label" for="NumberOfCoupon">{{'Number of coupon' | translate}}</label>
                     <input
                       (change)="saveChange()"
                       class="c-input"
@@ -63,7 +64,7 @@
                   </div>
                   <div class="c-control">
                     <label class="c-label" for="MaxUsagePerCustomer">
-                      Số lượng voucher áp dụng tối đa cho mỗi khách hàng</label
+                      {{'Maximum number of vouchers applicable per customer' | translate}}</label
                     >
                     <input
                       (change)="saveChange()"
@@ -76,7 +77,7 @@
                   <div class="c-control">
                     <ion-row>
                       <ion-col size="6" style="padding: 0px !important">
-                        <label class="c-label" for="FromDate">Bắt đầu</label>
+                        <label class="c-label" for="FromDate">{{'Start' | translate}}</label>
                         <input
                           (change)="saveChange()"
                           class="c-input"
@@ -86,7 +87,7 @@
                         />
                       </ion-col>
                       <ion-col size="6" style="padding: 0px !important">
-                        <label class="c-label" for="ToDate">Kết thúc</label>
+                        <label class="c-label" for="ToDate">{{'End' | translate}}</label>
                         <input
                           (change)="saveChange()"
                           class="c-input"
@@ -100,7 +101,7 @@
                 </ion-col>
                 <ion-col size="12" size-xl="6">
                   <div class="c-control">
-                    <label class="c-label" for="MinOrderValue"> Giá trị đơn hàng tối thiểu</label>
+                    <label class="c-label" for="MinOrderValue"> {{'Minimum order value' | translate}}</label>
                     <input
                       mask="separator.0"
                       thousandSeparator=","
@@ -121,7 +122,7 @@
                         formControlName="IsByPercent"
                       ></ion-toggle>
                       <ion-text class="ion-float-left"
-                        ><span style="padding-left: 10px">Được giảm theo (%)</span></ion-text
+                        ><span style="padding-left: 10px">{{'Decrease by (%)' | translate}}</span></ion-text
                       >
                     </label>
                     <input
@@ -137,7 +138,7 @@
                     />
                   </div>
                   <div class="c-control">
-                    <label class="c-label" for="MaxValue"> Được giảm tối đa</label>
+                    <label class="c-label" for="MaxValue"> {{'Max value' | translate}}</label>
                     <input
                       [readonly]="!formGroup.controls.IsByPercent.value"
                       mask="separator.0"
@@ -152,25 +153,25 @@
                     />
                   </div>
                   <div class="c-control">
-                    <ion-label>Chế độ hiển thị</ion-label>
+                    <ion-label>{{'Display mode' | translate}}</ion-label>
                     <div class="c-input" style="margin-top: 7px">
-                      <ion-label>Công khai</ion-label>
+                      <ion-label>{{'Public' | translate}}</ion-label>
                       <span class="ion-float-right">
                         <ion-toggle (ionChange)="saveChange()" formControlName="IsPublic"></ion-toggle>
                       </span>
                     </div>
                   </div>
                   <div class="c-control">
-                    <ion-label>Chế độ áp dụng</ion-label>
+                    <ion-label>{{'Applicable mode' | translate}}</ion-label>
                     <div class="c-input" style="margin-top: 7px">
-                      <ion-label>Auto</ion-label>
+                      <ion-label>{{'Auto' | translate}}</ion-label>
                       <span class="ion-float-right">
                         <ion-toggle (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
                       </span>
                     </div>
                   </div>
                   <div class="c-control">
-                    <ion-label>Sản phẩm áp dụng</ion-label>
+                    <ion-label>{{'Applicable products' | translate}}</ion-label>
                     <div class="c-input" style="margin-top: 7px">
                       <span>
                         <ion-toggle
@@ -178,14 +179,14 @@
                           (ionChange)="saveChange()"
                           formControlName="IsApplyAllProduct"
                         ></ion-toggle>
-                        <ion-text class="ion-float-left" style="padding-left: 10px">Tất cả</ion-text>
+                        <ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
                       </span>
                       <ion-button
                         size="small"
                         style="margin-top: -5.5px"
                         *ngIf="formGroup.controls.IsApplyAllProduct.value"
                         class="ion-float-right"
-                        >Tất cả sản phẩm</ion-button
+                        >{{'All products' | translate}}</ion-button
                       >
                       <ion-button
                         size="small"
@@ -194,13 +195,13 @@
                         class="ion-float-right clickable"
                         (click)="condition('ITEM')"
                       >
-                        <ion-text *ngIf="NumberItem <= 0">Sản phẩm cụ thể</ion-text>
-                        <ion-text *ngIf="NumberItem > 0">{{NumberItem}} Sản phẩm</ion-text>
+                        <ion-text *ngIf="NumberItem <= 0">{{'Specific products' | translate}}</ion-text>
+                        <ion-text *ngIf="NumberItem > 0">{{NumberItem}} {{'Product' | translate}}</ion-text>
                       </ion-button>
                     </div>
                   </div>
                   <div class="c-control">
-                    <ion-label>Khách hàng áp dụng</ion-label>
+                    <ion-label>{{'Customer applies' | translate}}</ion-label>
                     <div class="c-input" style="margin-top: 7px">
                       <span>
                         <ion-toggle
@@ -208,14 +209,14 @@
                           (ionChange)="saveChange()"
                           formControlName="IsApplyAllCustomer"
                         ></ion-toggle>
-                        <ion-text class="ion-float-left" style="padding-left: 10px">Tất cả</ion-text>
+                        <ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
                       </span>
                       <ion-button
                         size="small"
                         style="margin-top: -5.5px"
                         *ngIf="formGroup.controls.IsApplyAllCustomer.value"
                         class="ion-float-right"
-                        >Tất cả khách hàng</ion-button
+                        >{{'All customers' | translate}}g</ion-button
                       >
                       <ion-button
                         size="small"
@@ -224,15 +225,15 @@
                         class="ion-float-right clickable"
                         (click)="condition('CONTACT')"
                       >
-                        <ion-text *ngIf="NumberPartner > 0">{{NumberPartner}} Khách hàng</ion-text>
-                        <ion-text *ngIf="NumberPartner <= 0">Khách hàng cụ thể</ion-text>
+                        <ion-text *ngIf="NumberPartner > 0">{{NumberPartner}} {{'Customer' | translate}}</ion-text>
+                        <ion-text *ngIf="NumberPartner <= 0">{{'Specific customers' | translate}}</ion-text>
                       </ion-button>
                     </div>
                   </div>
                 </ion-col>
                 <ion-col size="12">
                   <div class="c-control">
-                    <label class="c-label" for="Remark">Mô tả chính sách Voucher</label>
+                    <label class="c-label" for="Remark">{{'Voucher policy description' | translate}}</label>
                     <textarea
                       (change)="saveChange()"
                       rows="3"

@@ -31,9 +31,9 @@
           color="primary"
         ></ion-icon>
       </div>
-      <div class="cell">Tên Discount</div>
-      <div class="cell">Thời gian áp dụng</div>
-      <div class="cell">Trạng thái</div>
+      <div class="cell">{{'Discount name' | translate}}</div>
+      <div class="cell">{{'Time application' | translate}}</div>
+      <div class="cell">{{'Status' | translate}}</div>
     </header>
     <form (submit)="refresh()" action="#">
       <header class="filter" *ngIf="pageConfig.isShowSearch">
