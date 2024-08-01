@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
@@ -31,6 +31,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
     public programPartnerProvider: PR_ProgramPartnerProvider,
     public programItemProvider: PR_ProgramItemProvider,
     public branchProvider: BRA_BranchProvider,
+    public popoverCtrl: PopoverController,
     public env: EnvService,
     public navCtrl: NavController,
     public route: ActivatedRoute,

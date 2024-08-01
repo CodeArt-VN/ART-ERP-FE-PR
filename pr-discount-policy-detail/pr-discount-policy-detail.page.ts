@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
@@ -38,6 +38,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
     public programRewardProvider: PR_ProgramRewardProvider,
     public branchProvider: BRA_BranchProvider,
     public itemProvider: WMS_ItemProvider,
+    public popoverCtrl: PopoverController,
     public env: EnvService,
     public navCtrl: NavController,
     public route: ActivatedRoute,
