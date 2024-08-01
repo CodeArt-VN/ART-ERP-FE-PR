@@ -72,8 +72,8 @@
       <ion-text>Tìm thấy</ion-text>
       <ion-label slot="end"
         >{{ Count }}
-        <ion-text *ngIf="Condition.Type == 'ITEM'">Sản phẩm</ion-text>
-        <ion-text *ngIf="Condition.Type == 'CONTACT'">Khách hàng</ion-text>
+        <ion-text *ngIf="Condition.Type == 'ITEM'">{{'Product' | translate}}</ion-text>
+        <ion-text *ngIf="Condition.Type == 'CONTACT'">{{'Customer' | translate}}</ion-text>
       </ion-label>
     </ion-item>
   </ng-container>

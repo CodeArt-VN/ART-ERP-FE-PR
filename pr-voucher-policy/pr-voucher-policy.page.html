@@ -31,11 +31,11 @@
           color="primary"
         ></ion-icon>
       </div>
-      <div class="cell">Tên Voucher</div>
-      <div class="cell">Số lượng VC</div>
-      <div class="cell">Giá trị đơn hàng tối thiểu</div>
-      <div class="cell">Thời gian áp dụng</div>
-      <div class="cell">Trạng thái</div>
+      <div class="cell">{{'Voucher name' | translate}}</div>
+      <div class="cell">{{'Number of coupon'}} | translate</div>
+      <div class="cell">{{'Minimum order value' | translate}}</div>
+      <div class="cell">{{'Time application' | translate}}</div>
+      <div class="cell">{{'Status' | translate}}</div>
     </header>
     <form (submit)="refresh()" action="#">
       <header class="filter" *ngIf="pageConfig.isShowSearch">
@@ -88,7 +88,7 @@
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
-        <button mat-raised-button type="submit" style="display: none">Search</button>
+        <button mat-raised-button type="submit" style="display: none">{{'Search' | translate}}</button>
       </header>
     </form>
   </section>

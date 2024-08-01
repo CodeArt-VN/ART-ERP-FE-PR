@@ -26,7 +26,7 @@
                   <ion-col size="12">
                     <div class="c-control">
                       <label class="c-label" for="IDItem"
-                        >Chọn sản phẩm
+                        >{{'Select product' | translate}}
                         <span
                           *ngIf="!formGroup.controls.IDItem.valid && !formGroup.controls.IDItem.pending && (formGroup.controls.IDItem.dirty || submitAttempt)"
                           ion-text
@@ -68,7 +68,7 @@
                   <ion-col size="12">
                     <div class="c-control">
                       <label class="c-label" for="IDItemUoM"
-                        >Đơn vị tính
+                        >{{'id-uom' | translate}}
                         <span
                           *ngIf="!formGroup.controls.IDItemUoM.valid && !formGroup.controls.IDItemUoM.pending && (formGroup.controls.IDItemUoM.dirty || submitAttempt)"
                           ion-text
@@ -96,7 +96,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="FromDate"
-                        >Từ ngày
+                        >{{'From date' | translate}}
                         <span
                           *ngIf="!formGroup.controls.FromDate.valid && !formGroup.controls.FromDate.pending && (formGroup.controls.FromDate.dirty || submitAttempt)"
                           ion-text
@@ -116,7 +116,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="ToDate"
-                        >Đến ngày
+                        >{{'To date' | translate}}
                         <span
                           *ngIf="!formGroup.controls.ToDate.valid && !formGroup.controls.ToDate.pending && (formGroup.controls.ToDate.dirty || submitAttempt)"
                           ion-text
@@ -133,7 +133,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="FromHour"
-                        >Khung giờ từ
+                        >{{'Time frame from' | translate}}
                         <span
                           *ngIf="!formGroup.controls.FromHour.valid && !formGroup.controls.FromHour.pending && (formGroup.controls.FromHour.dirty || submitAttempt)"
                           ion-text
@@ -153,7 +153,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="ToHour"
-                        >Đến
+                        >{{'TO' | translate}}
                         <span
                           *ngIf="!formGroup.controls.ToHour.valid && !formGroup.controls.ToHour.pending && (formGroup.controls.ToHour.dirty || submitAttempt)"
                           ion-text
@@ -171,7 +171,7 @@
                 <ion-row>
                   <ion-col size="12">
                     <div class="c-control">
-                      <label class="c-label" for="Id">Giá gốc</label>
+                      <label class="c-label" for="Id">{{'Original price' | translate}}</label>
                       <input
                         (change)="saveChange()"
                         mask="separator.0"
@@ -197,7 +197,7 @@
                           formControlName="IsByPercent"
                         ></ion-toggle>
                         <ion-text class="ion-float-left"
-                          ><span style="padding-left: 10px">Giảm theo (%)</span></ion-text
+                          ><span style="padding-left: 10px">{{'Decrease by (%)' | translate}}</span></ion-text
                         >
                       </label>
                       <input
@@ -220,7 +220,7 @@
                   <ion-col size="12">
                     <div class="c-control">
                       <label class="c-label" for="Price"
-                        >Giá sau giảm
+                        >{{'Price after discount' | translate}}
                         <span
                           *ngIf="!formGroup.controls.Price.valid && !formGroup.controls.Price.pending && (formGroup.controls.Price.dirty || submitAttempt)"
                           ion-text
@@ -229,7 +229,7 @@
                         >
                       </label>
                       <input
-                        placeholder="Nhập giá sau giảm"
+                        placeholder="{{'Enter price after discount' | translate}}"
                         (change)="saveChange()"
                         mask="separator.0"
                         thousandSeparator=","
@@ -248,7 +248,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="Quantity"
-                        >Số lượng
+                        >{{'Quantity' | translate}}
                         <span
                           *ngIf="!formGroup.controls.Quantity.valid && !formGroup.controls.Quantity.pending && (formGroup.controls.Quantity.dirty || submitAttempt)"
                           ion-text
@@ -268,7 +268,7 @@
                   <ion-col size="12" size-xl="6">
                     <div class="c-control">
                       <label class="c-label" for="MaxPerOrder"
-                        >Giới hạn trên 1 đơn hàng
+                        >{{'Limit on 1 order' | translate}}
                         <span
                           *ngIf="!formGroup.controls.MaxPerOrder.valid && !formGroup.controls.MaxPerOrder.pending && (formGroup.controls.MaxPerOrder.dirty || submitAttempt)"
                           ion-text
