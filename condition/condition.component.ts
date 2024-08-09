@@ -182,21 +182,21 @@ export class ConditionComponent extends PageBase {
     if (this.pageConfig.canDelete) {
       this.selectedItems.push(this.items[i]);
       this.env
-        .showPrompt(
-          'Bạn chắc muốn xóa ' + this.selectedItems.length + ' đang chọn?',
+        .showPrompt2(
+          {code:'Bạn có chắc muốn xóa {{value}} đang chọn?' , value:{value:this.selectedItems.length}},
           null,
-          'Xóa ' + this.selectedItems.length + ' dòng',
+          {code:'Xóa {{value}} dòng?' , value:{value:this.selectedItems.length}},
         )
         .then((_) => {
           this.env
-            .showLoading('Xin vui lòng chờ trong giây lát...', this.pageProvider.delete(this.selectedItems))
+            .showLoading2('Xin vui lòng chờ trong giây lát...', this.pageProvider.delete(this.selectedItems))
             .then((_) => {
               this.selectedItems = [];
               this.ConditionForm.removeAt(i);
               this.env.showTranslateMessage('Deleted!', 'success');
             })
             .catch((err) => {
-              this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+              this.env.showTranslateMessage('Không xóa được, xin vui lòng kiểm tra lại.');
               console.log(err);
             });
         })

@@ -26,7 +26,7 @@ export class PRVoucherPolicyPage extends PageBase {
   changeStatus(Status) {
     let text = 'Gửi Duyệt';
     let message =
-      'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
+      'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
     if (Status == 'Rejected') {
       text = 'Không Duyệt';
       message = 'Bạn có chắc chắn không duyệt các đối tượng này?';

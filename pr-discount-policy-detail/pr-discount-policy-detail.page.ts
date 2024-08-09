@@ -173,7 +173,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   }
   async condition(Type: string, IDParent = null, NameLevel = null) {
     if (this.id == 0) {
-      this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
+      this.env.showTranslateMessage('Vui lòng nhập thông tin phía trên', 'warning');
       return false;
     }
     let title = '';
