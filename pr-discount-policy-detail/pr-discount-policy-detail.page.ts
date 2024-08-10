@@ -173,7 +173,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   }
   async condition(Type: string, IDParent = null, NameLevel = null) {
     if (this.id == 0) {
-      this.env.showTranslateMessage('Vui lòng nhập thông tin phía trên', 'warning');
+      this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
       return false;
     }
     let title = '';
@@ -228,7 +228,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   }
   addLevelDiscount(event) {
     if (event.target.value == '') {
-      this.env.showTranslateMessage('vui lòng nhập tên hạn mức', 'danger');
+      this.env.showMessage('vui lòng nhập tên hạn mức', 'danger');
       return false;
     }
     let condition = {
@@ -249,7 +249,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   }
   updateLevelDiscount(c) {
     if (c.Name == '') {
-      this.env.showTranslateMessage('vui lòng nhập tên hạn mức', 'danger');
+      this.env.showMessage('vui lòng nhập tên hạn mức', 'danger');
       return false;
     }
     let condition = {
@@ -257,7 +257,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
       Name: c.Name,
     };
     this.programConditionProvider.save(condition).then((result) => {
-      this.env.showTranslateMessage('Saving completed!', 'success');
+      this.env.showMessage('Saving completed!', 'success');
     });
   }
   removeLevel(i, c) {
@@ -347,36 +347,36 @@ export class PRDiscountPolicyDetailPage extends PageBase {
   changedIDUoM(e, submit) {}
   saveReward(r) {
     if (r.Type == null) {
-      this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+      this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
       return false;
     }
     if (r.Type == 'PromotionItems') {
       if (r.IDItem == null || r.IDItemUoM == null || r.PromotionQuantity == 0) {
-        this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+        this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
         return false;
       }
     }
     if (r.Type == 'PercentDiscount') {
       if (r.IsRewardByOrder == false) {
         if (r.IDItem == null || r.IDItemUoM == null) {
-          this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+          this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
           return false;
         }
       }
       if (r.DiscountPercent <= 0 || r.MaxAmount <= 0) {
-        this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+        this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
         return false;
       }
     }
     if (r.Type == 'AmountDiscount') {
       if (r.IsRewardByOrder == false) {
         if (r.IDItem == null || r.IDItemUoM == null) {
-          this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+          this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
           return false;
         }
       }
       if (r.DiscountAmount <= 0) {
-        this.env.showTranslateMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+        this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
         return false;
       }
     }
@@ -394,7 +394,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
     };
     this.programRewardProvider.save(reward).then((result) => {
       r.Id = result['Id'];
-      this.env.showTranslateMessage('Saving completed!', 'success');
+      this.env.showMessage('Saving completed!', 'success');
     });
   }
   deleteReward(i, j, r) {

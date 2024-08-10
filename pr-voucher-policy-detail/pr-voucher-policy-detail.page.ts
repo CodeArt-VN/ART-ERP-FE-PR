@@ -87,7 +87,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
   }
   async condition(Type: string) {
     if (this.id == 0) {
-      this.env.showTranslateMessage('Vui lòng nhập thông tin phía trên', 'warning');
+      this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
       return false;
     }
     let title = '';

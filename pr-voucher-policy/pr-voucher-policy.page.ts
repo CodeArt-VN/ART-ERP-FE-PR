@@ -75,7 +75,7 @@ export class PRVoucherPolicyPage extends PageBase {
                         Code: publishEventCode,
                       });
                     }
-                    this.env.showTranslateMessage('Saving completed!', 'success');
+                    this.env.showMessage('Saving completed!', 'success');
                     this.submitAttempt = false;
                   })
                   .catch((err) => {

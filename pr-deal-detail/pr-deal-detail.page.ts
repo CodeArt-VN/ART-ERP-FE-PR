@@ -168,30 +168,30 @@ export class PRDealDetailPage extends PageBase {
       return false;
     }
     if (this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.DiscountByPercent.value == 0) {
-      this.env.showTranslateMessage('Vui lòng nhập % giảm giá', 'warning');
+      this.env.showMessage('Vui lòng nhập % giảm giá', 'warning');
       return false;
     }
     if (this.formGroup.controls.DiscountByPercent.value > 99) {
-      this.env.showTranslateMessage('% giảm giá không hợp lệ', 'warning');
+      this.env.showMessage('% giảm giá không hợp lệ', 'warning');
       return false;
     }
     if (this.formGroup.controls.IsByPercent.value == false && this.formGroup.controls.Price.value == 0) {
-      this.env.showTranslateMessage('Vui lòng nhập giá sau giảm', 'warning');
+      this.env.showMessage('Vui lòng nhập giá sau giảm', 'warning');
       return false;
     }
     if (this.formGroup.controls.OriginalPrice.value == null || this.formGroup.controls.OriginalPrice.value == 0) {
-      this.env.showTranslateMessage('Sản phẩm chưa có giá bán', 'warning');
+      this.env.showMessage('Sản phẩm chưa có giá bán', 'warning');
       return false;
     }
     if (this.formGroup.controls.Price.value > this.formGroup.controls.OriginalPrice.value) {
-      this.env.showTranslateMessage('Giá sau giảm không được lớn hơn giá gốc', 'warning');
+      this.env.showMessage('Giá sau giảm không được lớn hơn giá gốc', 'warning');
       return false;
     }
     if (
       Date.parse('01/01/2011 ' + this.formGroup.controls.FromHour.value) >
       Date.parse('01/01/2011 ' + this.formGroup.controls.ToHour.value)
     ) {
-      this.env.showTranslateMessage('Giờ bắt đầu phải nhỏ hơn giờ kết thúc', 'warning');
+      this.env.showMessage('Giờ bắt đầu phải nhỏ hơn giờ kết thúc', 'warning');
       return false;
     }
     if (
@@ -199,7 +199,7 @@ export class PRDealDetailPage extends PageBase {
         new Date(this.formGroup.controls.FromDate.value).getTime() <
       0
     ) {
-      this.env.showTranslateMessage('ngày kết thúc phải lớn hơn ngày bắt đầu', 'warning');
+      this.env.showMessage('ngày kết thúc phải lớn hơn ngày bắt đầu', 'warning');
       return false;
     }
     super.saveChange2();

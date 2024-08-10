@@ -128,7 +128,7 @@ export class ConditionComponent extends PageBase {
         this.items.splice(i, 1);
         this.countData();
       } else {
-        this.env.showTranslateMessage('Bạn không có quyền xóa', 'warning');
+        this.env.showMessage('Bạn không có quyền xóa', 'warning');
       }
     } else {
       this.ConditionForm.removeAt(i);
@@ -138,7 +138,7 @@ export class ConditionComponent extends PageBase {
     return new Promise((resolve, reject) => {
       form.updateValueAndValidity();
       if (!form.valid) {
-        this.env.showTranslateMessage('Please recheck information highlighted in red above', 'warning');
+        this.env.showMessage('Please recheck information highlighted in red above', 'warning');
       } else if (this.submitAttempt == false) {
         this.submitAttempt = true;
         this.item = {};
@@ -158,7 +158,7 @@ export class ConditionComponent extends PageBase {
         this.pageProvider
           .save(this.item, this.pageConfig.isForceCreate)
           .then((savedItem: any) => {
-            this.env.showTranslateMessage('Saving completed!', 'success');
+            this.env.showMessage('Saving completed!', 'success');
             form.controls.Id.patchValue(savedItem.Id);
             resolve(savedItem.Id);
             if (this.item.Id == 0) {
@@ -171,7 +171,7 @@ export class ConditionComponent extends PageBase {
             this.submitAttempt = false;
           })
           .catch((err) => {
-            this.env.showTranslateMessage('Cannot save, please try again', 'danger');
+            this.env.showMessage('Cannot save, please try again', 'danger');
             this.submitAttempt = false;
             reject(err);
           });
@@ -182,21 +182,21 @@ export class ConditionComponent extends PageBase {
     if (this.pageConfig.canDelete) {
       this.selectedItems.push(this.items[i]);
       this.env
-        .showPrompt2(
+        .showPrompt(
           {code:'Bạn có chắc muốn xóa {{value}} đang chọn?' , value:{value:this.selectedItems.length}},
           null,
           {code:'Xóa {{value}} dòng?' , value:{value:this.selectedItems.length}},
         )
         .then((_) => {
           this.env
-            .showLoading2('Xin vui lòng chờ trong giây lát...', this.pageProvider.delete(this.selectedItems))
+            .showLoading('Please wait for a few moments', this.pageProvider.delete(this.selectedItems))
             .then((_) => {
               this.selectedItems = [];
               this.ConditionForm.removeAt(i);
-              this.env.showTranslateMessage('Deleted!', 'success');
+              this.env.showMessage('Deleted!', 'success');
             })
             .catch((err) => {
-              this.env.showTranslateMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+              this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
               console.log(err);
             });
         })
