@@ -6,9 +6,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { PR_ProgramProvider } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-pr-discount-policy',
-  templateUrl: './pr-discount-policy.page.html',
-  styleUrls: ['./pr-discount-policy.page.scss'],
+    selector: 'app-pr-discount-policy',
+    templateUrl: './pr-discount-policy.page.html',
+    styleUrls: ['./pr-discount-policy.page.scss'],
+    standalone: false
 })
 export class PRDiscountPolicyPage extends PageBase {
   constructor(

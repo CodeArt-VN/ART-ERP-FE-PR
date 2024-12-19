@@ -10,9 +10,10 @@ import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 
 @Component({
-  selector: 'app-pr-program-detail',
-  templateUrl: './pr-program-detail.page.html',
-  styleUrls: ['./pr-program-detail.page.scss'],
+    selector: 'app-pr-program-detail',
+    templateUrl: './pr-program-detail.page.html',
+    styleUrls: ['./pr-program-detail.page.scss'],
+    standalone: false
 })
 export class PRProgramDetailPage extends PageBase {
   Discounts = [];

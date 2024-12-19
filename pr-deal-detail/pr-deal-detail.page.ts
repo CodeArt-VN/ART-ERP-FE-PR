@@ -11,9 +11,10 @@ import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators
 import { lib } from 'src/app/services/static/global-functions';
 
 @Component({
-  selector: 'app-pr-deal-detail',
-  templateUrl: './pr-deal-detail.page.html',
-  styleUrls: ['./pr-deal-detail.page.scss'],
+    selector: 'app-pr-deal-detail',
+    templateUrl: './pr-deal-detail.page.html',
+    styleUrls: ['./pr-deal-detail.page.scss'],
+    standalone: false
 })
 export class PRDealDetailPage extends PageBase {
   UoMs = [];

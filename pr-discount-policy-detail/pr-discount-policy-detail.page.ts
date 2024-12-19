@@ -21,9 +21,10 @@ import { Subject, concat, of } from 'rxjs';
 import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-pr-discount-policy-detail',
-  templateUrl: './pr-discount-policy-detail.page.html',
-  styleUrls: ['./pr-discount-policy-detail.page.scss'],
+    selector: 'app-pr-discount-policy-detail',
+    templateUrl: './pr-discount-policy-detail.page.html',
+    styleUrls: ['./pr-discount-policy-detail.page.scss'],
+    standalone: false
 })
 export class PRDiscountPolicyDetailPage extends PageBase {
   ConditionReward = [];

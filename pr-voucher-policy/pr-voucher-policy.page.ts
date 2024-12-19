@@ -6,9 +6,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { PR_ProgramProvider } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-pr-voucher-policy',
-  templateUrl: './pr-voucher-policy.page.html',
-  styleUrls: ['./pr-voucher-policy.page.scss'],
+    selector: 'app-pr-voucher-policy',
+    templateUrl: './pr-voucher-policy.page.html',
+    styleUrls: ['./pr-voucher-policy.page.scss'],
+    standalone: false
 })
 export class PRVoucherPolicyPage extends PageBase {
   constructor(

@@ -6,9 +6,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { BRA_BranchProvider, PR_DealProvider } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-pr-deal',
-  templateUrl: './pr-deal.page.html',
-  styleUrls: ['./pr-deal.page.scss'],
+    selector: 'app-pr-deal',
+    templateUrl: './pr-deal.page.html',
+    styleUrls: ['./pr-deal.page.scss'],
+    standalone: false
 })
 export class PRDealPage extends PageBase {
   constructor(
