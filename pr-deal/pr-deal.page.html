@@ -1,108 +1,144 @@
 <ion-header>
-  <app-list-toolbar
-    pageTitle="{{'List' | translate}}"
-    [pageConfig]="pageConfig"
-    [selectedItems]="selectedItems"
-    [query]="query"
-    (approveDeal)="changeStatus('Approved')"
-    (disapproveDeal)="changeStatus('Rejected')"
-    (submitDealForApproval)="changeStatus('Pending')"
-    (add)="add()"
-    (refresh)="refresh()"
-    (export)="export()"
-    (import)="import($event)"
-    (help)="help()"
-    (unselect)="unselect()"
-    (archiveItems)="archiveItems()"
-    (deleteItems)="deleteItems()"
-    (changeBranch)="changeBranch($event)"
-  ></app-list-toolbar>
-  <section class="table">
-    <header class="bold">
-      <div class="col-checkbox cell"></div>
-      <div class="col-id cell" (click)="sortToggle('Id')">
-        {{'Id' | translate}}
-        <ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
-        <ion-icon
-          class="min-btn"
-          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
-          *ngIf="query.Id"
-          name="search"
-          color="primary"
-        ></ion-icon>
-      </div>
-      <div class="col-name cell">{{'Product' | translate}}</div>
-      <div class="col-UoM cell">{{'Unit' | translate}}</div>
-      <div class="col-money cell">{{'Selling price' | translate}}</div>
-      <div class="col-money cell">{{'Price after discount' | translate}}</div>
-      <!-- <div class="col-sale cell">
-				Đã bán
-			</div>
-			<div class="col-max cell" (click)="sortToggle('MaxPerOrder')">
-				Giới hạn 
-				<ion-icon class="min-btn" *ngIf="sort.MaxPerOrder" [name]="sort.MaxPerOrder == 'MaxPerOrder'?'arrow-down': 'arrow-up'"></ion-icon>
-				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.MaxPerOrder" name="search" color="primary"></ion-icon>
-			</div> -->
-      <div class="col-date cell">{{'Time application' | translate}}</div>
-      <div class="col-time cell">{{'Time slot' | translate}}</div>
-      <div class="col-status cell">{{'Status'| translate}}</div>
-    </header>
-    <!-- <form (submit)="refresh()" action="#">
-			<header class="filter" *ngIf="pageConfig.isShowSearch">
-				<div class="col-checkbox cell"></div>
-				<div class="col-id cell">
-					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Id" class="c-input" [ngClass]="{active: query.Id}" type="text">
-					<ion-icon class="min-btn" (click)="query.Id=''; refresh()" *ngIf="query.Id" name="close-circle-outline"></ion-icon>
-				</div>
-				<div class="col-code cell">
-					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Code" class="c-input" [ngClass]="{active: query.Code}" type="text">
-					<ion-icon class="min-btn" (click)="query.Code=''; refresh()" *ngIf="query.Code" name="close-circle-outline"></ion-icon>
-				</div>
-				<div class="col-name cell">
-					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Name" class="c-input" [ngClass]="{active: query.Name}" type="text">
-					<ion-icon class="min-btn" (click)="query.Name=''; refresh()" *ngIf="query.Name" name="close-circle-outline"></ion-icon>
-				</div>
-				<div class="col-remark cell"></div>
-				<button mat-raised-button type="submit" style="display:none">Search</button>
-			</header>
-		</form> -->
-  </section>
+  <app-toolbar
+    [page]="this"
+    [ShowDelete]="ShowDelete"
+    [ShowSubmit]="ShowSubmit"
+    [ShowApprove]="ShowApprove"
+    [ShowDisapprove]="ShowDisapprove"
+  >
+  </app-toolbar>
 </ion-header>
 
-<ion-content appScrollbarTheme class="header-table">
-  <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
-  <div *ngIf="items.length && pageConfig.showSpinner==false">
-    <section class="table">
-      <div
-        *ngFor="let i of items; let j = index;"
-        class="row"
-        [ngClass]="{odd: j % 2 != 0}"
-        [ngClass]="{selected: i.checked}"
-      >
-        <div class="col-checkbox cell">
-          <input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox" />
+<ion-content scrollX="true" appScrollbarTheme class="header-table">
+  <!-- <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
+  <app-data-table
+    style="width: fit-content; min-width: calc(100% - 32px)"
+    class="box-shadow responsive"
+    [rows]="items"
+    [trackBy]="'Id'"
+    [(selectedRows)]="selectedItems"
+    [showSpinner]="pageConfig.showSpinner"
+    [showFilter]="pageConfig.isShowSearch"
+    [(query)]="query"
+    (dataInfinite)="loadData($event)"
+    (filter)="onDatatableFilter($event)"
+    (sort)="onSort($event)"
+    (selectedRowsChange)="changeSelection($event)"
+  >
+    <datatable-column class="col-checkbox cell" [checkbox]="true"> </datatable-column>
+    <datatable-column class="col-id cell" name="#" property="Id">
+      <ng-template datatable-header-template>
+        <div class="col-id cell" (click)="sortToggle('Id')">
+          {{'Id' | translate}}
+          <ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
+          <ion-icon
+            class="min-btn"
+            (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+            *ngIf="query.Id"
+            name="search"
+            color="primary"
+          ></ion-icon>
         </div>
+      </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-id cell">{{i.Id}}</div>
+      </ng-template>
+    </datatable-column>
+
+    <datatable-column class="col-name cell" name="Product" property="ItemName">
+      <ng-template datatable-header-template>
+        <div class="col-name cell">
+          {{'Product' | translate}}
+          <ion-icon
+            class="min-btn"
+            (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+            *ngIf="query.Id"
+            name="search"
+            color="primary"
+          ></ion-icon>
+        </div>
+      </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-name cell">{{i.ItemName}}</div>
+      </ng-template>
+    </datatable-column>
+
+    <datatable-column class="col-UoM cell" name="Unit" property="ItemUoMName">
+      <ng-template datatable-filter-template> </ng-template>
+      <ng-template datatable-header-template>
+        <div class="col-UoM cell">
+          {{'Unit' | translate}}
+          <ion-icon
+            class="min-btn"
+            (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+            *ngIf="query.Id"
+            name="search"
+            color="primary"
+          ></ion-icon>
+        </div>
+      </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-UoM cell">{{i.ItemUoMName}}</div>
+      </ng-template>
+    </datatable-column>
+
+    <datatable-column class="col-money cell" name="Selling price" property="OriginalPrice">
+      <ng-template datatable-filter-template> </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
           {{i.OriginalPrice | number: '1.0-0'}} đ
         </div>
-        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-money cell">
-          <div *ngIf="i.IsByPercent">
-            {{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100 | number: '1.0-0'}} đ
-          </div>
-          <div *ngIf="i.IsByPercent == false">{{i.Price | number: '1.0-0'}} đ</div>
-        </div>
+      </ng-template>
+    </datatable-column>
 
-        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell">
+    <datatable-column class="col-money cell" name="Price after discount" property="IsByPercent">
+      <ng-template datatable-filter-template> </ng-template>
+      <ng-template datatable-header-template>
+        <div class="col-money cell">{{'Price after discount' | translate}}</div>
+      </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
+        <div *ngIf="i.IsByPercent">
+          {{i.OriginalPrice - i.OriginalPrice*i.DiscountByPercent/100 | number: '1.0-0'}} đ
+        </div>
+        <div *ngIf="i.IsByPercent == false">{{i.Price | number: '1.0-0'}} đ</div>
+      </ng-template>
+    </datatable-column>
+
+    <datatable-column class="col-date cell" name="Time application" property="FromDate">
+      <ng-template datatable-filter-template> </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
+        <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-date cell ion-text-wrap">
           {{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
         </div>
+      </ng-template>
+    </datatable-column>
+
+    <datatable-column class="col-time cell" name="Time slot" property="FromHour">
+      <ng-template datatable-filter-template> </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-time cell">{{i.FromHour}} - {{i.ToHour}}</div>
+      </ng-template>
+    </datatable-column>
+    <datatable-column class="col-status cell" name="Status" property="Status">
+      <ng-template datatable-filter-template>
+        <select
+          (change)="refresh()"
+          class="c-input c-dropdown"
+          [ngModelOptions]="{standalone: true}"
+          [(ngModel)]="query.Status"
+          [ngClass]="{active: query.Status}"
+        >
+          <option value="">{{'All' | translate}}</option>
+          <option disabled value="">----------</option>
+          <option *ngFor="let t of statusList" [value]="t.Code">{{t.Name}}</option>
+        </select>
+      </ng-template>
+      <ng-template let-i="row" datatable-cell-template>
         <div (click)="nav('pr-deal/'+i.Id,'forward')" class="col-status cell">{{i.Status}}</div>
-      </div>
-    </section>
-  </div>
+      </ng-template>
+    </datatable-column>
+  </app-data-table>
+
   <ion-infinite-scroll
     color="primary"
     threshold="20%"

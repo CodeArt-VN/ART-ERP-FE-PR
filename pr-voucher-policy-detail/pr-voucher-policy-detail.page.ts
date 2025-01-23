@@ -10,6 +10,7 @@ import {
   PR_ProgramItemProvider,
   PR_ProgramPartnerProvider,
   PR_ProgramProvider,
+  SYS_SchemaProvider,
 } from 'src/app/services/static/services.service';
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
@@ -26,7 +27,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
   Bonus = [];
   NumberPartner = 0;
   NumberItem = 0;
-
+  schema: any;
   constructor(
     public pageProvider: PR_ProgramProvider,
     public programPartnerProvider: PR_ProgramPartnerProvider,
@@ -42,6 +43,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
     public loadingController: LoadingController,
     public commonService: CommonService,
     public modalController: ModalController,
+     public schemaService: SYS_SchemaProvider,
   ) {
     super();
     this.formGroup = formBuilder.group({
@@ -58,7 +60,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       IsAutoApply: [false],
       IsApplyAllProduct: [false],
       IsApplyAllCustomer: [false],
-      MinOrderValue: [10000],
+      MinOrderValue: [''],
       IsByPercent: [false],
       MaxValue: [0, Validators.required],
       Value: ['', Validators.required],
@@ -68,6 +70,8 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       IsItemPromotion: [false],
       IsDisabled: [false],
       IsDeleted: [false],
+      Filter: [''],
+      _Filter: [''],
     });
     this.pageConfig.isDetailPage = true;
   }
@@ -77,15 +81,40 @@ export class PRVoucherPolicyDetailPage extends PageBase {
       this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
       this.countPartner(this.item.Id);
       this.countItem(this.item.Id);
-      // if(this.item.Status != 'New'){
-      //   this.formGroup.disable();
-      // }
+      if(this.item.Status != 'New'){
+        this.formGroup.disable();
+      }
     } else {
       this.formGroup.controls.Status.setValue('New');
       this.formGroup.controls.Type.setValue('Voucher');
     }
     super.loadedData();
+
+    if(!this.formGroup.controls.IsByPercent.value ||this.item.Status != 'New' ){
+      this.formGroup.controls.MaxValue.disable();
+    }else{
+      this.formGroup.controls.MaxValue.enable();;
+    }
+    if(this.item.Filter){
+      this.formGroup.controls._Filter.setValue(JSON.parse(this.item.Filter));
+    }
+
+    this.schemaService.commonService
+              .connect('GET', 'BI/Schema/GetSchemaByCode',{Code : 'WMS_Item'})
+              .toPromise()
+              .then((value: any) => {
+                if (value) this.schema = value;
+              });
   }
+
+  saveConfig(e) {
+    this.formGroup.controls.Filter.setValue(JSON.stringify(e));
+    this.formGroup.controls.Filter.markAsDirty();
+    this.formGroup.controls._Filter.setValue(e);
+    this.saveChange();
+  }
+
+
   async condition(Type: string) {
     if (this.id == 0) {
       this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
@@ -127,6 +156,11 @@ export class PRVoucherPolicyDetailPage extends PageBase {
     if (this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.Value.value > 99) {
       this.formGroup.controls.Value.patchValue(0);
       this.formGroup.controls.Value.markAsDirty();
+    }
+    if(!this.formGroup.controls.IsByPercent.value){
+      this.formGroup.controls.MaxValue.disable();
+    }else{
+      this.formGroup.controls.MaxValue.enable();;
     }
     if (this.formGroup.valid) {
       super.saveChange2();

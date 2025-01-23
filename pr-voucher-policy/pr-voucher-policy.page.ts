@@ -12,6 +12,13 @@ import { PR_ProgramProvider } from 'src/app/services/static/services.service';
     standalone: false
 })
 export class PRVoucherPolicyPage extends PageBase {
+
+  ShowDelete = false;
+  ShowChangeBranch = false;
+  ShowSubmit = false;
+  ShowApprove = false;
+  ShowDisapprove = false;
+  statusList = [];
   constructor(
     public pageProvider: PR_ProgramProvider,
     public modalController: ModalController,
@@ -24,18 +31,22 @@ export class PRVoucherPolicyPage extends PageBase {
     super();
     Object.assign(this.query, { Type: 'Voucher' });
   }
-  changeStatus(Status) {
-    let text = 'Gửi Duyệt';
-    let message =
-      'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
-    if (Status == 'Rejected') {
-      text = 'Không Duyệt';
-      message = 'Bạn có chắc chắn không duyệt các đối tượng này?';
-    }
-    if (Status == 'Approved') {
-      text = 'Duyệt';
-      message = 'Bạn có chắc chắn duyệt các đối tượng này?';
-    }
+
+  loadedData(event?: any, ignoredFromGroup?: boolean): void {
+    super.loadedData();
+    this.ShowChangeBranch = this.pageConfig.canChangeBranch;
+    this.statusList = [{
+      Code :'Approved',
+      Name : 'Approved'
+    },{
+      Code : 'New',
+      Name : 'New'
+    },{
+      Code : 'Pending',
+      Name : 'Pending'
+    }]
+  }
+  changeStatus(text, message, Status) {
     this.alertCtrl
       .create({
         header: text,
@@ -92,4 +103,51 @@ export class PRVoucherPolicyPage extends PageBase {
         alert.present();
       });
   }
+
+  submit(): void {
+    let text = 'Gửi Duyệt';
+    let message =
+      'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
+    this.changeStatus(text, message, 'Pending');
+  }
+
+  approve(): void {
+    let text = 'Duyệt';
+    let message = 'Bạn có chắc chắn duyệt các đối tượng này?';
+    this.changeStatus(text, message, 'Approved');
+  }
+
+  disapprove(): void {
+    let text = 'Không Duyệt';
+    let message = 'Bạn có chắc chắn không duyệt các đối tượng này?';
+    this.changeStatus(text, message, 'Rejected');
+  }
+
+  changeSelection(i: any, e?: any): void {
+    this.ShowSubmit = this.pageConfig.canSubmit;
+    this.ShowApprove =  this.pageConfig.canApprove;
+    this.ShowDisapprove  = this.pageConfig.canDisapprove;
+    this.ShowDelete = this.pageConfig.canDelete;
+    let notShowSubmit = ['Approved','Rejected','Cancelled','Submitted','Pending'];
+    let notShowApprove = ['Approved','Rejected'];
+    let notShowDisapprove = ['Disapprove','Rejected','Cancelled'];
+    super.changeSelection(i, e);
+    this.selectedItems.forEach(o => {
+      if(notShowSubmit.includes(o.Status) ){
+        this.ShowSubmit = false;
+      }
+      if(notShowApprove.includes(o.Status)){
+        this.ShowApprove = false;
+      }
+      if(notShowDisapprove.includes(o.Status)){
+        this.ShowDisapprove = false;
+      }
+    })
+
+    if (this.selectedItems?.length == 0) {
+      this.ShowSubmit = this.ShowApprove = this.ShowDisapprove = false;
+    }
+  
+  }
+
 }

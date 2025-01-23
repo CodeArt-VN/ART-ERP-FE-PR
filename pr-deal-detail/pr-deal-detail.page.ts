@@ -74,6 +74,10 @@ export class PRDealDetailPage extends PageBase {
     if (this.item.Id == 0) {
       this.formGroup.controls.Status.patchValue('New');
       this.formGroup.controls.Status.markAsDirty();
+    }else{
+      if(this.formGroup.controls.Status.value != 'New'){
+        this.formGroup.disable();
+      }
     }
     if (this.formGroup.controls.IsByPercent.value == true) {
       this.formGroup.controls.DiscountByPercent.enable();
