@@ -8,14 +8,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { PRVoucherPolicyDetailPage } from './pr-voucher-policy-detail.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: PRVoucherPolicyDetailPage,
-  },
+	{
+		path: '',
+		component: PRVoucherPolicyDetailPage,
+	},
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
-  declarations: [PRVoucherPolicyDetailPage],
+	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
+	declarations: [PRVoucherPolicyDetailPage],
 })
 export class PRVoucherPolicyDetailPageModule {}
