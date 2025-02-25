@@ -196,7 +196,7 @@ export class ConditionComponent extends PageBase {
 							this.env.showMessage('Deleted!', 'success');
 						})
 						.catch((err) => {
-							this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+							this.env.showMessage('DELETE_RESULT_FAIL', 'danger');;
 							console.log(err);
 						});
 				})
