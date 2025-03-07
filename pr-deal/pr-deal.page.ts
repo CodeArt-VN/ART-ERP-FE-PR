@@ -49,7 +49,7 @@ export class PRDealPage extends PageBase {
 						},
 					},
 					{
-						text: 'Xác nhận',
+						text: 'Confirm',
 						cssClass: 'danger-btn',
 						handler: () => {
 							let publishEventCode = this.pageConfig.pageName;
