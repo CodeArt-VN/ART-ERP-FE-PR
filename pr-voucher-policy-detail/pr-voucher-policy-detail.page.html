@@ -75,7 +75,7 @@
 									</div>
 									<div class="c-control">
 										<label class="c-label" for="Value">
-											<ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsByPercent"></ion-toggle>
+											<ion-checkbox class="ion-float-left" (ionChange)="saveChange()" formControlName="IsByPercent"></ion-checkbox>
 											<ion-text class="ion-float-left"><span style="padding-left: 10px">{{'Decrease by (%)' | translate}}</span></ion-text>
 										</label>
 										<input
@@ -110,7 +110,7 @@
 										<div class="c-input" style="margin-top: 7px">
 											<ion-label>{{'Public' | translate}}</ion-label>
 											<span class="ion-float-right">
-												<ion-toggle (ionChange)="saveChange()" formControlName="IsPublic"></ion-toggle>
+												<ion-checkbox (ionChange)="saveChange()" formControlName="IsPublic"></ion-checkbox>
 											</span>
 										</div>
 									</div>
@@ -119,7 +119,7 @@
 										<div class="c-input" style="margin-top: 7px">
 											<ion-label>{{'Auto' | translate}}</ion-label>
 											<span class="ion-float-right">
-												<ion-toggle (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
+												<ion-checkbox (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-checkbox>
 											</span>
 										</div>
 									</div>
@@ -127,7 +127,7 @@
 										<ion-label>{{'Applicable products' | translate}}</ion-label>
 										<div class="c-input" style="margin-top: 7px">
 											<span>
-												<ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle>
+												<ion-checkbox class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-checkbox>
 												<ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
 											</span>
 											<ion-button size="small" style="margin-top: -5.5px" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right"
@@ -149,7 +149,7 @@
 										<ion-label>{{'Customer applies' | translate}}</ion-label>
 										<div class="c-input" style="margin-top: 7px">
 											<span>
-												<ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle>
+												<ion-checkbox class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-checkbox>
 												<ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
 											</span>
 											<ion-button size="small" style="margin-top: -5.5px" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right"
