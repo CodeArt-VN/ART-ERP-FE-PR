@@ -100,7 +100,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
     }
 
     this.schemaService.commonService
-              .connect('GET', 'BI/Schema/GetSchemaByCode',{Code : 'WMS_Item'})
+              .connect('GET', 'BI/Schema/GetSchemaByCode',{Code : 'WMS_Item',Type: 'DBTable'})
               .toPromise()
               .then((value: any) => {
                 if (value) this.schema = value;
