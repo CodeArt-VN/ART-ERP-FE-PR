@@ -6,10 +6,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { PR_ProgramProvider } from 'src/app/services/static/services.service';
 
 @Component({
-    selector: 'app-pr-program',
-    templateUrl: './pr-program.page.html',
-    styleUrls: ['./pr-program.page.scss'],
-    standalone: false
+	selector: 'app-pr-program',
+	templateUrl: './pr-program.page.html',
+	styleUrls: ['./pr-program.page.scss'],
+	standalone: false,
 })
 export class PRProgramPage extends PageBase {
   ShowDelete = false;

@@ -17,10 +17,10 @@ import { ConditionComponent } from '../condition/condition.component';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 
 @Component({
-    selector: 'app-pr-voucher-policy-detail',
-    templateUrl: './pr-voucher-policy-detail.page.html',
-    styleUrls: ['./pr-voucher-policy-detail.page.scss'],
-    standalone: false
+	selector: 'app-pr-voucher-policy-detail',
+	templateUrl: './pr-voucher-policy-detail.page.html',
+	styleUrls: ['./pr-voucher-policy-detail.page.scss'],
+	standalone: false,
 })
 export class PRVoucherPolicyDetailPage extends PageBase {
   Discounts = [];

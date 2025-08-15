@@ -1,85 +1,79 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>{{ Condition.Title }}</ion-title>
-    <ion-buttons slot="primary">
-      <ion-button title="{{ 'Add' | translate }}" (click)="addConditionForm()">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
-      <ion-button title="{{ 'Close' | translate }}" (click)="closeModal()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+	<ion-toolbar color="primary">
+		<ion-title>{{ Condition.Title }}</ion-title>
+		<ion-buttons slot="primary">
+			<ion-button title="{{ 'Add' | translate }}" (click)="addConditionForm()">
+				<ion-icon slot="icon-only" name="add-outline"></ion-icon>
+			</ion-button>
+			<ion-button title="{{ 'Close' | translate }}" (click)="closeModal()">
+				<ion-icon slot="icon-only" name="close"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content appScrollbarTheme class="ion-padding">
-  <app-page-message [itemsLength]="ConditionForm.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
-  <div id="pr-condition" style="position: absolute; z-index: 30005"></div>
-  <div class="table-contain">
-    <section class="table">
-      <form [formGroup]="formGroup">
-        <ng-container formArrayName="ConditionForm">
-          <div class="row" *ngFor="let c of ConditionForm.controls; let i = index">
-            <ng-container [formGroup]="c">
-              <div class="cell">
-                <ng-select
-                  (change)="saveItemChange(c)"
-                  [clearable]="false"
-                  appendTo="#pr-condition"
-                  formControlName="Attribute"
-                  class="c-input"
-                  [items]="AttributeOption"
-                  bindLabel="Name"
-                  bindValue="Id"
-                  placeholder="Lọc theo"
-                ></ng-select>
-              </div>
-              <div class="cell">
-                <ng-select
-                  (change)="saveItemChange(c)"
-                  [clearable]="false"
-                  appendTo="#pr-condition"
-                  formControlName="Operator"
-                  class="c-input"
-                  [items]="OperatorOption"
-                  bindLabel="Name"
-                  bindValue="Id"
-                  placeholder="So sánh"
-                ></ng-select>
-              </div>
-              <div class="cell">
-                <input
-                  type="text"
-                  (change)="saveItemChange(c)"
-                  formControlName="Value"
-                  class="c-input"
-                  placeholder="Value"
-                />
-              </div>
-              <div class="ion-float-right">
-                <ion-button color="danger" (click)="removeConditionForm(i, c)" fill="outline" slot="end" size="small"
-                  ><ion-icon name="trash-outline"></ion-icon
-                ></ion-button>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-      </form>
-    </section>
-  </div>
-  <ng-container *ngIf="items?.length > 0 && Condition.Type != 'REWARD'">
-    <ion-item lines="none" class="border ion-margin-top">
-      <ion-text>Tìm thấy</ion-text>
-      <ion-label slot="end"
-        >{{ Count }}
-        <ion-text *ngIf="Condition.Type == 'ITEM'">{{'Product' | translate}}</ion-text>
-        <ion-text *ngIf="Condition.Type == 'CONTACT'">{{'Customer' | translate}}</ion-text>
-      </ion-label>
-    </ion-item>
-  </ng-container>
+	<app-page-message [itemsLength]="ConditionForm.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+	<div id="pr-condition" style="position: absolute; z-index: 30005"></div>
+	<div class="table-contain">
+		<section class="table">
+			<form [formGroup]="formGroup">
+				<ng-container formArrayName="ConditionForm">
+					<div class="row" *ngFor="let c of ConditionForm.controls; let i = index">
+						<ng-container [formGroup]="c">
+							<div class="cell">
+								<ng-select
+									(change)="saveItemChange(c)"
+									[clearable]="false"
+									appendTo="#pr-condition"
+									formControlName="Attribute"
+									class="c-input"
+									[items]="AttributeOption"
+									bindLabel="Name"
+									bindValue="Id"
+									placeholder="Lọc theo"
+								></ng-select>
+							</div>
+							<div class="cell">
+								<ng-select
+									(change)="saveItemChange(c)"
+									[clearable]="false"
+									appendTo="#pr-condition"
+									formControlName="Operator"
+									class="c-input"
+									[items]="OperatorOption"
+									bindLabel="Name"
+									bindValue="Id"
+									placeholder="So sánh"
+								></ng-select>
+							</div>
+							<div class="cell">
+								<input type="text" (change)="saveItemChange(c)" formControlName="Value" class="c-input" placeholder="Value" />
+							</div>
+							<div class="ion-float-right">
+								<ion-button color="danger" (click)="removeConditionForm(i, c)" fill="outline" slot="end" size="small"
+									><ion-icon name="trash-outline"></ion-icon
+								></ion-button>
+							</div>
+						</ng-container>
+					</div>
+				</ng-container>
+			</form>
+		</section>
+	</div>
+	<ng-container *ngIf="items?.length > 0 && Condition.Type != 'REWARD'">
+		<ion-item lines="none" class="border ion-margin-top">
+			<ion-text>Tìm thấy</ion-text>
+			<ion-label slot="end"
+				>{{ Count }}
+				<ion-text *ngIf="Condition.Type == 'ITEM'">{{ 'Product' | translate }}</ion-text>
+				<ion-text *ngIf="Condition.Type == 'CONTACT'">{{ 'Customer' | translate }}</ion-text>
+			</ion-label>
+		</ion-item>
+	</ng-container>
 </ion-content>
 <ion-footer *ngIf="Condition.Type != 'REWARD'">
-  <ion-toolbar>
-    <ion-button expand="block" (click)="applyData()">Áp dụng</ion-button>
-  </ion-toolbar>
+	<ion-toolbar>
+		<ion-button expand="block" (click)="applyData()">Áp dụng</ion-button>
+	</ion-toolbar>
 </ion-footer>

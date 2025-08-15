@@ -9,22 +9,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConditionModule } from '../condition/condition.module';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: PRProgramDetailPage,
-  },
+	{
+		path: '',
+		component: PRProgramDetailPage,
+	},
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ReactiveFormsModule,
-    ShareModule,
-    ConditionModule,
-    RouterModule.forChild(routes),
-  ],
-  declarations: [PRProgramDetailPage],
+	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, ConditionModule, RouterModule.forChild(routes)],
+	declarations: [PRProgramDetailPage],
 })
 export class PRProgramDetailPageModule {}

@@ -8,14 +8,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { PRDiscountPolicyDetailPage } from './pr-discount-policy-detail.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: PRDiscountPolicyDetailPage,
-  },
+	{
+		path: '',
+		component: PRDiscountPolicyDetailPage,
+	},
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
-  declarations: [PRDiscountPolicyDetailPage],
+	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
+	declarations: [PRDiscountPolicyDetailPage],
 })
 export class PRDiscountPolicyDetailPageModule {}

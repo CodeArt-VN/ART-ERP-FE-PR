@@ -9,13 +9,7 @@ import { ShareModule } from 'src/app/share.module';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ShareModule,
-    RouterModule.forChild([{ path: '', component: PRProgramPage }]),
-  ],
-  declarations: [PRProgramPage],
+	imports: [CommonModule, FormsModule, IonicModule, ShareModule, RouterModule.forChild([{ path: '', component: PRProgramPage }])],
+	declarations: [PRProgramPage],
 })
 export class PRProgramPageModule {}

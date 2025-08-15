@@ -1,322 +1,269 @@
 <ion-header>
-  <app-detail-toolbar [page]="this"></app-detail-toolbar>
+	<app-detail-toolbar [page]="this"></app-detail-toolbar>
 </ion-header>
 
 <ion-content appScrollbarTheme class="ion-padding">
-  <div id="pr-program-discount" style="position: absolute; z-index: 30005"></div>
-  <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
-    <div class="row-full shadow full-screen">
-      <ion-toolbar color="primary">
-        <ion-title>Chính sách Discount</ion-title>
-      </ion-toolbar>
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="12" size-xl="12">
-            <form [formGroup]="formGroup">
-              <ion-row>
-                <ion-col size="12" size-xl="6">
-                  <div class="c-control">
-                    <label class="c-label" for="Type">{{'Type' | translate}}</label>
-                    <input class="c-input" id="Type" type="text" formControlName="Type" />
-                  </div>
-                  <div class="c-control">
-                    <label class="c-label" for="Status">{{'Status' | translate}}</label>
-                    <input class="c-input" id="Status" type="text" formControlName="Status" />
-                  </div>
-                  <div class="c-control">
-                    <label class="c-label" for="Name">{{'Discount name' | translate}}</label>
-                    <input
-                      autocomplete="off"
-                      (change)="saveChange()"
-                      class="c-input"
-                      id="Name"
-                      type="text"
-                      formControlName="Name"
-                    />
-                  </div>
-                  <div class="c-control">
-                    <ion-row>
-                      <ion-col size="6" style="padding: 0px !important">
-                        <label class="c-label" for="FromDate">{{'Start' | translate}}</label>
-                        <input
-                          (change)="saveChange()"
-                          class="c-input"
-                          id="FromDate"
-                          formControlName="FromDate"
-                          type="date"
-                        />
-                      </ion-col>
-                      <ion-col size="6" style="padding: 0px !important">
-                        <label class="c-label" for="ToDate">{{'End' | translate}}</label>
-                        <input
-                          (change)="saveChange()"
-                          class="c-input"
-                          id="ToDate"
-                          formControlName="ToDate"
-                          type="date"
-                        />
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </ion-col>
-                <ion-col size="12" size-xl="6">
-                  <div class="c-control">
-                    <ion-label>{{'Applicable products' | translate}}</ion-label>
-                    <div class="c-input" style="margin-top: 7px">
-                      <span>
-                        <ion-toggle
-                          class="ion-float-left"
-                          (ionChange)="saveChange()"
-                          formControlName="IsApplyAllProduct"
-                        ></ion-toggle>
-                        <ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
-                      </span>
-                      <ion-button
-                        size="small"
-                        style="margin-top: -5.5px"
-                        *ngIf="formGroup.controls.IsApplyAllProduct.value"
-                        class="ion-float-right"
-                        >{{'All products' | translate}}</ion-button
-                      >
-                      <ion-button
-                        [disabled]="item?.Status != 'New'"
-                        size="small"
-                        style="margin-top: -5.5px"
-                        *ngIf="!formGroup.controls.IsApplyAllProduct.value"
-                        class="ion-float-right clickable"
-                        (click)="condition('ITEM')"
-                      >
-                        <ion-text *ngIf="NumberItem <= 0">{{'Specific products' | translate}}</ion-text>
-                        <ion-text *ngIf="NumberItem > 0">{{NumberItem}} {{'Product' | translate}}</ion-text>
-                      </ion-button>
-                    </div>
-                  </div>
-                  <div class="c-control">
-                    <ion-label>{{'Customer applies' | translate}}</ion-label>
-                    <div class="c-input" style="margin-top: 7px">
-                      <span>
-                        <ion-toggle
-                          class="ion-float-left"
-                          (ionChange)="saveChange()"
-                          formControlName="IsApplyAllCustomer"
-                        ></ion-toggle>
-                        <ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
-                      </span>
-                      <ion-button
-                        size="small"
-                        style="margin-top: -5.5px"
-                        *ngIf="formGroup.controls.IsApplyAllCustomer.value"
-                        class="ion-float-right"
-                        >{{'All customers' | translate}}</ion-button
-                      >
-                      <ion-button
-                        [disabled]="item?.Status != 'New'"
-                        size="small"
-                        style="margin-top: -5.5px"
-                        *ngIf="!formGroup.controls.IsApplyAllCustomer.value"
-                        class="ion-float-right clickable"
-                        (click)="condition('CONTACT')"
-                      >
-                        <ion-text *ngIf="NumberPartner">{{NumberPartner}} {{'customer' | translate}}</ion-text>
-                        <ion-text *ngIf="NumberPartner <= 0">{{'Specific customers' | translate}}</ion-text>
-                      </ion-button>
-                    </div>
-                  </div>
-                  <div class="c-control">
-                    <label class="c-label" for="Remark">{{'Discount policy description' | translate}}</label>
-                    <textarea
-                      (change)="saveChange()"
-                      rows="3"
-                      class="c-input"
-                      id="Remark"
-                      formControlName="Remark"
-                      type="textarea"
-                    ></textarea>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </form>
-            <ion-row *ngIf="item.Id">
-              <ion-col size="12">
-                <ion-toolbar color="primary">
-                  <ion-title>{{'Reward conditions' | translate}}</ion-title>
-                </ion-toolbar>
-              </ion-col>
-              <ion-col size="12" *ngFor="let c of ConditionReward; let i= index">
-                <div class="c-control c-input">
-                  <div class="c-input">
-                    <ion-item style="margin-top: -12px" lines="none">
-                      <ion-input [(ngModel)]="c.Name" (change)="updateLevelDiscount(c)"></ion-input>
-                      <ion-button size="small" (click)="condition('REWARD',c.Id, c.Name)">{{'Condition' | translate}}</ion-button>
-                      <ion-button fill="none" size="small" (click)="removeLevel(i,c)"
-                        ><ion-icon color="danger" name="trash-outline"></ion-icon>
-                      </ion-button>
-                    </ion-item>
-                  </div>
-                  <div class="table-contain">
-                    <section class="table" style="min-width: 1100px">
-                      <header class="bold" style="padding-right: 0">
-                        <div class="col-order cell">{{'According ĐH' | translate}}</div>
-                        <div class="col-type cell">{{'Type' | translate}}</div>
-                        <div class="col-name cell">{{'Product' | translate}}</div>
-                        <div class="col-uom cell">{{'Unit' | translate}}</div>
-                        <div class="col-quantity cell">{{'Quantity' | translate}}</div>
-                        <div class="col-amount cell">{{'Amount reduced' | translate}}</div>
-                        <div class="col-percent cell">{{'According %' | translate}}</div>
-                        <div class="col-maxvalue cell">{{'Minimize' | translate}}</div>
-                        <div class="col-btn cell"></div>
-                      </header>
-                      <div class="row" *ngFor="let r of c.Rewards; let j = index;">
-                        <div class="col-order cell">
-                          <ion-toggle
-                            (ionChange)="changeByOrder(r)"
-                            [disabled]="!r.ChooseIsRewardByOrder"
-                            [(ngModel)]="r.IsRewardByOrder"
-                          ></ion-toggle>
-                        </div>
-                        <div class="col-type cell">
-                          <ng-select
-                            (change)="changeType(r)"
-                            required="true"
-                            [(ngModel)]="r.Type"
-                            [clearable]="false"
-                            appendTo="#pr-program-discount"
-                            class="c-input"
-                            [items]="TypeReward"
-                            bindLabel="Name"
-                            bindValue="Id"
-                            placeholder="{{'Type' | translate}}"
-                          ></ng-select>
-                        </div>
+	<div id="pr-program-discount" style="position: absolute; z-index: 30005"></div>
+	<div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
+		<div class="row-full shadow full-screen">
+			<ion-toolbar color="primary">
+				<ion-title>Chính sách Discount</ion-title>
+			</ion-toolbar>
+			<ion-grid fixed>
+				<ion-row>
+					<ion-col size="12" size-xl="12">
+						<form [formGroup]="formGroup">
+							<ion-row>
+								<ion-col size="12" size-xl="6">
+									<div class="c-control">
+										<label class="c-label" for="Type">{{'Type' | translate}}</label>
+										<input class="c-input" id="Type" type="text" formControlName="Type" />
+									</div>
+									<div class="c-control">
+										<label class="c-label" for="Status">{{'Status' | translate}}</label>
+										<input class="c-input" id="Status" type="text" formControlName="Status" />
+									</div>
+									<div class="c-control">
+										<label class="c-label" for="Name">{{'Discount name' | translate}}</label>
+										<input autocomplete="off" (change)="saveChange()" class="c-input" id="Name" type="text" formControlName="Name" />
+									</div>
+									<div class="c-control">
+										<ion-row>
+											<ion-col size="6" style="padding: 0px !important">
+												<label class="c-label" for="FromDate">{{'Start' | translate}}</label>
+												<input (change)="saveChange()" class="c-input" id="FromDate" formControlName="FromDate" type="date" />
+											</ion-col>
+											<ion-col size="6" style="padding: 0px !important">
+												<label class="c-label" for="ToDate">{{'End' | translate}}</label>
+												<input (change)="saveChange()" class="c-input" id="ToDate" formControlName="ToDate" type="date" />
+											</ion-col>
+										</ion-row>
+									</div>
+								</ion-col>
+								<ion-col size="12" size-xl="6">
+									<div class="c-control">
+										<ion-label>{{'Applicable products' | translate}}</ion-label>
+										<div class="c-input" style="margin-top: 7px">
+											<span>
+												<ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle>
+												<ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
+											</span>
+											<ion-button size="small" style="margin-top: -5.5px" *ngIf="formGroup.controls.IsApplyAllProduct.value" class="ion-float-right"
+												>{{'All products' | translate}}</ion-button
+											>
+											<ion-button
+												[disabled]="item?.Status != 'New'"
+												size="small"
+												style="margin-top: -5.5px"
+												*ngIf="!formGroup.controls.IsApplyAllProduct.value"
+												class="ion-float-right clickable"
+												(click)="condition('ITEM')"
+											>
+												<ion-text *ngIf="NumberItem <= 0">{{'Specific products' | translate}}</ion-text>
+												<ion-text *ngIf="NumberItem > 0">{{NumberItem}} {{'Product' | translate}}</ion-text>
+											</ion-button>
+										</div>
+									</div>
+									<div class="c-control">
+										<ion-label>{{'Customer applies' | translate}}</ion-label>
+										<div class="c-input" style="margin-top: 7px">
+											<span>
+												<ion-toggle class="ion-float-left" (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle>
+												<ion-text class="ion-float-left" style="padding-left: 10px">{{'All' | translate}}</ion-text>
+											</span>
+											<ion-button size="small" style="margin-top: -5.5px" *ngIf="formGroup.controls.IsApplyAllCustomer.value" class="ion-float-right"
+												>{{'All customers' | translate}}</ion-button
+											>
+											<ion-button
+												[disabled]="item?.Status != 'New'"
+												size="small"
+												style="margin-top: -5.5px"
+												*ngIf="!formGroup.controls.IsApplyAllCustomer.value"
+												class="ion-float-right clickable"
+												(click)="condition('CONTACT')"
+											>
+												<ion-text *ngIf="NumberPartner">{{NumberPartner}} {{'customer' | translate}}</ion-text>
+												<ion-text *ngIf="NumberPartner <= 0">{{'Specific customers' | translate}}</ion-text>
+											</ion-button>
+										</div>
+									</div>
+									<div class="c-control">
+										<label class="c-label" for="Remark">{{'Discount policy description' | translate}}</label>
+										<textarea (change)="saveChange()" rows="3" class="c-input" id="Remark" formControlName="Remark" type="textarea"></textarea>
+									</div>
+								</ion-col>
+							</ion-row>
+						</form>
+						<ion-row *ngIf="item.Id">
+							<ion-col size="12">
+								<ion-toolbar color="primary">
+									<ion-title>{{'Reward conditions' | translate}}</ion-title>
+								</ion-toolbar>
+							</ion-col>
+							<ion-col size="12" *ngFor="let c of ConditionReward; let i= index">
+								<div class="c-control c-input">
+									<div class="c-input">
+										<ion-item style="margin-top: -12px" lines="none">
+											<ion-input [(ngModel)]="c.Name" (change)="updateLevelDiscount(c)"></ion-input>
+											<ion-button size="small" (click)="condition('REWARD',c.Id, c.Name)">{{'Condition' | translate}}</ion-button>
+											<ion-button fill="none" size="small" (click)="removeLevel(i,c)"><ion-icon color="danger" name="trash-outline"></ion-icon> </ion-button>
+										</ion-item>
+									</div>
+									<div class="table-contain">
+										<section class="table" style="min-width: 1100px">
+											<header class="bold" style="padding-right: 0">
+												<div class="col-order cell">{{'According ĐH' | translate}}</div>
+												<div class="col-type cell">{{'Type' | translate}}</div>
+												<div class="col-name cell">{{'Product' | translate}}</div>
+												<div class="col-uom cell">{{'Unit' | translate}}</div>
+												<div class="col-quantity cell">{{'Quantity' | translate}}</div>
+												<div class="col-amount cell">{{'Amount reduced' | translate}}</div>
+												<div class="col-percent cell">{{'According %' | translate}}</div>
+												<div class="col-maxvalue cell">{{'Minimize' | translate}}</div>
+												<div class="col-btn cell"></div>
+											</header>
+											<div class="row" *ngFor="let r of c.Rewards; let j = index;">
+												<div class="col-order cell">
+													<ion-toggle (ionChange)="changeByOrder(r)" [disabled]="!r.ChooseIsRewardByOrder" [(ngModel)]="r.IsRewardByOrder"></ion-toggle>
+												</div>
+												<div class="col-type cell">
+													<ng-select
+														(change)="changeType(r)"
+														required="true"
+														[(ngModel)]="r.Type"
+														[clearable]="false"
+														appendTo="#pr-program-discount"
+														class="c-input"
+														[items]="TypeReward"
+														bindLabel="Name"
+														bindValue="Id"
+														placeholder="{{'Type' | translate}}"
+													></ng-select>
+												</div>
 
-                        <div class="col-name cell">
-                          <ng-select
-                            [disabled]="!r.ChooseItem"
-                            [required]="r.ChooseItem"
-                            appendTo="#pr-program-discount"
-                            [(ngModel)]="r.IDItem"
-                            (change)="changedIDItem(i,j, $event, true)"
-                            [clearable]="false"
-                            class="c-input"
-                            [items]="r._ItemDataSource | async"
-                            [typeahead]="r._ItemSearchInput"
-                            [loading]="r._ItemSearchLoading"
-                            [virtualScroll]="true"
-                            bindLabel="Name"
-                            bindValue="Id"
-                            placeholder="{{'Product' | translate}}"
-                          >
-                            <ng-template ng-label-tmp let-i="item"> {{i.Name}} </ng-template>
-                          </ng-select>
-                        </div>
-                        <div class="col-uom cell">
-                          <ng-select
-                            [disabled]="!r.ChooseItemUoM"
-                            [required]="r.ChooseItemUoM"
-                            [(ngModel)]="r.IDItemUoM"
-                            [clearable]="false"
-                            appendTo="#pr-program-discount"
-                            class="c-input"
-                            [items]="r._UoMs"
-                            bindLabel="Name"
-                            bindValue="Id"
-                            placeholder="{{'Unit' | translate}}"
-                          ></ng-select>
-                        </div>
-                        <div class="col-quantity cell">
-                          <input
-                            [style]="{'border-color': r.ChooseQuantity && r.PromotionQuantity == 0?'red !important': null}"
-                            [disabled]="!r.ChooseQuantity"
-                            id="PromotionQuantity"
-                            [(ngModel)]="r.PromotionQuantity"
-                            type="number"
-                            class="c-input"
-                            placeholder="{{'Quantity' | translate}}"
-                          />
-                        </div>
-                        <div class="col-amount cell">
-                          <input
-                            [style]="{'border-color': r.ChooseAmount && r.DiscountAmount == 0?'red !important': null}"
-                            [disabled]="!r.ChooseAmount"
-                            [(ngModel)]="r.DiscountAmount"
-                            placeholder="{{'Amount reduced' | translate}}"
-                            mask="separator.0"
-                            thousandSeparator=","
-                            [allowNegativeNumbers]="true"
-                            suffix=" ₫"
-                            class="c-input"
-                            id="DiscountAmount"
-                            type="text"
-                          />
-                        </div>
-                        <div class="col-percent cell">
-                          <input
-                            [style]="{'border-color': r.ChoosePercent && r.DiscountPercent == 0?'red !important': null}"
-                            [disabled]="!r.ChoosePercent"
-                            [required]="r.ChoosePercent"
-                            [(ngModel)]="r.DiscountPercent"
-                            placeholder="Phần trăm giảm"
-                            mask="separator.0"
-                            thousandSeparator=","
-                            [allowNegativeNumbers]="true"
-                            suffix=" %"
-                            class="c-input"
-                            id="DiscountPercent"
-                            type="text"
-                          />
-                        </div>
-                        <div class="col-maxvalue cell">
-                          <input
-                            [style]="{'border-color': r.ChooseMaxValue && r.MaxAmount == 0?'red !important': null}"
-                            [disabled]="!r.ChooseMaxValue"
-                            [(ngModel)]="r.MaxAmount"
-                            type="text"
-                            class="c-input"
-                            placeholder="{{'Minimize' | translate}}"
-                            mask="separator.0"
-                            thousandSeparator=","
-                            [allowNegativeNumbers]="true"
-                            suffix=" ₫"
-                            id="MaxValue"
-                          />
-                        </div>
-                        <div class="col-btn cell">
-                          <ion-button title="lưu lại" fill="none" size="small" (click)="saveReward(r)"
-                            ><ion-icon color="primary" name="save-outline"></ion-icon
-                          ></ion-button>
-                          <ion-button
-                            title="Xóa"
-                            fill="none"
-                            *ngIf="r.Id != 0"
-                            size="small"
-                            (click)="deleteReward(i,j,r)"
-                            ><ion-icon color="danger" name="trash-outline"></ion-icon
-                          ></ion-button>
-                        </div>
-                      </div>
-                    </section>
-                    `
-                  </div>
-                  <div class="ion-text-center">
-                    <ion-button title="{{'Add rewards' | translate}}" fill="outline" (click)="addReward(i)"
-                      ><ion-icon name="add"></ion-icon>{{'Add rewards' | translate}}</ion-button
-                    >
-                  </div>
-                </div>
-              </ion-col>
-              <ion-col size="12">
-                <div class="c-control c-input">
-                  <div class="c-input">
-                    <ion-item style="margin-top: -12px" lines="none">
-                      <ion-input placeholder="{{'Enter limit name' | translate}}" (change)="addLevelDiscount($event)"></ion-input>
-                    </ion-item>
-                  </div>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-  </div>
+												<div class="col-name cell">
+													<ng-select
+														[disabled]="!r.ChooseItem"
+														[required]="r.ChooseItem"
+														appendTo="#pr-program-discount"
+														[(ngModel)]="r.IDItem"
+														(change)="changedIDItem(i,j, $event, true)"
+														[clearable]="false"
+														class="c-input"
+														[items]="r._ItemDataSource | async"
+														[typeahead]="r._ItemSearchInput"
+														[loading]="r._ItemSearchLoading"
+														[virtualScroll]="true"
+														bindLabel="Name"
+														bindValue="Id"
+														placeholder="{{'Product' | translate}}"
+													>
+														<ng-template ng-label-tmp let-i="item"> {{i.Name}} </ng-template>
+													</ng-select>
+												</div>
+												<div class="col-uom cell">
+													<ng-select
+														[disabled]="!r.ChooseItemUoM"
+														[required]="r.ChooseItemUoM"
+														[(ngModel)]="r.IDItemUoM"
+														[clearable]="false"
+														appendTo="#pr-program-discount"
+														class="c-input"
+														[items]="r._UoMs"
+														bindLabel="Name"
+														bindValue="Id"
+														placeholder="{{'Unit' | translate}}"
+													></ng-select>
+												</div>
+												<div class="col-quantity cell">
+													<input
+														[style]="{'border-color': r.ChooseQuantity && r.PromotionQuantity == 0?'red !important': null}"
+														[disabled]="!r.ChooseQuantity"
+														id="PromotionQuantity"
+														[(ngModel)]="r.PromotionQuantity"
+														type="number"
+														class="c-input"
+														placeholder="{{'Quantity' | translate}}"
+													/>
+												</div>
+												<div class="col-amount cell">
+													<input
+														[style]="{'border-color': r.ChooseAmount && r.DiscountAmount == 0?'red !important': null}"
+														[disabled]="!r.ChooseAmount"
+														[(ngModel)]="r.DiscountAmount"
+														placeholder="{{'Amount reduced' | translate}}"
+														mask="separator.0"
+														thousandSeparator=","
+														[allowNegativeNumbers]="true"
+														suffix=" ₫"
+														class="c-input"
+														id="DiscountAmount"
+														type="text"
+													/>
+												</div>
+												<div class="col-percent cell">
+													<input
+														[style]="{'border-color': r.ChoosePercent && r.DiscountPercent == 0?'red !important': null}"
+														[disabled]="!r.ChoosePercent"
+														[required]="r.ChoosePercent"
+														[(ngModel)]="r.DiscountPercent"
+														placeholder="Phần trăm giảm"
+														mask="separator.0"
+														thousandSeparator=","
+														[allowNegativeNumbers]="true"
+														suffix=" %"
+														class="c-input"
+														id="DiscountPercent"
+														type="text"
+													/>
+												</div>
+												<div class="col-maxvalue cell">
+													<input
+														[style]="{'border-color': r.ChooseMaxValue && r.MaxAmount == 0?'red !important': null}"
+														[disabled]="!r.ChooseMaxValue"
+														[(ngModel)]="r.MaxAmount"
+														type="text"
+														class="c-input"
+														placeholder="{{'Minimize' | translate}}"
+														mask="separator.0"
+														thousandSeparator=","
+														[allowNegativeNumbers]="true"
+														suffix=" ₫"
+														id="MaxValue"
+													/>
+												</div>
+												<div class="col-btn cell">
+													<ion-button title="lưu lại" fill="none" size="small" (click)="saveReward(r)"
+														><ion-icon color="primary" name="save-outline"></ion-icon
+													></ion-button>
+													<ion-button title="Xóa" fill="none" *ngIf="r.Id != 0" size="small" (click)="deleteReward(i,j,r)"
+														><ion-icon color="danger" name="trash-outline"></ion-icon
+													></ion-button>
+												</div>
+											</div>
+										</section>
+										`
+									</div>
+									<div class="ion-text-center">
+										<ion-button title="{{'Add rewards' | translate}}" fill="outline" (click)="addReward(i)"
+											><ion-icon name="add"></ion-icon>{{'Add rewards' | translate}}</ion-button
+										>
+									</div>
+								</div>
+							</ion-col>
+							<ion-col size="12">
+								<div class="c-control c-input">
+									<div class="c-input">
+										<ion-item style="margin-top: -12px" lines="none">
+											<ion-input placeholder="{{'Enter limit name' | translate}}" (change)="addLevelDiscount($event)"></ion-input>
+										</ion-item>
+									</div>
+								</div>
+							</ion-col>
+						</ion-row>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</div>
+	</div>
 </ion-content>

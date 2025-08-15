@@ -7,14 +7,7 @@ import { RouterModule } from '@angular/router';
 import { PRVoucherPolicyPage } from './pr-voucher-policy.page';
 
 @NgModule({
-  imports: [
-    ShareModule,
-    CommonModule,
-    FormsModule,
-    IonicModule,
-
-    RouterModule.forChild([{ path: '', component: PRVoucherPolicyPage }]),
-  ],
-  declarations: [PRVoucherPolicyPage],
+	imports: [ShareModule, CommonModule, FormsModule, IonicModule, RouterModule.forChild([{ path: '', component: PRVoucherPolicyPage }])],
+	declarations: [PRVoucherPolicyPage],
 })
 export class PRVoucherPolicyPageModule {}
