@@ -17,104 +17,108 @@ import { lib } from 'src/app/services/static/global-functions';
 	standalone: false,
 })
 export class PRDealDetailPage extends PageBase {
-	UoMs = [];
-	constructor(
-		public pageProvider: PR_DealProvider,
-		public itemProvider: WMS_ItemProvider,
-		public branchProvider: BRA_BranchProvider,
-		public env: EnvService,
-		public navCtrl: NavController,
-		public route: ActivatedRoute,
-		public alertCtrl: AlertController,
-		public formBuilder: FormBuilder,
-		public cdr: ChangeDetectorRef,
-		public loadingController: LoadingController,
-		public commonService: CommonService
-	) {
-		super();
-		this.pageConfig.isDetailPage = true;
-		console.log(env.selectedBranch);
-		this.formGroup = formBuilder.group({
-			IDBranch: [env.selectedBranch],
-			Id: new FormControl({ value: '', disabled: true }),
-			IDItem: [null, Validators.required],
-			IDItemUoM: [null, Validators.required],
-			FromDate: ['', Validators.required],
-			ToDate: ['', Validators.required],
-			FromHour: ['', Validators.required],
-			ToHour: ['', Validators.required],
-			IsByPercent: [false],
-			DiscountByPercent: new FormControl({ value: '', disabled: true }),
-			Quantity: [''],
-			MaxPerOrder: [''],
-			Price: ['', Validators.required],
-			OriginalPrice: new FormControl({ value: '', disabled: true }),
-			Code: [''],
-			Name: [''],
-			Remark: [''],
-			Sort: [''],
-			Status: [''],
-			IsDisabled: new FormControl({ value: '', disabled: true }),
-			IsDeleted: new FormControl({ value: '', disabled: true }),
-			CreatedBy: new FormControl({ value: '', disabled: true }),
-			CreatedDate: new FormControl({ value: '', disabled: true }),
-			ModifiedBy: new FormControl({ value: '', disabled: true }),
-			ModifiedDate: new FormControl({ value: '', disabled: true }),
-		});
-	}
-	loadedData(event) {
-		if (this.item?.IDItem) {
-			this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
-			this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
-			this.loadSelectedItem(this.item.IDItem);
-		} else {
-			this.itemSearch();
-		}
-		super.loadedData(event);
-		if (this.item.Id == 0) {
-			this.formGroup.controls.Status.patchValue('New');
-			this.formGroup.controls.Status.markAsDirty();
-		}
-		if (this.formGroup.controls.IsByPercent.value == true) {
-			this.formGroup.controls.DiscountByPercent.enable();
-			this.formGroup.controls.Price.disable();
-		}
-	}
-	segmentView = 's1';
-	segmentChanged(ev: any) {
-		this.segmentView = ev.detail.value;
-	}
-	itemList$;
-	itemListLoading = false;
-	itemListInput$ = new Subject<string>();
-	itemListSelected = [];
-	itemSearch() {
-		this.itemListLoading = false;
-		this.itemList$ = concat(
-			of(this.itemListSelected),
-			this.itemListInput$.pipe(
-				distinctUntilChanged(),
-				tap(() => (this.itemListLoading = true)),
-				switchMap((term) =>
-					this.itemProvider
-						.search({
-							Take: 20,
-							Skip: 0,
-							Term: term ? term : this.item.IDItem,
-							AllUoM: true,
-						})
-						.pipe(
-							catchError(() => of([])), // empty list on error
-							tap(() => (this.itemListLoading = false))
-						)
-				)
-			)
-		);
-	}
-	loadSelectedItem(IDItem) {
-		this.itemProvider.search({ Id: IDItem, AllUoM: true }).subscribe((result) => {
-			if (result) {
-				let OriginalPrice = result[0].UoMs.find((e) => e.Id == this.item.IDItemUoM)?.PriceList[0]?.Price;
+  UoMs = [];
+  constructor(
+    public pageProvider: PR_DealProvider,
+    public itemProvider: WMS_ItemProvider,
+    public branchProvider: BRA_BranchProvider,
+    public env: EnvService,
+    public navCtrl: NavController,
+    public route: ActivatedRoute,
+    public alertCtrl: AlertController,
+    public formBuilder: FormBuilder,
+    public cdr: ChangeDetectorRef,
+    public loadingController: LoadingController,
+    public commonService: CommonService,
+  ) {
+    super();
+    this.pageConfig.isDetailPage = true;
+    console.log(env.selectedBranch);
+    this.formGroup = formBuilder.group({
+      IDBranch: [env.selectedBranch],
+      Id: new FormControl({ value: '', disabled: true }),
+      IDItem: [null, Validators.required],
+      IDItemUoM: [null, Validators.required],
+      FromDate: ['', Validators.required],
+      ToDate: ['', Validators.required],
+      FromHour: ['', Validators.required],
+      ToHour: ['', Validators.required],
+      IsByPercent: [false],
+      DiscountByPercent: new FormControl({ value: '', disabled: true }),
+      Quantity: [''],
+      MaxPerOrder: [''],
+      Price: ['', Validators.required],
+      OriginalPrice: new FormControl({ value: '', disabled: true }),
+      Code: [''],
+      Name: [''],
+      Remark: [''],
+      Sort: [''],
+      Status: [''],
+      IsDisabled: new FormControl({ value: '', disabled: true }),
+      IsDeleted: new FormControl({ value: '', disabled: true }),
+      CreatedBy: new FormControl({ value: '', disabled: true }),
+      CreatedDate: new FormControl({ value: '', disabled: true }),
+      ModifiedBy: new FormControl({ value: '', disabled: true }),
+      ModifiedDate: new FormControl({ value: '', disabled: true }),
+    });
+  }
+  loadedData(event) {
+    if (this.item?.IDItem) {
+      this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
+      this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+      this.loadSelectedItem(this.item.IDItem);
+    } else {
+      this.itemSearch();
+    }
+    super.loadedData(event);
+    if (this.item.Id == 0) {
+      this.formGroup.controls.Status.patchValue('New');
+      this.formGroup.controls.Status.markAsDirty();
+    }else{
+      if(this.formGroup.controls.Status.value != 'New'){
+        this.formGroup.disable();
+      }
+    }
+    if (this.formGroup.controls.IsByPercent.value == true) {
+      this.formGroup.controls.DiscountByPercent.enable();
+      this.formGroup.controls.Price.disable();
+    }
+  }
+  segmentView = 's1';
+  segmentChanged(ev: any) {
+    this.segmentView = ev.detail.value;
+  }
+  itemList$;
+  itemListLoading = false;
+  itemListInput$ = new Subject<string>();
+  itemListSelected = [];
+  itemSearch() {
+    this.itemListLoading = false;
+    this.itemList$ = concat(
+      of(this.itemListSelected),
+      this.itemListInput$.pipe(
+        distinctUntilChanged(),
+        tap(() => (this.itemListLoading = true)),
+        switchMap((term) =>
+          this.itemProvider
+            .search({
+              Take: 20,
+              Skip: 0,
+              Term: term ? term : this.item.IDItem,
+              AllUoM: true,
+            })
+            .pipe(
+              catchError(() => of([])), // empty list on error
+              tap(() => (this.itemListLoading = false)),
+            ),
+        ),
+      ),
+    );
+  }
+  loadSelectedItem(IDItem) {
+    this.itemProvider.search({ Id: IDItem, AllUoM: true }).subscribe((result) => {
+      if (result) {
+        let OriginalPrice = result[0].UoMs.find((e) => e.Id == this.item.IDItemUoM)?.PriceList[0]?.Price;
 
 				this.formGroup.controls.OriginalPrice.patchValue(OriginalPrice);
 				this.UoMs = result[0].UoMs;
