@@ -9,6 +9,7 @@ import { BRA_BranchProvider, PR_ProgramProvider, SYS_SchemaProvider } from 'src/
 import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 import { Prop } from 'ionicons/dist/types/stencil-public-runtime';
+import { ProgramVoucherPage } from '../pr-program-voucher/pr-program-voucher.page';
 
 @Component({
 	selector: 'app-pr-program-detail',
@@ -26,6 +27,16 @@ export class PRProgramDetailPage extends PageBase {
 	tempItemList: any;
 	countItem = 0;
 	type: any;
+	typeList = [
+		{ Code: 'Voucher', Name: 'Voucher' },
+		{ Code: 'Promotion', Name: 'Promotion' },
+		{ Code: 'Discount', Name: 'Discount' },
+		{ Code: 'PromotionAndDiscount', Name: 'PromotionAndDiscount' },
+		{ Code: 'Accumulate', Name: 'Accumulate' },
+		{ Code: 'DisplayReward', Name: 'DisplayReward' }
+	];
+
+
 	@ViewChild('popoverPub') popoverPub;
 	@ViewChild('appFilterHavingClause') appFilterHavingClause;
 
@@ -86,8 +97,8 @@ export class PRProgramDetailPage extends PageBase {
 			Id: new FormControl({ value: '', disabled: true }),
 			IDBranch: [this.env.selectedBranch],
 			Branches: [],
-			Name: [''],
-			Type: [''],
+			Name: ['',Validators.required],
+			Type: ['Voucher',Validators.required],
 			Code: ['', Validators.required],
 			Status: new FormControl({ value: 'New', disabled: true }),
 			Sort: [0],
@@ -106,16 +117,28 @@ export class PRProgramDetailPage extends PageBase {
 			IsByPercent: [false],
 			MaxValue: [0],
 			Value: [0],
-			NumberOfCoupon: [0],
+			NumberOfCopy: [0],
 			MaxUsagePerCustomer: [0],
 			IsDiscount: [false],
 			IsItemPromotion: [false],
 			IsUseWithOrthersPromotion: [false],
 			IsDisabled: [false],
 			IsDeleted: [false],
-			ConfigItem: [''],
-			ConfigContact: [''],
-			ConfigBranch: [''],
+			ConfigItem: ['',Validators.required],
+			ConfigContact: ['',Validators.required],
+			ConfigBranch: ['',Validators.required],
+			IsGenerateVoucher: [''],
+			NumberOfGeneratedVoucher: [''],
+			VoucherCode:[''],
+			VoucherPrefix: [''],
+			VoucherSuffix: [''],
+			VoucherCodeLength: [''],
+			VoucherIsUpperCase: [true],
+			VoucherIsBreak: [false],
+			VoucherBreakPartLength: [4],
+			VoucherBreakChar: ['-'],
+			VoucherRadix: [36],
+
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -127,6 +150,14 @@ export class PRProgramDetailPage extends PageBase {
 		if (this.item?.Id) {
 			this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
 			this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+			if (this.formGroup.controls.IsGenerateVoucher.value) {
+				this.formGroup.get('Code').clearValidators();
+				this.formGroup.get('Code').updateValueAndValidity();
+			}
+		}else{
+			this.formGroup.controls.IsApplyAllBranch.markAsDirty();
+			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
+			this.formGroup.controls.IsApplyAllProduct.markAsDirty();
 		}
 		super.loadedData();
 		if (this.formGroup.controls.Status.value !== 'New') {
@@ -152,6 +183,43 @@ export class PRProgramDetailPage extends PageBase {
 			{ Code: 'min', Name: 'Min of {0}', icon: '' },
 			{ Code: 'average', Name: 'Average {0}', icon: '' },
 		];
+	}
+
+	changeIsGenerateVoucher() {
+		if (this.formGroup.controls.IsGenerateVoucher.value) {
+			this.formGroup.get('NumberOfGeneratedVoucher').addValidators([Validators.required]);
+			this.formGroup.get('NumberOfGeneratedVoucher').updateValueAndValidity();
+			this.formGroup.get('Code').setValue(null);
+			this.formGroup.get('Code').clearValidators();
+			this.formGroup.get('Code').updateValueAndValidity();
+			this.formGroup.get('Code').markAsDirty;
+		} else {
+			this.formGroup.get('NumberOfGeneratedVoucher').setValue(null);
+			this.formGroup.get('NumberOfGeneratedVoucher').clearValidators();
+			this.formGroup.get('NumberOfGeneratedVoucher').updateValueAndValidity();
+			this.formGroup.get('NumberOfGeneratedVoucher').markAsDirty;
+		}
+		this.saveChange();
+	}
+
+	generatedVoucher() {
+		this.env.showLoading(
+			'Generating vouchers ....',
+			this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id }).toPromise()
+		).then(_ =>{
+			this.env.showMessage('Generate vouchers success','success');
+		});
+	}
+
+	async openVoucherList() {
+		const modal = await this.modalController.create({
+			component: ProgramVoucherPage,
+			componentProps: {
+				IDProgram: this.item.Id,
+			},
+			cssClass: 'modal300',
+		});
+		await modal.present();
 	}
 
 	addNewForm(e, type) {
@@ -384,8 +452,8 @@ export class PRProgramDetailPage extends PageBase {
 
 	generateCodeVoucher() {
 		let code = lib.generateCode().toUpperCase();
-		this.formGroup.controls.Code.patchValue(code);
-		this.formGroup.controls.Code.markAsDirty();
+		this.formGroup.controls.VoucherCode.patchValue(code);
+		this.formGroup.controls.VoucherCode.markAsDirty();
 		this.saveChange();
 	}
 
@@ -409,36 +477,34 @@ export class PRProgramDetailPage extends PageBase {
 			this.formGroup.controls.MaxValue.enable();
 		}
 
-		// if (this.formGroup.controls.IsApplyAllProduct.value) {
-		//   this.formGroup.controls.ConfigItem.removeValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigItem.updateValueAndValidity();
-		// } else {
-		//   this.formGroup.controls.ConfigItem.addValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigItem.updateValueAndValidity();
+		if (this.formGroup.controls.IsApplyAllProduct.value) {
+		  this.formGroup.controls.ConfigItem.removeValidators([Validators.required]);
+		  this.formGroup.controls.ConfigItem.updateValueAndValidity();
+		} else {
+		  this.formGroup.controls.ConfigItem.addValidators([Validators.required]);
+		  this.formGroup.controls.ConfigItem.updateValueAndValidity();
 
-		// }
-
-		// if (this.formGroup.controls.IsApplyAllCustomer.value) {
-		//   this.formGroup.controls.ConfigContact.removeValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigContact.updateValueAndValidity();
-		// } else {
-		//   this.formGroup.controls.ConfigContact.addValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigContact.updateValueAndValidity();
-
-		// }
-
-		// if (this.formGroup.controls.IsApplyAllBranch.value) {
-		//   this.formGroup.controls.ConfigBranch.removeValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigBranch.updateValueAndValidity();
-		// } else {
-		//   this.formGroup.controls.ConfigBranch.addValidators([Validators.required]);
-		//   this.formGroup.controls.ConfigBranch.updateValueAndValidity();
-
-		// }
-
-		if (this.formGroup.valid) {
-			return super.saveChange2();
 		}
+
+		if (this.formGroup.controls.IsApplyAllCustomer.value) {
+		  this.formGroup.controls.ConfigContact.removeValidators([Validators.required]);
+		  this.formGroup.controls.ConfigContact.updateValueAndValidity();
+		} else {
+		  this.formGroup.controls.ConfigContact.addValidators([Validators.required]);
+		  this.formGroup.controls.ConfigContact.updateValueAndValidity();
+
+		}
+
+		if (this.formGroup.controls.IsApplyAllBranch.value) {
+		  this.formGroup.controls.ConfigBranch.removeValidators([Validators.required]);
+		  this.formGroup.controls.ConfigBranch.updateValueAndValidity();
+		} else {
+		  this.formGroup.controls.ConfigBranch.addValidators([Validators.required]);
+		  this.formGroup.controls.ConfigBranch.updateValueAndValidity();
+
+		}
+
+		return super.saveChange2();
 	}
 
 	async condition(Type: string) {
