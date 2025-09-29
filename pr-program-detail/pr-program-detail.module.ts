@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PRProgramDetailPage } from './pr-program-detail.page';
 import { ShareModule } from 'src/app/share.module';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { RouterModule, Routes } from '@angular/router';
 import { ConditionModule } from '../condition/condition.module';
 

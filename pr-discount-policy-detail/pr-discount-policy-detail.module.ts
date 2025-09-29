@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ShareModule } from 'src/app/share.module';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { RouterModule, Routes } from '@angular/router';
 import { PRDiscountPolicyDetailPage } from './pr-discount-policy-detail.page';
 
