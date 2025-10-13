@@ -10,7 +10,7 @@ import { lib } from 'src/app/services/static/global-functions';
 import { ConditionComponent } from '../condition/condition.component';
 import { Prop } from 'ionicons/dist/types/stencil-public-runtime';
 import { ProgramVoucherPage } from '../pr-program-voucher/pr-program-voucher.page';
-
+import { ApiSetting } from 'src/app/services/static/api-setting';
 @Component({
 	selector: 'app-pr-program-detail',
 	templateUrl: './pr-program-detail.page.html',
@@ -33,9 +33,8 @@ export class PRProgramDetailPage extends PageBase {
 		{ Code: 'Discount', Name: 'Discount' },
 		{ Code: 'PromotionAndDiscount', Name: 'PromotionAndDiscount' },
 		{ Code: 'Accumulate', Name: 'Accumulate' },
-		{ Code: 'DisplayReward', Name: 'DisplayReward' }
+		{ Code: 'DisplayReward', Name: 'DisplayReward' },
 	];
-
 
 	@ViewChild('popoverPub') popoverPub;
 	@ViewChild('appFilterHavingClause') appFilterHavingClause;
@@ -97,8 +96,8 @@ export class PRProgramDetailPage extends PageBase {
 			Id: new FormControl({ value: '', disabled: true }),
 			IDBranch: [this.env.selectedBranch],
 			Branches: [],
-			Name: ['',Validators.required],
-			Type: ['Voucher',Validators.required],
+			Name: ['', Validators.required],
+			Type: ['Voucher', Validators.required],
 			Code: ['', Validators.required],
 			Status: new FormControl({ value: 'New', disabled: true }),
 			Sort: [0],
@@ -124,12 +123,12 @@ export class PRProgramDetailPage extends PageBase {
 			IsUseWithOrthersPromotion: [false],
 			IsDisabled: [false],
 			IsDeleted: [false],
-			ConfigItem: ['',Validators.required],
-			ConfigContact: ['',Validators.required],
-			ConfigBranch: ['',Validators.required],
+			ConfigItem: ['', Validators.required],
+			ConfigContact: ['', Validators.required],
+			ConfigBranch: ['', Validators.required],
 			IsGenerateVoucher: [''],
 			NumberOfGeneratedVoucher: [''],
-			VoucherCode:[''],
+			VoucherCode: [''],
 			VoucherPrefix: [''],
 			VoucherSuffix: [''],
 			VoucherCodeLength: [''],
@@ -138,7 +137,6 @@ export class PRProgramDetailPage extends PageBase {
 			VoucherBreakPartLength: [4],
 			VoucherBreakChar: ['-'],
 			VoucherRadix: [36],
-
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -154,7 +152,7 @@ export class PRProgramDetailPage extends PageBase {
 				this.formGroup.get('Code').clearValidators();
 				this.formGroup.get('Code').updateValueAndValidity();
 			}
-		}else{
+		} else {
 			this.formGroup.controls.IsApplyAllBranch.markAsDirty();
 			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
 			this.formGroup.controls.IsApplyAllProduct.markAsDirty();
@@ -189,10 +187,10 @@ export class PRProgramDetailPage extends PageBase {
 		if (this.formGroup.controls.IsGenerateVoucher.value) {
 			this.formGroup.get('NumberOfGeneratedVoucher').addValidators([Validators.required]);
 			this.formGroup.get('NumberOfGeneratedVoucher').updateValueAndValidity();
-			this.formGroup.get('Code').setValue(null);
-			this.formGroup.get('Code').clearValidators();
-			this.formGroup.get('Code').updateValueAndValidity();
-			this.formGroup.get('Code').markAsDirty;
+			this.formGroup.get('VoucherCode').setValue(null);
+			this.formGroup.get('VoucherCode').clearValidators();
+			this.formGroup.get('VoucherCode').updateValueAndValidity();
+			this.formGroup.get('VoucherCode').markAsDirty;
 		} else {
 			this.formGroup.get('NumberOfGeneratedVoucher').setValue(null);
 			this.formGroup.get('NumberOfGeneratedVoucher').clearValidators();
@@ -203,12 +201,11 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	generatedVoucher() {
-		this.env.showLoading(
-			'Generating vouchers ....',
-			this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id }).toPromise()
-		).then(_ =>{
-			this.env.showMessage('Generate vouchers success','success');
-		});
+		this.env
+			.showLoading('Generating vouchers ....', this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id }).toPromise())
+			.then((_) => {
+				this.env.showMessage('Generate vouchers success', 'success');
+			});
 	}
 
 	async openVoucherList() {
@@ -478,30 +475,27 @@ export class PRProgramDetailPage extends PageBase {
 		}
 
 		if (this.formGroup.controls.IsApplyAllProduct.value) {
-		  this.formGroup.controls.ConfigItem.removeValidators([Validators.required]);
-		  this.formGroup.controls.ConfigItem.updateValueAndValidity();
+			this.formGroup.controls.ConfigItem.removeValidators([Validators.required]);
+			this.formGroup.controls.ConfigItem.updateValueAndValidity();
 		} else {
-		  this.formGroup.controls.ConfigItem.addValidators([Validators.required]);
-		  this.formGroup.controls.ConfigItem.updateValueAndValidity();
-
+			this.formGroup.controls.ConfigItem.addValidators([Validators.required]);
+			this.formGroup.controls.ConfigItem.updateValueAndValidity();
 		}
 
 		if (this.formGroup.controls.IsApplyAllCustomer.value) {
-		  this.formGroup.controls.ConfigContact.removeValidators([Validators.required]);
-		  this.formGroup.controls.ConfigContact.updateValueAndValidity();
+			this.formGroup.controls.ConfigContact.removeValidators([Validators.required]);
+			this.formGroup.controls.ConfigContact.updateValueAndValidity();
 		} else {
-		  this.formGroup.controls.ConfigContact.addValidators([Validators.required]);
-		  this.formGroup.controls.ConfigContact.updateValueAndValidity();
-
+			this.formGroup.controls.ConfigContact.addValidators([Validators.required]);
+			this.formGroup.controls.ConfigContact.updateValueAndValidity();
 		}
 
 		if (this.formGroup.controls.IsApplyAllBranch.value) {
-		  this.formGroup.controls.ConfigBranch.removeValidators([Validators.required]);
-		  this.formGroup.controls.ConfigBranch.updateValueAndValidity();
+			this.formGroup.controls.ConfigBranch.removeValidators([Validators.required]);
+			this.formGroup.controls.ConfigBranch.updateValueAndValidity();
 		} else {
-		  this.formGroup.controls.ConfigBranch.addValidators([Validators.required]);
-		  this.formGroup.controls.ConfigBranch.updateValueAndValidity();
-
+			this.formGroup.controls.ConfigBranch.addValidators([Validators.required]);
+			this.formGroup.controls.ConfigBranch.updateValueAndValidity();
 		}
 
 		return super.saveChange2();
@@ -548,5 +542,76 @@ export class PRProgramDetailPage extends PageBase {
 			ListItem: this.ListItem,
 		};
 		this.Bonus.push(bonus);
+	}
+
+	approve(): void {
+		let text = 'Duyệt';
+		let message = 'Bạn có chắc chắn duyệt các đối tượng này?';
+		this.changeStatus(text, message, 'Approved');
+	}
+
+	disapprove(): void {
+		let text = 'Không Duyệt';
+		let message = 'Bạn có chắc chắn không duyệt các đối tượng này?';
+		this.changeStatus(text, message, 'Rejected');
+	}
+
+	changeStatus(text, message, Status) {
+		this.alertCtrl
+			.create({
+				header: text,
+				//subHeader: '---',
+				message: message,
+				buttons: [
+					{
+						text: 'Hủy',
+						role: 'cancel',
+						handler: () => {
+							//console.log('Không xóa');
+						},
+					},
+					{
+						text: 'Xác nhận',
+						cssClass: 'danger-btn',
+						handler: () => {
+							let publishEventCode = this.pageConfig.pageName;
+							let apiPath = {
+								method: 'POST',
+								url: function () {
+									return ApiSetting.apiDomain('PR/Program/ChangeStatus/');
+								},
+							};
+
+							if (this.submitAttempt == false) {
+								this.submitAttempt = true;
+								let postDTO = {
+									Ids: [this.id],
+									Status: Status,
+								};
+								this.pageProvider.commonService
+									.connect(apiPath.method, apiPath.url(), postDTO)
+									.toPromise()
+									.then((savedItem: any) => {
+										if (publishEventCode) {
+											this.env.publishEvent({
+												Code: publishEventCode,
+											});
+										}
+										this.env.showMessage('Saving completed!', 'success');
+										this.submitAttempt = false;
+										this.refresh(null);
+									})
+									.catch((err) => {
+										this.submitAttempt = false;
+										//console.log(err);
+									});
+							}
+						},
+					},
+				],
+			})
+			.then((alert) => {
+				alert.present();
+			});
 	}
 }
