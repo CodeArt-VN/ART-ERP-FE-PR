@@ -1,13 +1,6 @@
 <ion-header>
 	<app-toolbar [page]="this">
 		<ion-button
-			title="{{'Generated voucher' | translate}}"
-			(click)="generatedVoucher()"
-			*ngIf="this.formGroup.controls.IsGenerateVoucher.value && this.item && this.item.Id && this.pageConfig.showSpinner==false && this.formGroup.controls.Status.value =='Approved'"
-		>
-			<ion-icon slot="icon-only" name="gift-outline"></ion-icon>
-		</ion-button>
-		<ion-button
 			title="{{'Open voucher list' | translate}}"
 			(click)="openVoucherList()"
 			*ngIf="this.formGroup.controls.IsGenerateVoucher.value && this.item && this.item.Id && this.pageConfig.showSpinner==false && this.formGroup.controls.Status.value =='Approved'"
@@ -131,7 +124,7 @@
 												type: 'checkbox',
 												form: formGroup
 											}"
-											(change)="changeIsGenerateVoucher()"
+											(change)="saveChange()"
 										>
 										</app-form-control>
 									</div>
@@ -147,109 +140,12 @@
 										>
 										</app-form-control>
 									</div>
+
 									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
 										<app-form-control
 											[field]="{
 													id: 'NumberOfGeneratedVoucher',
 													label: 'Number of generated voucher',
-													type: 'number',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherPrefix',
-													label: 'Voucher prefix',
-													type: 'text',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherSuffix',
-													label: 'Voucher suffix',
-													type: 'text',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherCodeLength',
-													label: 'Voucher length',
-													type: 'number',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherIsUpperCase',
-													label: 'Voucher upper case',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherIsBreak',
-													label: 'Voucher break',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherBreakPartLength',
-													label: 'Voucher break part length',
-													type: 'number',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherBreakChar',
-													label: 'Voucher break char',
-													type: 'text',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-													id: 'VoucherRadix',
-													label: 'Voucher radix',
 													type: 'number',
 													form: formGroup
 												}"
@@ -381,46 +277,138 @@
 										</app-form-control>
 									</div>
 
-									<ion-list>
-										<ion-item lines="none">
-											<ion-label>Public Program</ion-label>
-											<ion-toggle formControlName="IsPublic" (ionChange)="saveChange()"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsAutoApply</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsAutoApply"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsApplyAllProduct</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsApplyAllProduct"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsApplyAllCustomer</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsApplyAllCustomer"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsApplyAllBranch</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsApplyAllBranch"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsUseWithOrthersPromotion</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsUseWithOrthersPromotion"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none">
-											<ion-label>IsByPercent</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsByPercent"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
-											<ion-label>IsDiscount</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsDiscount"></ion-toggle>
-										</ion-item>
-										<ion-item lines="none" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
-											<ion-label>IsItemPromotion</ion-label>
-											<ion-toggle (ionChange)="saveChange()" formControlName="IsItemPromotion"></ion-toggle>
-										</ion-item>
-									</ion-list>
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsPublic',
+													label: 'Public Program',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsAutoApply',
+													label: 'IsAutoApply',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsApplyAllProduct',
+													label: 'IsApplyAllProduct',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsApplyAllCustomer',
+													label: 'IsApplyAllCustomer',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="checkValidator();saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsApplyAllCustomer',
+													label: 'IsApplyAllCustomer',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="checkValidator();saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsApplyAllBranch',
+													label: 'IsApplyAllBranch',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="checkValidator();saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsUseWithOrthersPromotion',
+													label: 'IsUseWithOrthersPromotion',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'IsByPercent',
+													label: 'IsByPercent',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
+										<app-form-control
+											[field]="{
+													id: 'IsDiscount',
+													label: 'IsDiscount',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+
+									<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
+										<app-form-control
+											[field]="{
+													id: 'IsItemPromotion',
+													label: 'IsItemPromotion',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
 								</ion-col>
 							</ion-row>
+
 							<ion-modal [isOpen]="isModalFilter" (willDismiss)="isModalFilter = false">
 								<ng-template>
 									<ion-header>
@@ -468,7 +456,6 @@
 										</ion-toolbar>
 									</ion-footer>
 								</ng-template>
-								``
 							</ion-modal>
 
 							<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover" (didDismiss)="dismissPopover()">
@@ -477,14 +464,14 @@
 										<ng-container *ngIf="pickerGroupName == 'MeasureBy'">
 											<app-form-control
 												[field]="{
-                    id: 'Property',
-                    label: 'Property',
-                    type: 'ng-select',
-                    dataSource: _schemaDetailsList,
-                    bindValue: 'Code',
-                    bindLabel: 'Name',
-                    form: formGroupMeasureBy
-                  }"
+												id: 'Property',
+												label: 'Property',
+												type: 'ng-select',
+												dataSource: _schemaDetailsList,
+												bindValue: 'Code',
+												bindLabel: 'Name',
+												form: formGroupMeasureBy
+											}"
 											></app-form-control>
 											<app-form-control
 												[field]="{

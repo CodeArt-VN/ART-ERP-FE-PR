@@ -1,6 +1,14 @@
 <ion-header>
 	<ion-toolbar>
 		<ion-title>{{'Program voucher' | translate}}</ion-title>
+
+		<ion-button slot="end" fill="clear" (click)="printProgramVoucher()" title="{{'Print program voucher' | translate}}">
+			<ion-icon slot="icon-only" name="print"></ion-icon>
+		</ion-button>
+
+		<ion-button slot="end" fill="clear" title="{{'Generated voucher' | translate}}" (click)="isModalVoucherConfig = true">
+			<ion-icon slot="icon-only" name="gift-outline"></ion-icon>
+		</ion-button>
 		<ion-button slot="end" fill="clear" class="ion-hide-md-down" title="{{ 'Export' | translate }}" (click)="export()">
 			<ion-icon color="warning" slot="icon-only" name="cloud-download-outline"></ion-icon>
 		</ion-button>
@@ -33,13 +41,144 @@
 					(selectedRowsChange)="showCommandBySelectedRows($event)"
 				>
 					<datatable-column class="col-code" name="Code" property="Code"></datatable-column>
+					<datatable-column class="col-name" name="Name" property="IDBussinessPartner"> </datatable-column>
+
 					<datatable-column class="col-remark" name="Used" property="IsUsed">
 						<ng-template let-i="row" datatable-cell-template>
 							<ion-icon *ngIf="i.IsUsed" color="success" name="checkmark-circle-outline"></ion-icon>
 						</ng-template>
 					</datatable-column>
 				</app-data-table>
+
+				<ion-infinite-scroll color="primary" threshold="20%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
+					<ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
+				</ion-infinite-scroll>
 			</div>
 		</div>
+
+		<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
+			<ng-template>
+				<ion-header>
+					<ion-toolbar>
+						<ion-title>{{'Voucher configuration' | translate}} </ion-title>
+						<ion-buttons slot="end">
+							<ion-button (click)="isModalVoucherConfig = false">
+								<ion-icon name="close"></ion-icon>
+							</ion-button>
+						</ion-buttons>
+					</ion-toolbar>
+				</ion-header>
+
+				<ion-content class="ion-padding">
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'Quantity',
+								label: 'Quantity',
+								type: 'number',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherPrefix',
+								label: 'Voucher prefix',
+								type: 'text',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherSuffix',
+								label: 'Voucher suffix',
+								type: 'text',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherCodeLength',
+								label: 'Voucher code length',
+								type: 'number',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherIsUpperCase',
+								label: 'Voucher upper case',
+								type: 'checkbox',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherIsBreak',
+								label: 'Voucher break',
+								type: 'checkbox',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherBreakPartLength',
+								label: 'Voucher break part length',
+								type: 'number',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherBreakChar',
+								label: 'Voucher break char',
+								type: 'text',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+
+					<div class="c-control">
+						<app-form-control
+							[field]="{
+								id: 'VoucherRadix',
+								label: 'Voucher radix',
+								type: 'number',
+								form: programFormGroup
+							}"
+						>
+						</app-form-control>
+					</div>
+				</ion-content>
+
+				<ion-footer>
+					<ion-toolbar>
+						<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
+						<ion-button size="medium" slot="end" (click)="generatedVoucher()">{{ 'Generate' | translate }}</ion-button>
+					</ion-toolbar>
+				</ion-footer>
+			</ng-template>
+		</ion-modal>
 	</div>
 </ion-content>
