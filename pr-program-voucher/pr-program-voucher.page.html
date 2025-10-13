@@ -41,7 +41,16 @@
 					(selectedRowsChange)="showCommandBySelectedRows($event)"
 				>
 					<datatable-column class="col-code" name="Code" property="Code"></datatable-column>
-					<datatable-column class="col-name" name="Name" property="IDBussinessPartner"> </datatable-column>
+					<datatable-column class="col-name" name="Bussiness partner" property="_BussinessPartner">
+						<ng-template let-i="row" datatable-cell-template>
+							<b *ngIf="i._BussinessPartner?.Code"><span [ngClass]="{ 'no-check-dirty': noCheckDirty }" class="important" >{{ i._BussinessPartner?.Code }} | </span></b>
+							<span style="white-space: normal" class="important"> {{ i._BussinessPartner?.Name }}</span>
+							<span *ngIf="i._BussinessPartner?.WorkPhone">
+								|
+								<small> <b class="important">{{ i._BussinessPartner?.WorkPhone }}</b></small></span
+							>
+						</ng-template>
+					</datatable-column>
 
 					<datatable-column class="col-remark" name="Used" property="IsUsed">
 						<ng-template let-i="row" datatable-cell-template>
