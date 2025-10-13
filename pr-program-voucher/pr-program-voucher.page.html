@@ -1,0 +1,45 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>{{'Program voucher' | translate}}</ion-title>
+		<ion-button slot="end" fill="clear" class="ion-hide-md-down" title="{{ 'Export' | translate }}" (click)="export()">
+			<ion-icon color="warning" slot="icon-only" name="cloud-download-outline"></ion-icon>
+		</ion-button>
+		<!-- Import -->
+		<ion-button slot="end" fill="clear" class="ion-hide-md-down" title="{{ 'Import' | translate }}" (click)="onClickImport()">
+			<ion-icon color="warning" slot="icon-only" name="cloud-upload-outline"></ion-icon>
+		</ion-button>
+		<input class="hide-all" #importfile type="file" (change)="importFileChange($event)" />
+		<ion-button slot="end" fill="clear" title="{{'Close' | translate}}" color="secondary" (click)="closeModal()">
+			<ion-icon slot="icon-only" name="close"></ion-icon>
+		</ion-button>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+	<div class="main-view">
+		<div class="row-full shadow full-screen">
+			<div class="ion-padding">
+				<app-data-table
+					class="box-shadow responsive"
+					[rows]="items"
+					[trackBy]="'Id'"
+					[(selectedRows)]="selectedItems"
+					[showSpinner]="pageConfig.showSpinner"
+					[showFilter]="pageConfig.isShowSearch"
+					[(query)]="query"
+					(dataInfinite)="loadData($event)"
+					(filter)="onDatatableFilter($event)"
+					(sort)="onSort($event)"
+					(selectedRowsChange)="showCommandBySelectedRows($event)"
+				>
+					<datatable-column class="col-code" name="Code" property="Code"></datatable-column>
+					<datatable-column class="col-remark" name="Used" property="IsUsed">
+						<ng-template let-i="row" datatable-cell-template>
+							<ion-icon *ngIf="i.IsUsed" color="success" name="checkmark-circle-outline"></ion-icon>
+						</ng-template>
+					</datatable-column>
+				</app-data-table>
+			</div>
+		</div>
+	</div>
+</ion-content>

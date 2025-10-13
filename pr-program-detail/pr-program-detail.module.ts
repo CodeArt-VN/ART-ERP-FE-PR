@@ -6,6 +6,7 @@ import { PRProgramDetailPage } from './pr-program-detail.page';
 import { ShareModule } from 'src/app/share.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ConditionModule } from '../condition/condition.module';
+import { ProgramVoucherPage } from '../pr-program-voucher/pr-program-voucher.page';
 
 const routes: Routes = [
 	{
@@ -16,6 +17,5 @@ const routes: Routes = [
 
 @NgModule({
 	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, ConditionModule, RouterModule.forChild(routes)],
-	declarations: [PRProgramDetailPage],
-})
+	declarations: [PRProgramDetailPage,ProgramVoucherPage]})
 export class PRProgramDetailPageModule {}
