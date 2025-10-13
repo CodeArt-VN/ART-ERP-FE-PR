@@ -544,6 +544,12 @@ export class PRProgramDetailPage extends PageBase {
 		this.Bonus.push(bonus);
 	}
 
+	submit(): void {
+		let text = 'Gửi Duyệt';
+		let message = 'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
+		this.changeStatus(text, message, 'Submitted');
+	}
+
 	approve(): void {
 		let text = 'Duyệt';
 		let message = 'Bạn có chắc chắn duyệt các đối tượng này?';
@@ -553,6 +559,12 @@ export class PRProgramDetailPage extends PageBase {
 	disapprove(): void {
 		let text = 'Không Duyệt';
 		let message = 'Bạn có chắc chắn không duyệt các đối tượng này?';
+		this.changeStatus(text, message, 'Disapproved');
+	}
+
+	cancel(): void {
+		let text = 'Huỷ';
+		let message = 'Bạn có chắc chắn huỷ các đối tượng này?';
 		this.changeStatus(text, message, 'Rejected');
 	}
 

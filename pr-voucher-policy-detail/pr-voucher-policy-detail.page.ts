@@ -118,10 +118,10 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 		if (this.formGroup.controls.IsGenerateVoucher.value) {
 			this.formGroup.get('NumberOfGeneratedVoucher').addValidators([Validators.required]);
 			this.formGroup.get('NumberOfGeneratedVoucher').updateValueAndValidity();
-			this.formGroup.get('Code').setValue(null);
-			this.formGroup.get('Code').clearValidators();
-			this.formGroup.get('Code').updateValueAndValidity();
-			this.formGroup.get('Code').markAsDirty;
+			this.formGroup.get('VoucherCode').setValue(null);
+			this.formGroup.get('VoucherCode').clearValidators();
+			this.formGroup.get('VoucherCode').updateValueAndValidity();
+			this.formGroup.get('VoucherCode').markAsDirty;
 		} else {
 			this.formGroup.get('NumberOfGeneratedVoucher').setValue(null);
 			this.formGroup.get('NumberOfGeneratedVoucher').clearValidators();
@@ -249,6 +249,89 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 			})
 			.catch((err) => {
 				console.log(err);
+			});
+	}
+
+	submit(): void {
+		let text = 'Gửi Duyệt';
+		let message = 'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
+		this.changeStatus(text, message, 'Submitted');
+	}
+
+	approve(): void {
+		let text = 'Duyệt';
+		let message = 'Bạn có chắc chắn duyệt các đối tượng này?';
+		this.changeStatus(text, message, 'Approved');
+	}
+
+	disapprove(): void {
+		let text = 'Không Duyệt';
+		let message = 'Bạn có chắc chắn không duyệt các đối tượng này?';
+		this.changeStatus(text, message, 'Disapproved');
+	}
+
+	cancel(): void {
+		let text = 'Huỷ';
+		let message = 'Bạn có chắc chắn huỷ các đối tượng này?';
+		this.changeStatus(text, message, 'Rejected');
+	}
+
+	changeStatus(text, message, Status) {
+		this.alertCtrl
+			.create({
+				header: text,
+				//subHeader: '---',
+				message: message,
+				buttons: [
+					{
+						text: 'Hủy',
+						role: 'cancel',
+						handler: () => {
+							//console.log('Không xóa');
+						},
+					},
+					{
+						text: 'Xác nhận',
+						cssClass: 'danger-btn',
+						handler: () => {
+							let publishEventCode = this.pageConfig.pageName;
+							let apiPath = {
+								method: 'POST',
+								url: function () {
+									return ApiSetting.apiDomain('PR/Program/ChangeStatus/');
+								},
+							};
+
+							if (this.submitAttempt == false) {
+								this.submitAttempt = true;
+								let postDTO = {
+									Ids: [this.id],
+									Status: Status,
+								};
+								this.pageProvider.commonService
+									.connect(apiPath.method, apiPath.url(), postDTO)
+									.toPromise()
+									.then((savedItem: any) => {
+										if (publishEventCode) {
+											this.env.publishEvent({
+												Code: publishEventCode,
+											});
+										}
+										this.env.showMessage('Saving completed!', 'success');
+										this.submitAttempt = false;
+										this.refresh(null);
+									})
+									.catch((err) => {
+										this.submitAttempt = false;
+										//console.log(err);
+									});
+							}
+						},
+					},
+				],
+			})
+			.then((alert) => {
+				alert.present();
 			});
 	}
 }
