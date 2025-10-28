@@ -18,6 +18,7 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 	standalone: false,
 })
 export class PRProgramDetailPage extends PageBase {
+	isModalVoucherConfig = false;
 	Discounts = [];
 	Bonus = [];
 	ListItem = [];
@@ -27,6 +28,7 @@ export class PRProgramDetailPage extends PageBase {
 	tempItemList: any;
 	countItem = 0;
 	type: any;
+	radixList = [];
 	typeList = [
 		{ Code: 'Voucher', Name: 'Voucher' },
 		{ Code: 'Promotion', Name: 'Promotion' },
@@ -136,7 +138,7 @@ export class PRProgramDetailPage extends PageBase {
 			VoucherIsBreak: [false],
 			VoucherBreakPartLength: [4],
 			VoucherBreakChar: ['-'],
-			VoucherRadix: [36],
+			VoucherRadix: ['36'],
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -144,7 +146,18 @@ export class PRProgramDetailPage extends PageBase {
 		});
 		this.pageConfig.isDetailPage = true;
 	}
+
+	preLoadData(event?: any): void {
+		Promise.all([this.env.getType('base-radix')]).then((values: any) => {
+			this.radixList = values[0];
+			super.preLoadData(event);
+		});
+	}
+
 	loadedData(event) {
+		if (this.item.VoucherRadix !== undefined && this.item.VoucherRadix !== null) {
+			this.item.VoucherRadix = this.item.VoucherRadix.toString();
+		}
 		super.loadedData();
 
 		if (this.item?.Id) {
@@ -163,6 +176,7 @@ export class PRProgramDetailPage extends PageBase {
 		}
 		if (this.formGroup.controls.Status.value !== 'New') {
 			this.formGroup.disable();
+
 		}
 
 		this.ListBranches = lib.cloneObject(this.env.branchList);
@@ -607,5 +621,9 @@ export class PRProgramDetailPage extends PageBase {
 			.then((alert) => {
 				alert.present();
 			});
+	}
+
+	openModalVoucherConfig() {
+		this.isModalVoucherConfig = true;
 	}
 }

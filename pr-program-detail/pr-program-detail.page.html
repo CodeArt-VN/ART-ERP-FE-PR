@@ -32,7 +32,8 @@
 												dataSource:typeList,
 												bindValue:'Code',
 												bindName:'Name',
-												form: formGroup
+												form: formGroup,
+												appendTo:'#pr-program'
 												}"
 											(change)="saveChange()"
 										>
@@ -70,7 +71,7 @@
 													[field]="{
 													id: 'FromDate',
 													label: 'Start',
-													type: 'date',
+													type: 'datetime-local',
 													form: formGroup
 												}"
 													(change)="saveChange()"
@@ -82,7 +83,7 @@
 													[field]="{
 													id: 'ToDate',
 													label: 'End',
-													type: 'date',
+													type: 'datetime-local',
 													form: formGroup
 												}"
 													(change)="saveChange()"
@@ -142,7 +143,18 @@
 									</div>
 
 									<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
+										<label class="c-label" for="VoucherCode">
+											<ion-text class="ion-float-left">{{'Number of generated voucher' | translate}}</ion-text>
+
+											<ion-icon
+												class="ion-float-right clickable"
+												(click)="openModalVoucherConfig()"
+												title="{{'Config voucher code generated' | translate}}"
+												name="cog-outline"
+												color="primary"
+											></ion-icon>
+										</label>
+										<app-input-control
 											[field]="{
 													id: 'NumberOfGeneratedVoucher',
 													label: 'Number of generated voucher',
@@ -151,7 +163,7 @@
 												}"
 											(change)="saveChange()"
 										>
-										</app-form-control>
+										</app-input-control>
 									</div>
 
 									<div class="c-control">
@@ -445,6 +457,125 @@
 								</ng-template>
 							</ion-modal>
 
+							<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
+								<ng-template>
+									<ion-header>
+										<ion-toolbar>
+											<ion-title>{{'Voucher configuration' | translate}} </ion-title>
+											<ion-buttons slot="end">
+												<ion-button (click)="isModalVoucherConfig = false">
+													<ion-icon name="close"></ion-icon>
+												</ion-button>
+											</ion-buttons>
+										</ion-toolbar>
+									</ion-header>
+
+									<ion-content class="ion-padding">
+										<div id="pr-program-modal" style="position: absolute; z-index: 30005"></div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherPrefix',
+													label: 'Voucher prefix',
+													type: 'text',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherSuffix',
+													label: 'Voucher suffix',
+													type: 'text',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+												id: 'VoucherCodeLength',
+												label: 'Voucher code length',
+												type: 'number',
+												form: formGroup
+											}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherIsUpperCase',
+													label: 'Voucher upper case',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherIsBreak',
+													label: 'Voucher break',
+													type: 'checkbox',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherBreakPartLength',
+													label: 'Voucher break part length',
+													type: 'number',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherBreakChar',
+													label: 'Voucher break char',
+													type: 'text',
+													form: formGroup
+												}"
+											>
+											</app-form-control>
+										</div>
+
+										<div class="c-control">
+											<app-form-control
+												[field]="{
+													id: 'VoucherRadix',
+													label: 'Voucher radix',
+													type: 'ng-select',
+													dataSource: radixList,
+													bindValue: 'Code',
+													bindLabel: 'Name',
+													form: formGroup,
+												appendTo:'#pr-program-modal'
+												}"
+											>
+											</app-form-control>
+										</div>
+									</ion-content>
+
+									<ion-footer>
+										<ion-toolbar>
+											<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
+											<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveChange(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
+										</ion-toolbar>
+									</ion-footer>
+								</ng-template>
+							</ion-modal>
+
 							<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover" (didDismiss)="dismissPopover()">
 								<ng-template>
 									<ion-content class="ion-padding">
@@ -457,7 +588,8 @@
 												dataSource: _schemaDetailsList,
 												bindValue: 'Code',
 												bindLabel: 'Name',
-												form: formGroupMeasureBy
+												form: formGroupMeasureBy,
+												appendTo:'#pr-program'
 											}"
 											></app-form-control>
 											<app-form-control
@@ -468,7 +600,8 @@
                     dataSource: _measureMethodDataSource,
                     bindValue: 'Code',
                     bindLabel: 'Code',
-                    form: formGroupMeasureBy
+                    form: formGroupMeasureBy,
+												appendTo:'#pr-program'
                   }"
 											></app-form-control>
 										</ng-container>
