@@ -19,6 +19,7 @@ export class ProgramVoucherPage extends PageBase {
 	IDProgram = 0;
 	isModalVoucherConfig = false;
 	programFormGroup;
+	radixList = [];
 	constructor(
 		public pageProvider: PR_ProgramVoucherProvider,
 		public programProvider: PR_ProgramProvider,
@@ -51,10 +52,14 @@ export class ProgramVoucherPage extends PageBase {
 	}
 
 	preLoadData(event?: any): void {
-		this.programProvider.read({ Id: this.IDProgram }).then((result: any) => {
-			if (result.data && result.data.length > 0) {
-				this.programFormGroup.patchValue(result.data[0]);
+		Promise.all([this.env.getType('base-radix'), this.programProvider.read({ Id: this.IDProgram })]).then((values: any) => {
+			if (values[1].data && values[1].data.length > 0) {
+				if (values[1].data[0].VoucherRadix !== undefined && values[1].data[0].VoucherRadix !== null) {
+					values[1].data[0].VoucherRadix = values[1].data[0].VoucherRadix.toString();
+				}
+				this.programFormGroup.patchValue(values[1].data[0]);
 			}
+			this.radixList = values[0];
 			super.preLoadData(event);
 		});
 	}
@@ -69,6 +74,9 @@ export class ProgramVoucherPage extends PageBase {
 		if (this.programFormGroup.controls.NumberOfGeneratedVoucher.value > 0) {
 			this.programFormGroup.controls.Quantity.setValue(this.programFormGroup.controls.NumberOfGeneratedVoucher.value);
 			this.programFormGroup.controls.Quantity.markAsDirty();
+		}
+		if (!this.pageConfig.canAddNewGeneratedVoucher) {
+			this.programFormGroup.controls.Quantity.disable();
 		}
 	}
 

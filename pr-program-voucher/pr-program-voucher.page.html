@@ -7,7 +7,7 @@
 		</ion-button>
 
 		<ion-button slot="end" fill="clear" title="{{'Generated voucher' | translate}}" (click)="isModalVoucherConfig = true">
-			<ion-icon slot="icon-only" name="gift-outline"></ion-icon>
+			<ion-icon slot="icon-only" name="add-outline"></ion-icon>
 		</ion-button>
 		<ion-button slot="end" fill="clear" class="ion-hide-md-down" title="{{ 'Export' | translate }}" (click)="export()">
 			<ion-icon color="warning" slot="icon-only" name="cloud-download-outline"></ion-icon>
@@ -43,7 +43,9 @@
 					<datatable-column class="col-code" name="Code" property="Code"></datatable-column>
 					<datatable-column class="col-name" name="Bussiness partner" property="_BussinessPartner">
 						<ng-template let-i="row" datatable-cell-template>
-							<b *ngIf="i._BussinessPartner?.Code"><span [ngClass]="{ 'no-check-dirty': noCheckDirty }" class="important" >{{ i._BussinessPartner?.Code }} | </span></b>
+							<b *ngIf="i._BussinessPartner?.Code"
+								><span [ngClass]="{ 'no-check-dirty': noCheckDirty }" class="important">{{ i._BussinessPartner?.Code }} | </span></b
+							>
 							<span style="white-space: normal" class="important"> {{ i._BussinessPartner?.Name }}</span>
 							<span *ngIf="i._BussinessPartner?.WorkPhone">
 								|
@@ -79,6 +81,7 @@
 				</ion-header>
 
 				<ion-content class="ion-padding">
+					<div id="pr-voucher-modal" style="position: absolute; z-index: 30005"></div>
 					<div class="c-control">
 						<app-form-control
 							[field]="{
@@ -173,8 +176,12 @@
 							[field]="{
 								id: 'VoucherRadix',
 								label: 'Voucher radix',
-								type: 'number',
-								form: programFormGroup
+								type: 'ng-select',
+								dataSource: radixList,
+								bindValue: 'Code',
+								bindLabel: 'Name',
+								form: programFormGroup,
+								appendTo:'#pr-voucher-modal'
 							}"
 						>
 						</app-form-control>
@@ -184,7 +191,9 @@
 				<ion-footer>
 					<ion-toolbar>
 						<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
-						<ion-button size="medium" slot="end" (click)="generatedVoucher()">{{ 'Generate' | translate }}</ion-button>
+						<ion-button [disabled]="!pageConfig.canAddNewGeneratedVoucher" size="medium" slot="end" (click)="generatedVoucher()"
+							>{{ 'Generate' | translate }}</ion-button
+						>
 					</ion-toolbar>
 				</ion-footer>
 			</ng-template>
