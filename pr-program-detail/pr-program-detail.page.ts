@@ -626,4 +626,10 @@ export class PRProgramDetailPage extends PageBase {
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
 	}
+
+	segmentView = 's1';
+	segmentChanged(ev: any) {
+		this.segmentView = ev.detail.value;
+	}
+
 }

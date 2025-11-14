@@ -15,9 +15,22 @@
 	<div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
 		<div class="row-full shadow full-screen">
 			<ion-toolbar color="primary">
-				<ion-title>{{'Design program' | translate}}</ion-title>
+				<ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
+					<ion-segment-button value="s1">
+						<ion-label>{{'General information' | translate}}</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="s2">
+						<ion-label>{{'Values' | translate}}</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="s3">
+						<ion-label>{{'Conditions' | translate}}</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="s4">
+						<ion-label>{{'Items' | translate}}</ion-label>
+					</ion-segment-button>
+				</ion-segment>
 			</ion-toolbar>
-			<ion-grid fixed>
+			<ion-grid fixed *ngIf="segmentView == 's1'">
 				<ion-row>
 					<ion-col size="12" size-xl="12">
 						<form [formGroup]="formGroup">
@@ -69,6 +82,62 @@
 											<ion-col size="6" style="padding: 0px !important">
 												<app-form-control
 													[field]="{
+														id: 'ApplicableFromHour',
+														label: 'Applicable time start',
+														type: 'time',
+														form: formGroup
+													}"
+													(change)="saveChange()"
+												>
+												</app-form-control>
+											</ion-col>
+											<ion-col size="6" style="padding: 0px !important">
+												<app-form-control
+													[field]="{
+														id: 'ApplicableToHour',
+														label: 'Applicable time end',
+														type: 'time',
+														form: formGroup
+													}"
+													(change)="saveChange()"
+												>
+												</app-form-control>
+											</ion-col>
+										</ion-row>
+									</div>
+									<div class="c-control">
+										<ion-row>
+											<ion-col size="6" style="padding: 0px !important">
+												<app-form-control
+													[field]="{
+															id: 'ExclusionFromHour',
+															label: 'Exclusion time start',
+															type: 'time',
+															form: formGroup
+														}"
+													(change)="saveChange()"
+												>
+												</app-form-control>
+											</ion-col>
+											<ion-col size="6" style="padding: 0px !important">
+												<app-form-control
+													[field]="{
+															id: 'ExclusionToHour',
+															label: 'Exclusion time end',
+															type: 'time',
+															form: formGroup
+														}"
+													(change)="saveChange()"
+												>
+												</app-form-control>
+											</ion-col>
+										</ion-row>
+									</div>
+									<div class="c-control">
+										<ion-row>
+											<ion-col size="6" style="padding: 0px !important">
+												<app-form-control
+													[field]="{
 													id: 'FromDate',
 													label: 'Start',
 													type: 'datetime-local',
@@ -92,7 +161,32 @@
 											</ion-col>
 										</ion-row>
 									</div>
-
+								</ion-col>
+								<ion-col size="12" size-xl="6">
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+												id: 'Status',
+												label: 'Status',
+												type: 'text',
+												form: formGroup
+											}"
+										>
+										</app-form-control>
+									</div>
+									<div class="c-control">
+										<app-form-control
+											[field]="{
+													id: 'Sort',
+													label: 'Sort',
+													type: 'text',
+													form: formGroup
+												}"
+											(change)="saveChange()"
+										>
+										</app-form-control>
+									</div>
+									
 									<!-- flag -->
 									<div class="c-control" *ngIf="!this.formGroup.controls.IsGenerateVoucher.value">
 										<label class="c-label" for="VoucherCode">
@@ -129,6 +223,7 @@
 										>
 										</app-form-control>
 									</div>
+
 									<div class="c-control" *ngIf="!formGroup.controls.IsGenerateVoucher.value">
 										<app-form-control
 											[field]="{
@@ -165,576 +260,462 @@
 										>
 										</app-input-control>
 									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-												id: 'MaxValue',
-												label: 'Max value',
-												type: 'text',
-												form: formGroup
-											}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-                     						 id:'Value',label:'Value',type:'number',form:formGroup} "
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-                   							id:'MinOrderValue',label:'Min order value',type:'number',form:formGroup} "
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control" *ngIf="!formGroup.controls.IsGenerateVoucher.value">
-										<app-form-control
-											[field]="{
-												id: 'MaxUsagePerCustomer',
-												label: 'Maximum number of vouchers applicable per customer',
-												type: 'number',
-												form: formGroup
-               								}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-								</ion-col>
-								<ion-col size="12" size-xl="6">
-									<div class="c-control">
-										<ion-row>
-											<ion-col size="6" style="padding: 0px !important">
-												<app-form-control
-													[field]="{
-														id: 'ApplicableFromHour',
-														label: 'Applicable time start',
-														type: 'time',
-														form: formGroup
-													}"
-													(change)="saveChange()"
-												>
-												</app-form-control>
-											</ion-col>
-											<ion-col size="6" style="padding: 0px !important">
-												<app-form-control
-													[field]="{
-                        id: 'ApplicableToHour',
-                        label: 'Applicable time end',
-                        type: 'time',
-                        form: formGroup
-                      }"
-													(change)="saveChange()"
-												>
-												</app-form-control>
-											</ion-col>
-										</ion-row>
-									</div>
-									<div class="c-control">
-										<ion-row>
-											<ion-col size="6" style="padding: 0px !important">
-												<app-form-control
-													[field]="{
-                        id: 'ExclusionFromHour',
-                        label: 'Exclusion time start',
-                        type: 'time',
-                        form: formGroup
-                      }"
-													(change)="saveChange()"
-												>
-												</app-form-control>
-											</ion-col>
-											<ion-col size="6" style="padding: 0px !important">
-												<app-form-control
-													[field]="{
-                        id: 'ExclusionToHour',
-                        label: 'Exclusion time end',
-                        type: 'time',
-                        form: formGroup
-                      }"
-													(change)="saveChange()"
-												>
-												</app-form-control>
-											</ion-col>
-										</ion-row>
-									</div>
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'Sort',
-													label: 'Sort',
-													type: 'text',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-												id: 'Status',
-												label: 'Status',
-												type: 'text',
-												form: formGroup
-											}"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsPublic',
-													label: 'Public Program',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsAutoApply',
-													label: 'IsAutoApply',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsApplyAllProduct',
-													label: 'IsApplyAllProduct',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsApplyAllCustomer',
-													label: 'IsApplyAllCustomer',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="checkValidator();saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsApplyAllBranch',
-													label: 'IsApplyAllBranch',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="checkValidator();saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsUseWithOrthersPromotion',
-													label: 'IsUseWithOrthersPromotion',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control">
-										<app-form-control
-											[field]="{
-													id: 'IsByPercent',
-													label: 'IsByPercent',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
-										<app-form-control
-											[field]="{
-													id: 'IsDiscount',
-													label: 'IsDiscount',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-
-									<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
-										<app-form-control
-											[field]="{
-													id: 'IsItemPromotion',
-													label: 'IsItemPromotion',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											(change)="saveChange()"
-										>
-										</app-form-control>
-									</div>
-								</ion-col>
-							</ion-row>
-
-							<ion-modal [isOpen]="isModalFilter" (willDismiss)="isModalFilter = false">
-								<ng-template>
-									<ion-header>
-										<ion-toolbar>
-											<ion-title>{{'Filter' | translate}} </ion-title>
-											<ion-buttons slot="end">
-												<ion-button (click)="isModalFilter = false">
-													<ion-icon name="close"></ion-icon>
-												</ion-button>
-											</ion-buttons>
-										</ion-toolbar>
-									</ion-header>
-
-									<ion-content class="ion-padding">
-										<app-filter #appFilter [schema]="schema" [item]="config" [smallWidth]="true" (submit)="filterConfig($event)"></app-filter>
-
-										<div class="c-control" *ngIf="(type == 'BRANCH' || type =='CONTACT' )&& schema">
-											<label class="c-label">{{ 'Measure By' | translate }}</label>
-											<span class="c-input" style="flex-wrap: wrap; height: auto">
-												<ion-chip color="warning" *ngFor="let c of MeasureBy" style="height: auto; margin: 0; margin-right: 2px">
-													<ion-label (click)="presentPopover($event, c, 'MeasureBy')">{{c.Title || c.Property }}</ion-label>
-													<ion-icon name="close" (click)="removeForm($event, c)"></ion-icon>
-												</ion-chip>
-												<ion-button fill="clear" size="small" (click)="addNewForm($event, 'MeasureBy')"
-													><ion-icon name="add-circle-outline"></ion-icon
-												></ion-button>
-											</span>
-										</div>
-
-										<div class="c-control" *ngIf="_dataSouceDimension && (type == 'BRANCH'|| type =='CONTACT')">
-											<label class="c-label">{{ 'Having clause' | translate }}</label>
-											<app-filter
-												#appFilterHavingClause
-												[schema]="_dataSouceDimension"
-												[item]="configHaving"
-												[smallWidth]="true"
-												(submit)="_havingClause = $event"
-											></app-filter>
-										</div>
-									</ion-content>
-
-									<ion-footer>
-										<ion-toolbar>
-											<ion-button size="large" slot="end" (click)="appFilter.onFormSubmit()">{{'Save' | translate}}</ion-button>
-										</ion-toolbar>
-									</ion-footer>
-								</ng-template>
-							</ion-modal>
-
-							<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
-								<ng-template>
-									<ion-header>
-										<ion-toolbar>
-											<ion-title>{{'Voucher configuration' | translate}} </ion-title>
-											<ion-buttons slot="end">
-												<ion-button (click)="isModalVoucherConfig = false">
-													<ion-icon name="close"></ion-icon>
-												</ion-button>
-											</ion-buttons>
-										</ion-toolbar>
-									</ion-header>
-
-									<ion-content class="ion-padding">
-										<div id="pr-program-modal" style="position: absolute; z-index: 30005"></div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherPrefix',
-													label: 'Voucher prefix',
-													type: 'text',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherSuffix',
-													label: 'Voucher suffix',
-													type: 'text',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-												id: 'VoucherCodeLength',
-												label: 'Voucher code length',
-												type: 'number',
-												form: formGroup
-											}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherIsUpperCase',
-													label: 'Voucher upper case',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherIsBreak',
-													label: 'Voucher break',
-													type: 'checkbox',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherBreakPartLength',
-													label: 'Voucher break part length',
-													type: 'number',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherBreakChar',
-													label: 'Voucher break char',
-													type: 'text',
-													form: formGroup
-												}"
-											>
-											</app-form-control>
-										</div>
-
-										<div class="c-control">
-											<app-form-control
-												[field]="{
-													id: 'VoucherRadix',
-													label: 'Voucher radix',
-													type: 'ng-select',
-													dataSource: radixList,
-													bindValue: 'Code',
-													bindLabel: 'Name',
-													form: formGroup,
-												appendTo:'#pr-program-modal'
-												}"
-											>
-											</app-form-control>
-										</div>
-									</ion-content>
-
-									<ion-footer>
-										<ion-toolbar>
-											<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
-											<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveChange(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
-										</ion-toolbar>
-									</ion-footer>
-								</ng-template>
-							</ion-modal>
-
-							<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover" (didDismiss)="dismissPopover()">
-								<ng-template>
-									<ion-content class="ion-padding">
-										<ng-container *ngIf="pickerGroupName == 'MeasureBy'">
-											<app-form-control
-												[field]="{
-												id: 'Property',
-												label: 'Property',
-												type: 'ng-select',
-												dataSource: _schemaDetailsList,
-												bindValue: 'Code',
-												bindLabel: 'Name',
-												form: formGroupMeasureBy,
-												appendTo:'#pr-program'
-											}"
-											></app-form-control>
-											<app-form-control
-												[field]="{
-                    id: 'Method',
-                    label: 'Method',
-                    type: 'ng-select',
-                    dataSource: _measureMethodDataSource,
-                    bindValue: 'Code',
-                    bindLabel: 'Code',
-                    form: formGroupMeasureBy,
-												appendTo:'#pr-program'
-                  }"
-											></app-form-control>
-										</ng-container>
-										<ion-button size="small" expand="block" (click)="dismissPopover(true)">Apply</ion-button>
-									</ion-content>
-								</ng-template>
-							</ion-popover>
-							<ion-row>
-								<ion-col size="12">
-									<div *ngIf="!formGroup.controls.IsApplyAllProduct.value" class="c-control">
-										<div class="c-input clickable" (click)="openModalFilter('ITEM')">
-											<ion-label>{{'Applicable products' | translate}}</ion-label>
-											<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
-										</div>
-									</div>
-									<div *ngIf="!formGroup.controls.IsApplyAllCustomer.value" class="c-control">
-										<div class="c-input clickable" (click)="openModalFilter('CONTACT')">
-											<!-- (click)="condition('CONTACT')" -->
-											<ion-label>{{'Customer applies' | translate}}</ion-label>
-											<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
-										</div>
-									</div>
-									<div *ngIf="!formGroup.controls.IsApplyAllBranch.value" class="c-control">
-										<div class="c-input clickable" (click)="openModalFilter('BRANCH')">
-											<!-- (click)="condition('CONTACT')" -->
-											<ion-label>{{'Branch applies' | translate}}</ion-label>
-											<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
-										</div>
-									</div>
 								</ion-col>
 							</ion-row>
 						</form>
-						<ion-row *ngIf="formGroup.controls.IsDiscount.value">
-							<ion-col size="12">
-								<ion-toolbar color="primary">
-									<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
-								</ion-toolbar>
-								<div class="table-contain">
-									<section class="table" style="min-width: 480px" *ngFor="let d of Discounts; let dj = index;">
-										<ion-toolbar>
-											<ion-title>{{'Limit' | translate}} {{dj+1}}</ion-title>
-										</ion-toolbar>
-										<header class="bold" style="padding-right: 0">
-											<div class="col-name cell">{{'Product' | translate}}</div>
-											<div class="col-uom cell">{{'Unit' | translate}}</div>
-											<div class="col-price cell">{{'Selling price' | translate}}</div>
-											<div class="col-value cell">{{'Value' | translate}}</div>
-											<div class="col-discount cell">{{'Promotional value' | translate}}</div>
-										</header>
-										<div class="row" *ngFor="let i of d.ListItem; let j = index;">
-											<div class="col-name cell">
-												<input type="text" class="c-input" disabled value="{{i.Name}}" />
-											</div>
-											<div class="col-uom cell">
-												<ng-select
-													[clearable]="false"
-													appendTo="#pr-program"
-													class="c-input"
-													[items]="i.ItemUoms"
-													bindLabel="Name"
-													bindValue="Id"
-													placeholder="{{'Unit' | translate}}"
-												></ng-select>
-											</div>
-											<div class="col-price cell">{{i.ItemUoms[0].PriceList?.Price | number: '1.0-0'}} đ</div>
-											<div class="col-value cell">
-												<input type="text" class="c-input" placeholder="Từ (&#8805;)" />
-											</div>
-											<div class="col-discount cell">
-												<input type="text" class="c-input" placeholder="Giá trị chiết khấu (%)" />
-											</div>
-										</div>
-									</section>
-								</div>
-							</ion-col>
-							<ion-col size="12" size-xl="4" offset-xl="4">
-								<ion-button color="primary" fill="outline" expand="block" (click)="addLevelDiscount()">
-									<ion-icon name="add-circle-outline"></ion-icon>{{'Add limit' | translate}}</ion-button
-								>
-							</ion-col>
-						</ion-row>
-						<ion-row *ngIf="formGroup.controls.IsItemPromotion.value">
-							<ion-col size="12">
-								<ion-toolbar color="primary">
-									<ion-text>{{'Conditions for gifting goods' | translate}}</ion-text>
-								</ion-toolbar>
-								<div class="table-contain">
-									<section class="table" style="min-width: 480px" *ngFor="let b of Bonus; let bj = index;">
-										<ion-toolbar>
-											<ion-title>{{'Limit' | translate}} {{bj+1}}</ion-title>
-										</ion-toolbar>
-										<header class="bold" style="padding-right: 0">
-											<div class="col-name cell">{{'Product' | translate}}</div>
-											<div class="col-uom cell">{{'Unit' | translate}}</div>
-											<div class="col-price cell">{{'Selling price' | translate}}</div>
-											<div class="col-value cell">{{'Value' | translate}}</div>
-											<div class="col-discount cell">{{'Promotional value' | translate}}</div>
-										</header>
-										<div class="row" *ngFor="let i of b.ListItem; let j = index;">
-											<div class="col-name cell">
-												<input type="text" class="c-input" disabled value="{{i.Name}}" />
-											</div>
-											<div class="col-uom cell">
-												<ng-select
-													[clearable]="false"
-													appendTo="#pr-program"
-													class="c-input"
-													[items]="i.ItemUoms"
-													bindLabel="Name"
-													bindValue="Id"
-													placeholder="{{'Unit' | translate}}"
-												></ng-select>
-											</div>
-											<div class="col-price cell">{{i.ItemUoms[0].PriceList?.Price | number: '1.0-0'}} đ</div>
-											<div class="col-value cell">
-												<input type="text" class="c-input" placeholder="Từ (&#8805;)" />
-											</div>
-											<div class="col-discount cell">
-												<input type="text" class="c-input" placeholder="Giá trị chiết khấu (%)" />
-											</div>
-										</div>
-									</section>
-								</div>
-							</ion-col>
-							<ion-col size="12" size-xl="4" offset-xl="4">
-								<ion-button color="primary" fill="outline" expand="block" (click)="addLevelBonus()">
-									<ion-icon name="add-circle-outline"></ion-icon>{{'Add limit' | translate}}</ion-button
-								>
-							</ion-col>
-						</ion-row>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
+			<ion-grid fixed *ngIf="segmentView == 's2'">
+				<form [formGroup]="formGroup">
+					<ion-row>
+						
+						<ion-col size="12" size-xl="6">
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsPublic',
+										label: 'Public Program',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsAutoApply',
+										label: 'Auto apply',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<!-- <div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsApplyAllProduct',
+										label: 'IsApplyAllProduct',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsApplyAllCustomer',
+										label: 'IsApplyAllCustomer',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="checkValidator();saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsApplyAllBranch',
+										label: 'IsApplyAllBranch',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="checkValidator();saveChange()"
+								>
+								</app-form-control>
+							</div> -->
+
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsUseWithOrthersPromotion',
+										label: 'Use with orthers promotion',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+						</ion-col>
+
+						<ion-col size="12" size-xl="6">
+							<div class="c-control">
+								<app-form-control
+									[field]="{
+										id: 'IsByPercent',
+										label: 'By percent',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
+								<app-form-control
+									[field]="{
+										id: 'IsDiscount',
+										label: 'Discount',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+
+							<div class="c-control" *ngIf="!(this.formGroup.controls.Type.value =='Voucher')">
+								<app-form-control
+									[field]="{
+										id: 'IsItemPromotion',
+										label: 'Item promotion',
+										type: 'checkbox',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-form-control>
+							</div>
+						</ion-col>
+					</ion-row>
+					<ion-row *ngIf="formGroup.controls.IsDiscount.value">
+					<ion-col size="12">
+						<ion-toolbar color="primary">
+							<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
+						</ion-toolbar>
+						<div class="table-contain">
+							<section class="table" style="min-width: 480px" *ngFor="let d of Discounts; let dj = index;">
+								<ion-toolbar>
+									<ion-title>{{'Limit' | translate}} {{dj+1}}</ion-title>
+								</ion-toolbar>
+								<header class="bold" style="padding-right: 0">
+									<div class="col-name cell">{{'Product' | translate}}</div>
+									<div class="col-uom cell">{{'Unit' | translate}}</div>
+									<div class="col-price cell">{{'Selling price' | translate}}</div>
+									<div class="col-value cell">{{'Value' | translate}}</div>
+									<div class="col-discount cell">{{'Promotional value' | translate}}</div>
+								</header>
+								<div class="row" *ngFor="let i of d.ListItem; let j = index;">
+									<div class="col-name cell">
+										<input type="text" class="c-input" disabled value="{{i.Name}}" />
+									</div>
+									<div class="col-uom cell">
+										<ng-select
+											[clearable]="false"
+											appendTo="#pr-program"
+											class="c-input"
+											[items]="i.ItemUoms"
+											bindLabel="Name"
+											bindValue="Id"
+											placeholder="{{'Unit' | translate}}"
+										></ng-select>
+									</div>
+									<div class="col-price cell">{{i.ItemUoms[0].PriceList?.Price | number: '1.0-0'}} đ</div>
+									<div class="col-value cell">
+										<input type="text" class="c-input" placeholder="Từ (&#8805;)" />
+									</div>
+									<div class="col-discount cell">
+										<input type="text" class="c-input" placeholder="Giá trị chiết khấu (%)" />
+									</div>
+								</div>
+							</section>
+						</div>
+					</ion-col>
+					<ion-col size="12" size-xl="4" offset-xl="4">
+						<ion-button color="primary" fill="outline" expand="block" (click)="addLevelDiscount()">
+							<ion-icon name="add-circle-outline"></ion-icon>{{'Add limit' | translate}}</ion-button
+						>
+					</ion-col>
+				</ion-row>
+				<ion-row *ngIf="formGroup.controls.IsItemPromotion.value">
+					<ion-col size="12">
+						<ion-toolbar color="primary">
+							<ion-text>{{'Conditions for gifting goods' | translate}}</ion-text>
+						</ion-toolbar>
+						<div class="table-contain">
+							<section class="table" style="min-width: 480px" *ngFor="let b of Bonus; let bj = index;">
+								<ion-toolbar>
+									<ion-title>{{'Limit' | translate}} {{bj+1}}</ion-title>
+								</ion-toolbar>
+								<header class="bold" style="padding-right: 0">
+									<div class="col-name cell">{{'Product' | translate}}</div>
+									<div class="col-uom cell">{{'Unit' | translate}}</div>
+									<div class="col-price cell">{{'Selling price' | translate}}</div>
+									<div class="col-value cell">{{'Value' | translate}}</div>
+									<div class="col-discount cell">{{'Promotional value' | translate}}</div>
+								</header>
+								<div class="row" *ngFor="let i of b.ListItem; let j = index;">
+									<div class="col-name cell">
+										<input type="text" class="c-input" disabled value="{{i.Name}}" />
+									</div>
+									<div class="col-uom cell">
+										<ng-select
+											[clearable]="false"
+											appendTo="#pr-program"
+											class="c-input"
+											[items]="i.ItemUoms"
+											bindLabel="Name"
+											bindValue="Id"
+											placeholder="{{'Unit' | translate}}"
+										></ng-select>
+									</div>
+									<div class="col-price cell">{{i.ItemUoms[0].PriceList?.Price | number: '1.0-0'}} đ</div>
+									<div class="col-value cell">
+										<input type="text" class="c-input" placeholder="Từ (&#8805;)" />
+									</div>
+									<div class="col-discount cell">
+										<input type="text" class="c-input" placeholder="Giá trị chiết khấu (%)" />
+									</div>
+								</div>
+							</section>
+						</div>
+					</ion-col>
+					<ion-col size="12" size-xl="4" offset-xl="4">
+						<ion-button color="primary" fill="outline" expand="block" (click)="addLevelBonus()">
+							<ion-icon name="add-circle-outline"></ion-icon>{{'Add limit' | translate}}</ion-button
+						>
+					</ion-col>
+				</ion-row>
+				</form>
+			</ion-grid>
+			<ion-grid fixed *ngIf="segmentView == 's3'">
+				<form [formGroup]="formGroup">
+					<ion-row>
+						<ion-col size="12">
+							<div class="c-control">
+								<div class="c-input clickable" (click)="openModalFilter('ITEM')">
+									<ion-label>{{'Applicable products' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
+								</div>
+							</div>
+							<div class="c-control">
+								<div class="c-input clickable" (click)="openModalFilter('CONTACT')">
+									<!-- (click)="condition('CONTACT')" -->
+									<ion-label>{{'Customer applies' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
+								</div>
+							</div>
+							<div class="c-control">
+								<div class="c-input clickable" (click)="openModalFilter('BRANCH')">
+									<!-- (click)="condition('CONTACT')" -->
+									<ion-label>{{'Branch applies' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
+								</div>
+							</div>
+						</ion-col>
+					</ion-row>
+				</form>
+			</ion-grid>
+			<ion-grid fixed *ngIf="segmentView == 's4'"> 
+				
+			</ion-grid>
 		</div>
 	</div>
+
+	<ion-modal [isOpen]="isModalFilter" (willDismiss)="isModalFilter = false">
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>{{'Filter' | translate}} </ion-title>
+					<ion-buttons slot="end">
+						<ion-button (click)="isModalFilter = false">
+							<ion-icon name="close"></ion-icon>
+						</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+
+			<ion-content class="ion-padding">
+				<app-filter #appFilter [schema]="schema" [item]="config" [smallWidth]="true" (submit)="filterConfig($event)"></app-filter>
+
+				<div class="c-control" *ngIf="(type == 'BRANCH' || type =='CONTACT' )&& schema">
+					<label class="c-label">{{ 'Measure By' | translate }}</label>
+					<span class="c-input" style="flex-wrap: wrap; height: auto">
+						<ion-chip color="warning" *ngFor="let c of MeasureBy" style="height: auto; margin: 0; margin-right: 2px">
+							<ion-label (click)="presentPopover($event, c, 'MeasureBy')">{{c.Title || c.Property }}</ion-label>
+							<ion-icon name="close" (click)="removeForm($event, c)"></ion-icon>
+						</ion-chip>
+						<ion-button fill="clear" size="small" (click)="addNewForm($event, 'MeasureBy')"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+					</span>
+				</div>
+
+				<div class="c-control" *ngIf="_dataSouceDimension && (type == 'BRANCH'|| type =='CONTACT')">
+					<label class="c-label">{{ 'Having clause' | translate }}</label>
+					<app-filter #appFilterHavingClause [schema]="_dataSouceDimension" [item]="configHaving" [smallWidth]="true" (submit)="_havingClause = $event"></app-filter>
+				</div>
+			</ion-content>
+
+			<ion-footer>
+				<ion-toolbar>
+					<ion-button size="large" slot="end" (click)="appFilter.onFormSubmit()">{{'Save' | translate}}</ion-button>
+				</ion-toolbar>
+			</ion-footer>
+		</ng-template>
+	</ion-modal>
+
+	<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>{{'Voucher configuration' | translate}} </ion-title>
+					<ion-buttons slot="end">
+						<ion-button (click)="isModalVoucherConfig = false">
+							<ion-icon name="close"></ion-icon>
+						</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+
+			<ion-content class="ion-padding">
+				<div id="pr-program-modal" style="position: absolute; z-index: 30005"></div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherPrefix',
+							label: 'Voucher prefix',
+							type: 'text',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherSuffix',
+							label: 'Voucher suffix',
+							type: 'text',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherCodeLength',
+							label: 'Voucher code length',
+							type: 'number',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherIsUpperCase',
+							label: 'Voucher upper case',
+							type: 'checkbox',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherIsBreak',
+							label: 'Voucher break',
+							type: 'checkbox',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherBreakPartLength',
+							label: 'Voucher break part length',
+							type: 'number',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherBreakChar',
+							label: 'Voucher break char',
+							type: 'text',
+							form: formGroup
+						}"
+					>
+					</app-form-control>
+				</div>
+
+				<div class="c-control">
+					<app-form-control
+						[field]="{
+							id: 'VoucherRadix',
+							label: 'Voucher radix',
+							type: 'ng-select',
+							dataSource: radixList,
+							bindValue: 'Code',
+							bindLabel: 'Name',
+							form: formGroup,
+						appendTo:'#pr-program-modal'
+						}"
+					>
+					</app-form-control>
+				</div>
+			</ion-content>
+
+			<ion-footer>
+				<ion-toolbar>
+					<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
+					<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveChange(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
+				</ion-toolbar>
+			</ion-footer>
+		</ng-template>
+	</ion-modal>
+
+	<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover" (didDismiss)="dismissPopover()">
+		<ng-template>
+			<ion-content class="ion-padding">
+				<ng-container *ngIf="pickerGroupName == 'MeasureBy'">
+					<app-form-control
+						[field]="{
+							id: 'Property',
+							label: 'Property',
+							type: 'ng-select',
+							dataSource: _schemaDetailsList,
+							bindValue: 'Code',
+							bindLabel: 'Name',
+							form: formGroupMeasureBy,
+							appendTo:'#pr-program'
+						}"
+					></app-form-control>
+					<app-form-control
+						[field]="{
+							id: 'Method',
+							label: 'Method',
+							type: 'ng-select',
+							dataSource: _measureMethodDataSource,
+							bindValue: 'Code',
+							bindLabel: 'Code',
+							form: formGroupMeasureBy,
+							appendTo:'#pr-program'
+							}"
+					></app-form-control>
+				</ng-container>
+				<ion-button size="small" expand="block" (click)="dismissPopover(true)">Apply</ion-button>
+			</ion-content>
+		</ng-template>
+	</ion-popover>
 </ion-content>
