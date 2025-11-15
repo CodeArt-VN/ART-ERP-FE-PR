@@ -139,6 +139,12 @@ export class PRProgramDetailPage extends PageBase {
 			VoucherBreakPartLength: [4],
 			VoucherBreakChar: ['-'],
 			VoucherRadix: ['36'],
+			Remark: [''],
+			CreatedBy: new FormControl({ value: '', disabled: true }),
+			CreatedDate: new FormControl({ value: '', disabled: true }),
+			ModifiedBy: new FormControl({ value: '', disabled: true }),
+			ModifiedDate: new FormControl({ value: '', disabled: true }),
+			
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -632,11 +638,6 @@ export class PRProgramDetailPage extends PageBase {
 
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
-	}
-
-	segmentView = 's1';
-	segmentChanged(ev: any) {
-		this.segmentView = ev.detail.value;
 	}
 
 }
