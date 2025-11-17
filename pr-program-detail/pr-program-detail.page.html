@@ -342,32 +342,49 @@
 						<ion-col size="12" size-sm size-xl="8">
 								
 						<div class="c-control modal-filter">
-								<div class="c-input clickable" [ngClass]="{'disable': formGroup.controls.Status.value !== 'New'}"  (click)="formGroup.controls.Status.value === 'New' && openModalFilter('ITEM')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								  (click)="formGroup.controls.Status.value === 'New' && openModalFilter('ITEM')">
 									<ion-label>{{'Applicable products' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
 								
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="formGroup.controls.Status.value === 'New' && resetConfig('IsApplyAllProduct')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllProduct')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
 							</div>
 							<div class="c-control modal-filter">
-								<div class="c-input clickable" [ngClass]="{'disable': formGroup.controls.Status.value !== 'New'}" (click)="formGroup.controls.Status.value === 'New' && openModalFilter('CONTACT')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								
+								(click)="formGroup.controls.Status.value === 'New' && openModalFilter('CONTACT')">
 									<ion-label>{{'Customer applies' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="formGroup.controls.Status.value === 'New' && resetConfig('IsApplyAllCustomer')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllCustomer')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
 							</div>
 							<div class="c-control modal-filter">
-								<div class="c-input clickable" [ngClass]="{'disable': formGroup.controls.Status.value !== 'New'}" (click)="formGroup.controls.Status.value === 'New' && openModalFilter('BRANCH')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								
+								(click)="formGroup.controls.Status.value === 'New' && openModalFilter('BRANCH')">
 									<ion-label>{{'Branch applies' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="formGroup.controls.Status.value === 'New' && resetConfig('IsApplyAllBranch')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllBranch')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
