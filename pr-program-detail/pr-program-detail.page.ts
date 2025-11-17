@@ -139,6 +139,12 @@ export class PRProgramDetailPage extends PageBase {
 			VoucherBreakPartLength: [4],
 			VoucherBreakChar: ['-'],
 			VoucherRadix: ['36'],
+			Remark: [''],
+			CreatedBy: new FormControl({ value: '', disabled: true }),
+			CreatedDate: new FormControl({ value: '', disabled: true }),
+			ModifiedBy: new FormControl({ value: '', disabled: true }),
+			ModifiedDate: new FormControl({ value: '', disabled: true }),
+			
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -367,6 +373,8 @@ export class PRProgramDetailPage extends PageBase {
 			};
 			this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
 			this.formGroup.controls.ConfigContact.markAsDirty();
+			this.formGroup.controls.IsApplyAllCustomer.setValue(false); 
+			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
 		} else if (this.type == 'ITEM') {
 			apiPath = 'ApplyItem';
 			config = {
@@ -377,6 +385,8 @@ export class PRProgramDetailPage extends PageBase {
 			};
 			this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
 			this.formGroup.controls.ConfigItem.markAsDirty();
+			this.formGroup.controls.IsApplyAllProduct.setValue(false);
+			this.formGroup.controls.IsApplyAllProduct.markAsDirty();
 		} else {
 			apiPath = 'ApplyBranch';
 			if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
@@ -389,6 +399,8 @@ export class PRProgramDetailPage extends PageBase {
 			};
 			this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
 			this.formGroup.controls.ConfigBranch.markAsDirty();
+			this.formGroup.controls.IsApplyAllBranch.setValue(false);
+			this.formGroup.controls.IsApplyAllBranch.markAsDirty();
 		}
 		this.saveChange();
 		// this.env
@@ -450,36 +462,37 @@ export class PRProgramDetailPage extends PageBase {
 		console.log(this.formGroup.controls.Branches.value);
 	}
 
-	checkValidator(controls) {
+	resetConfig(controls) {
 		switch (controls) {
 			case 'IsApplyAllProduct':
-				if (this.formGroup.controls.IsApplyAllProduct.value) {
-					this.formGroup.controls.ConfigItem.removeValidators([Validators.required]);
-					this.formGroup.controls.ConfigItem.updateValueAndValidity();
-				} else {
-					this.formGroup.controls.ConfigItem.addValidators([Validators.required]);
-					this.formGroup.controls.ConfigItem.updateValueAndValidity();
-				}
+				this.formGroup.controls.IsApplyAllProduct.setValue(true);
+				this.formGroup.controls.IsApplyAllProduct.markAsDirty();
+				this.formGroup.controls.ConfigItem.setValue(null);
+				this.formGroup.controls.ConfigItem.clearValidators();
+				this.formGroup.controls.ConfigItem.updateValueAndValidity();
+				this.formGroup.controls.ConfigItem.reset();
+				this.formGroup.controls.ConfigItem.markAsDirty();
 				break;
 			case 'IsApplyAllCustomer':
-				if (this.formGroup.controls.IsApplyAllCustomer.value) {
-					this.formGroup.controls.ConfigContact.removeValidators([Validators.required]);
-					this.formGroup.controls.ConfigContact.updateValueAndValidity();
-				} else {
-					this.formGroup.controls.ConfigContact.addValidators([Validators.required]);
-					this.formGroup.controls.ConfigContact.updateValueAndValidity();
-				}
+				this.formGroup.controls.IsApplyAllCustomer.setValue(true);
+				this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
+				this.formGroup.controls.ConfigContact.setValue(null);
+				this.formGroup.controls.ConfigContact.clearValidators();
+				this.formGroup.controls.ConfigContact.updateValueAndValidity();
+				this.formGroup.controls.ConfigContact.reset();
+				this.formGroup.controls.ConfigContact.markAsDirty();
 				break;
 			case 'IsApplyAllBranch':
-				if (this.formGroup.controls.IsApplyAllBranch.value) {
-					this.formGroup.controls.ConfigBranch.removeValidators([Validators.required]);
-					this.formGroup.controls.ConfigBranch.updateValueAndValidity();
-				} else {
-					this.formGroup.controls.ConfigBranch.addValidators([Validators.required]);
-					this.formGroup.controls.ConfigBranch.updateValueAndValidity();
-				}
+				this.formGroup.controls.IsApplyAllBranch.setValue(true);
+				this.formGroup.controls.IsApplyAllBranch.markAsDirty();
+				this.formGroup.controls.ConfigBranch.setValue(null);
+				this.formGroup.controls.ConfigBranch.clearValidators();
+				this.formGroup.controls.ConfigBranch.updateValueAndValidity();
+				this.formGroup.controls.ConfigBranch.reset();
+				this.formGroup.controls.ConfigBranch.markAsDirty();
 				break;
 		}
+		this.saveChange();
 	}
 
 	saveChange() {
@@ -626,4 +639,5 @@ export class PRProgramDetailPage extends PageBase {
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
 	}
+
 }

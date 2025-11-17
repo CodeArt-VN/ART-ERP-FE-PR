@@ -94,3 +94,10 @@ ion-checkbox::part(container) {
 		min-width: 200px !important;
 	}
 }
+.modal-filter {
+	display: flex;
+    flex-direction: column;
+	ion-button {
+		align-self: flex-end;
+	}
+}
