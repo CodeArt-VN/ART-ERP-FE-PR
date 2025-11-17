@@ -331,7 +331,57 @@
 							>
 							</app-form-control>
 						</ion-col>
-						<ion-col size="12" size-sm size-xl="8" push-xl="3" *ngIf="formGroup.controls.IsDiscount.value">
+					
+					</ion-row>
+					<ion-row class="hr-group">
+						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+							<ion-list-header class="ion-no-padding">
+								<ion-label color="primary">{{'Conditions' | translate}}</ion-label>
+							</ion-list-header>
+						</ion-col>
+						<ion-col size="12" size-sm size-xl="8">
+								
+						<div class="c-control modal-filter">
+								<div class="c-input clickable" (click)="openModalFilter('ITEM')">
+									<ion-label>{{'Applicable products' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
+								
+								</div>
+								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllProduct')">
+									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
+									{{'Reset' | translate}}
+								</ion-button>
+							</div>
+							<div class="c-control modal-filter">
+								<div class="c-input clickable" (click)="openModalFilter('CONTACT')">
+									<ion-label>{{'Customer applies' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
+								</div>
+								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllCustomer')">
+									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
+									{{'Reset' | translate}}
+								</ion-button>
+							</div>
+							<div class="c-control modal-filter">
+								<div class="c-input clickable" (click)="openModalFilter('BRANCH')">
+									<ion-label>{{'Branch applies' | translate}}</ion-label>
+									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
+								</div>
+								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllBranch')">
+									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
+									{{'Reset' | translate}}
+								</ion-button>
+							</div>
+								
+						</ion-col>
+					</ion-row>
+					<ion-row class="hr-group" *ngIf="formGroup.controls.IsDiscount.value || formGroup.controls.IsItemPromotion.value">
+						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+							<ion-list-header class="ion-no-padding">
+								<ion-label color="primary">{{'Items' | translate}}</ion-label>
+							</ion-list-header>
+						</ion-col>
+							<ion-col size="12" size-sm size-xl="8" push-xl="3" *ngIf="formGroup.controls.IsDiscount.value">
 							<ion-toolbar color="primary">
 							<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
 							</ion-toolbar>
@@ -426,61 +476,6 @@
 									{{ 'Add limit' | translate }}
 								</ion-button>
 							</div>
-						</ion-col>
-					</ion-row>
-					<ion-row class="hr-group">
-						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
-							<ion-list-header class="ion-no-padding">
-								<ion-label color="primary">{{'Conditions' | translate}}</ion-label>
-							</ion-list-header>
-						</ion-col>
-						<ion-col size="12" size-sm size-xl="8">
-								
-						<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('ITEM')">
-									<ion-label>{{'Applicable products' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
-								
-								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllProduct')">
-									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-							</div>
-							<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('CONTACT')">
-									<ion-label>{{'Customer applies' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
-								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllCustomer')">
-									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-							</div>
-							<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('BRANCH')">
-									<ion-label>{{'Branch applies' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
-								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllBranch')">
-									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-							</div>
-								
-						</ion-col>
-					</ion-row>
-					<ion-row class="hr-group">
-						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
-							<ion-list-header class="ion-no-padding">
-								<ion-label color="primary">{{'Items' | translate}}</ion-label>
-							</ion-list-header>
-						</ion-col>
-						<ion-col size="12" size-sm size-xl="4">
-								
-						</ion-col>
-						<ion-col size="12" size-sm size-xl="4">
-								
 						</ion-col>
 					</ion-row>
 
