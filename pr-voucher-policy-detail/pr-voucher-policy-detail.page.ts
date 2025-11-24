@@ -133,7 +133,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 
 	generatedVoucher() {
 		this.env
-			.showLoading('Generating vouchers ....', this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id }).toPromise())
+			.showLoading('Generating vouchers ....', this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id, Quantity: this.item.NumberOfGeneratedVoucher }).toPromise())
 			.then((_) => {
 				this.env.showMessage('Generate vouchers success', 'success');
 			});

@@ -62,7 +62,7 @@
 							>
 							</app-form-control>
 
-														<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value"
+							<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value"
 								[field]="{
 									id: 'NumberOfCopy',
 									label: 'Number of copy',
@@ -140,7 +140,7 @@
 									type: 'checkbox',
 									form: formGroup
 								}"
-								(change)="saveChange()"
+								(change)="isGenerateVoucher()"
 							>
 							</app-form-control>
 							
@@ -675,7 +675,7 @@
 			<ion-footer>
 				<ion-toolbar>
 					<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
-					<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveChange(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
+					<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveVoucherConfig(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
 				</ion-toolbar>
 			</ion-footer>
 		</ng-template>
