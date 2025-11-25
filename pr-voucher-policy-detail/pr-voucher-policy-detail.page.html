@@ -1,13 +1,6 @@
 <ion-header>
 	<app-detail-toolbar [page]="this">
 		<ion-button
-			title="{{'Generated voucher' | translate}}"
-			(click)="generatedVoucher()"
-			*ngIf="this.formGroup.controls.IsGenerateVoucher.value && this.item && this.item.Id && this.pageConfig.showSpinner==false && this.formGroup.controls.Status.value =='Approved'"
-		>
-			<ion-icon slot="icon-only" name="gift-outline"></ion-icon>
-		</ion-button>
-		<ion-button
 			title="{{'Open voucher list' | translate}}"
 			(click)="openVoucherList()"
 			*ngIf="this.formGroup.controls.IsGenerateVoucher.value && this.item && this.item.Id && this.pageConfig.showSpinner==false && this.formGroup.controls.Status.value =='Approved'"

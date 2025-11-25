@@ -144,7 +144,6 @@ export class PRProgramDetailPage extends PageBase {
 			CreatedDate: new FormControl({ value: '', disabled: true }),
 			ModifiedBy: new FormControl({ value: '', disabled: true }),
 			ModifiedDate: new FormControl({ value: '', disabled: true }),
-			
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -182,7 +181,6 @@ export class PRProgramDetailPage extends PageBase {
 		}
 		if (this.formGroup.controls.Status.value !== 'New') {
 			this.formGroup.disable();
-
 		}
 
 		this.ListBranches = lib.cloneObject(this.env.branchList);
@@ -373,7 +371,7 @@ export class PRProgramDetailPage extends PageBase {
 			};
 			this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
 			this.formGroup.controls.ConfigContact.markAsDirty();
-			this.formGroup.controls.IsApplyAllCustomer.setValue(false); 
+			this.formGroup.controls.IsApplyAllCustomer.setValue(false);
 			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
 		} else if (this.type == 'ITEM') {
 			apiPath = 'ApplyItem';
@@ -458,6 +456,29 @@ export class PRProgramDetailPage extends PageBase {
 		this.saveChange();
 	}
 
+	isGenerateVoucher() {
+		if (this.id === 0) {
+			const isGen = this.formGroup.controls.IsGenerateVoucher.value;
+			if (isGen) {
+				this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();
+			} else {
+				this.formGroup.controls.NumberOfCopy.markAsDirty();
+			}
+		}
+		this.saveChange();
+	}
+	saveVoucherConfig(){
+		if (this.id === 0) {
+			this.formGroup.controls.VoucherIsUpperCase.markAsDirty();
+			this.formGroup.controls.VoucherIsBreak.markAsDirty();
+			this.formGroup.controls.VoucherBreakPartLength.markAsDirty();
+			this.formGroup.controls.VoucherBreakChar.markAsDirty();
+			this.formGroup.controls.VoucherRadix.markAsDirty();
+			this.formGroup.controls.VoucherBreakChar.markAsDirty();
+		}
+		this.saveChange();
+	}
+
 	changeTest() {
 		console.log(this.formGroup.controls.Branches.value);
 	}
@@ -506,7 +527,14 @@ export class PRProgramDetailPage extends PageBase {
 		} else {
 			this.formGroup.controls.MaxValue.enable();
 		}
-
+        if (this.formGroup.controls.NumberOfGeneratedVoucher.value == '') {
+            this.formGroup.controls.NumberOfGeneratedVoucher.patchValue(0);
+            this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();
+        }
+        if (this.formGroup.controls.NumberOfCopy.value == '') {
+            this.formGroup.controls.NumberOfCopy.patchValue(0);
+            this.formGroup.controls.NumberOfCopy.markAsDirty();
+        }
 		return super.saveChange2();
 	}
 
@@ -639,5 +667,4 @@ export class PRProgramDetailPage extends PageBase {
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
 	}
-
 }
