@@ -62,7 +62,7 @@
 							>
 							</app-form-control>
 
-														<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value"
+							<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value"
 								[field]="{
 									id: 'NumberOfCopy',
 									label: 'Number of copy',
@@ -140,7 +140,7 @@
 									type: 'checkbox',
 									form: formGroup
 								}"
-								(change)="saveChange()"
+								(change)="isGenerateVoucher()"
 							>
 							</app-form-control>
 							
@@ -342,32 +342,49 @@
 						<ion-col size="12" size-sm size-xl="8">
 								
 						<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('ITEM')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								  (click)="formGroup.controls.Status.value === 'New' && openModalFilter('ITEM')">
 									<ion-label>{{'Applicable products' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
 								
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllProduct')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllProduct')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
 							</div>
 							<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('CONTACT')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								
+								(click)="formGroup.controls.Status.value === 'New' && openModalFilter('CONTACT')">
 									<ion-label>{{'Customer applies' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllCustomer')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllCustomer')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
 							</div>
 							<div class="c-control modal-filter">
-								<div class="c-input clickable" (click)="openModalFilter('BRANCH')">
+								<div class="c-input" 
+								[ngClass]="{
+									'disable': formGroup.controls.Status.value !== 'New',
+									'clickable': formGroup.controls.Status.value === 'New'
+								}"
+								
+								(click)="formGroup.controls.Status.value === 'New' && openModalFilter('BRANCH')">
 									<ion-label>{{'Branch applies' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
 								</div>
-								<ion-button size="small" slot="end" color="danger" (click)="resetConfig('IsApplyAllBranch')">
+								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllBranch')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
 									{{'Reset' | translate}}
 								</ion-button>
@@ -381,7 +398,7 @@
 								<ion-label color="primary">{{'Items' | translate}}</ion-label>
 							</ion-list-header>
 						</ion-col>
-							<ion-col size="12" size-sm size-xl="8" push-xl="3" *ngIf="formGroup.controls.IsDiscount.value">
+							<ion-col size="12" size-sm size-xl="8" *ngIf="formGroup.controls.IsDiscount.value">
 							<ion-toolbar color="primary">
 							<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
 							</ion-toolbar>
@@ -658,7 +675,7 @@
 			<ion-footer>
 				<ion-toolbar>
 					<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
-					<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveChange(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
+					<ion-button [disabled]="formGroup.disabled" size="medium" slot="end" (click)="saveVoucherConfig(); isModalVoucherConfig = false">{{ 'Save' | translate }}</ion-button>
 				</ion-toolbar>
 			</ion-footer>
 		</ng-template>

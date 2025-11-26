@@ -131,14 +131,6 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 		this.saveChange();
 	}
 
-	generatedVoucher() {
-		this.env
-			.showLoading('Generating vouchers ....', this.pageProvider.commonService.connect('POST', 'PR/ProgramVoucher/GenerateVoucher', { IDProgram: this.item.Id }).toPromise())
-			.then((_) => {
-				this.env.showMessage('Generate vouchers success', 'success');
-			});
-	}
-
 	async openVoucherList() {
 		const modal = await this.modalController.create({
 			component: ProgramVoucherPage,
