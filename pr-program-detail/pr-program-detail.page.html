@@ -72,7 +72,7 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-								
+
 							<div class="c-control" *ngIf="formGroup.controls.IsGenerateVoucher.value">
 								<label class="c-label" for="VoucherCode">
 									<ion-text class="ion-float-left">{{'Number of generated voucher' | translate}}</ion-text>
@@ -107,22 +107,23 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-						
+
 							<app-form-control
 								[field]="{
 									id:'Value',label:'Value',type:'number',form:formGroup} "
 								(change)="saveChange()"
 							>
 							</app-form-control>
-						
+
 							<app-form-control
 								[field]="{
 								id:'MinOrderValue',label:'Min order value',type:'number',form:formGroup} "
 								(change)="saveChange()"
 							>
 							</app-form-control>
-						
-							<app-form-control  *ngIf="!formGroup.controls.IsGenerateVoucher.value"
+
+							<app-form-control
+								*ngIf="!formGroup.controls.IsGenerateVoucher.value"
 								[field]="{
 									id: 'MaxUsagePerCustomer',
 									label: 'Max vouchers per customer',
@@ -143,15 +144,11 @@
 								(change)="isGenerateVoucher()"
 							>
 							</app-form-control>
-							
+
 							<div class="c-control" *ngIf="!this.formGroup.controls.IsGenerateVoucher.value">
 								<label class="c-label" for="VoucherCode">
 									<ion-text class="ion-float-left">{{'Voucher code' | translate}}</ion-text>
-									<ion-text
-										*ngIf="formGroup.controls.Status.value == 'New'"
-										color="primary"
-										(click)="generateCodeVoucher()"
-										class="ion-float-right clickable"
+									<ion-text *ngIf="formGroup.controls.Status.value == 'New'" color="primary" (click)="generateCodeVoucher()" class="ion-float-right clickable"
 										>{{'Generate code' | translate}} <ion-icon title="{{'Generate code' | translate}}" name="alert-circle-outline"></ion-icon
 									></ion-text>
 								</label>
@@ -168,7 +165,6 @@
 							</div>
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
-							
 							<app-form-control
 								[field]="{
 									id: 'Status',
@@ -178,7 +174,7 @@
 								}"
 							>
 							</app-form-control>
-						
+
 							<app-form-control
 								[field]="{
 										id: 'Sort',
@@ -188,7 +184,7 @@
 									}"
 								(change)="saveChange()"
 							>
-							</app-form-control>						
+							</app-form-control>
 							<app-form-control
 								[field]="{
 								id: 'FromDate',
@@ -249,9 +245,6 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-							
-
-								
 						</ion-col>
 					</ion-row>
 					<ion-row class="hr-group">
@@ -261,7 +254,6 @@
 							</ion-list-header>
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
-								
 							<app-form-control
 								[field]="{
 									id: 'IsPublic',
@@ -272,7 +264,7 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-					
+
 							<app-form-control
 								[field]="{
 									id: 'IsAutoApply',
@@ -283,7 +275,7 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-						
+
 							<app-form-control
 								[field]="{
 									id: 'IsUseWithOrthersPromotion',
@@ -294,7 +286,6 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-						
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
 							<app-form-control
@@ -307,8 +298,9 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-				
-							<app-form-control *ngIf="!(this.formGroup.controls.Type.value =='Voucher')"
+
+							<app-form-control
+								*ngIf="!(this.formGroup.controls.Type.value =='Voucher')"
 								[field]="{
 									id: 'IsDiscount',
 									label: 'Discount',
@@ -318,9 +310,9 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-	
-						
-							<app-form-control  *ngIf="!(this.formGroup.controls.Type.value =='Voucher')"
+
+							<app-form-control
+								*ngIf="!(this.formGroup.controls.Type.value =='Voucher')"
 								[field]="{
 									id: 'IsItemPromotion',
 									label: 'Item promotion',
@@ -331,7 +323,6 @@
 							>
 							</app-form-control>
 						</ion-col>
-					
 					</ion-row>
 					<ion-row class="hr-group">
 						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
@@ -350,7 +341,6 @@
 								  (click)="formGroup.controls.Status.value === 'New' && openModalFilter('ITEM')">
 									<ion-label>{{'Applicable products' | translate}}</ion-label>
 									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
-								
 								</div>
 								<ion-button size="small" slot="end" color="danger" [disabled]="formGroup.controls.Status.value !== 'New'" (click)="resetConfig('IsApplyAllProduct')">
 									<ion-icon  slot="start" name="close-circle-outline"></ion-icon>
@@ -389,7 +379,6 @@
 									{{'Reset' | translate}}
 								</ion-button>
 							</div>
-								
 						</ion-col>
 					</ion-row>
 					<ion-row class="hr-group" *ngIf="formGroup.controls.IsDiscount.value || formGroup.controls.IsItemPromotion.value">
@@ -398,9 +387,9 @@
 								<ion-label color="primary">{{'Items' | translate}}</ion-label>
 							</ion-list-header>
 						</ion-col>
-							<ion-col size="12" size-sm size-xl="8" *ngIf="formGroup.controls.IsDiscount.value">
+						<ion-col size="12" size-sm size-xl="8" *ngIf="formGroup.controls.IsDiscount.value">
 							<ion-toolbar color="primary">
-							<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
+								<ion-text slot="start">{{'Discount terms' | translate}}</ion-text>
 							</ion-toolbar>
 							<div class="table-contain">
 								<section class="table" style="min-width: 480px" *ngFor="let d of Discounts; let dj = index;">
@@ -713,5 +702,5 @@
 				<ion-button size="small" expand="block" (click)="dismissPopover(true)">Apply</ion-button>
 			</ion-content>
 		</ng-template>
-	</ion-popover>	
+	</ion-popover>
 </ion-content>

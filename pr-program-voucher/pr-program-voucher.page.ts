@@ -75,9 +75,11 @@ export class ProgramVoucherPage extends PageBase {
 			this.programFormGroup.controls.Quantity.setValue(this.programFormGroup.controls.NumberOfGeneratedVoucher.value);
 			this.programFormGroup.controls.Quantity.markAsDirty();
 		}
-		if (!this.pageConfig.canAddNewGeneratedVoucher) {
+		if (!this.pageConfig.canAddNewGenerateVoucher) {
 			this.programFormGroup.controls.Quantity.disable();
 		}
+
+		console.log('PageConfig: ' ,this.pageConfig.canAddNewGenerateVoucher)
 	}
 
 	onClickImport() {
