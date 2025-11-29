@@ -160,9 +160,6 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	loadedData(event) {
-		if (this.item.VoucherRadix !== undefined && this.item.VoucherRadix !== null) {
-			this.item.VoucherRadix = this.item.VoucherRadix.toString();
-		}
 		super.loadedData();
 
 		if (this.item?.Id) {
@@ -179,6 +176,12 @@ export class PRProgramDetailPage extends PageBase {
 			this.formGroup.controls.Status.markAsDirty();
 			this.formGroup.controls.Type.markAsDirty();
 		}
+
+		if (!this.formGroup.get('IsGenerateVoucher').value) {
+			this.formGroup.get('VoucherCode').setValidators([Validators.required]);
+			this.formGroup.get('VoucherCode').updateValueAndValidity();
+		}
+
 		if (this.formGroup.controls.Status.value !== 'New') {
 			this.formGroup.disable();
 		}
@@ -461,13 +464,21 @@ export class PRProgramDetailPage extends PageBase {
 			const isGen = this.formGroup.controls.IsGenerateVoucher.value;
 			if (isGen) {
 				this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();
+				this.formGroup.controls.VoucherCode.clearValidators();
+				this.formGroup.controls.VoucherCode.updateValueAndValidity();
+				if (this.formGroup.controls.VoucherCode.value !== '') {
+					this.formGroup.controls.VoucherCode.setValue(null);
+					this.formGroup.controls.VoucherCode.markAsDirty();
+				}
 			} else {
 				this.formGroup.controls.NumberOfCopy.markAsDirty();
+				this.formGroup.controls.VoucherCode.setValidators([Validators.required]);
+				this.formGroup.controls.VoucherCode.updateValueAndValidity();
 			}
 		}
 		this.saveChange();
 	}
-	saveVoucherConfig(){
+	saveVoucherConfig() {
 		if (this.id === 0) {
 			this.formGroup.controls.VoucherIsUpperCase.markAsDirty();
 			this.formGroup.controls.VoucherIsBreak.markAsDirty();
@@ -527,14 +538,14 @@ export class PRProgramDetailPage extends PageBase {
 		} else {
 			this.formGroup.controls.MaxValue.enable();
 		}
-        if (this.formGroup.controls.NumberOfGeneratedVoucher.value == '') {
-            this.formGroup.controls.NumberOfGeneratedVoucher.patchValue(0);
-            this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();
-        }
-        if (this.formGroup.controls.NumberOfCopy.value == '') {
-            this.formGroup.controls.NumberOfCopy.patchValue(0);
-            this.formGroup.controls.NumberOfCopy.markAsDirty();
-        }
+		if (this.formGroup.controls.NumberOfGeneratedVoucher.value == '') {
+			this.formGroup.controls.NumberOfGeneratedVoucher.patchValue(0);
+			this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();
+		}
+		if (this.formGroup.controls.NumberOfCopy.value == '') {
+			this.formGroup.controls.NumberOfCopy.patchValue(0);
+			this.formGroup.controls.NumberOfCopy.markAsDirty();
+		}
 		return super.saveChange2();
 	}
 
