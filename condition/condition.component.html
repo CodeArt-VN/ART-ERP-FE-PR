@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header collapse="fade">
 	<ion-toolbar color="primary">
 		<ion-title>{{ Condition.Title }}</ion-title>
 		<ion-buttons slot="primary">
@@ -72,8 +72,21 @@
 		</ion-item>
 	</ng-container>
 </ion-content>
-<ion-footer *ngIf="Condition.Type != 'REWARD'">
+
+<ion-footer collapse="fade" *ngIf="Condition.Type != 'REWARD'">
 	<ion-toolbar>
-		<ion-button expand="block" (click)="applyData()">Áp dụng</ion-button>
+		<div slot="start">
+        </div>
+		
+		<div slot="end">
+		
+			<ion-button [strong]="true" (click)="applyData()">
+				{{'Apply' | translate}}
+			</ion-button>
+            <ion-button fill="outline" color="warning" (click)="closeModal()" >
+                {{'Cancel' | translate}}
+            </ion-button>
+        </div>
+		
 	</ion-toolbar>
 </ion-footer>
