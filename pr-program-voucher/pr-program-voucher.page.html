@@ -69,7 +69,7 @@
 
 		<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
 			<ng-template>
-				<ion-header>
+				<ion-header collapse="fade">
 					<ion-toolbar>
 						<ion-title>{{'Voucher configuration' | translate}} </ion-title>
 						<ion-buttons slot="end">
@@ -188,12 +188,20 @@
 					</div>
 				</ion-content>
 
-				<ion-footer>
+				<ion-footer collapse="fade">
 					<ion-toolbar>
-						<ion-button size="medium" slot="end" (click)="isModalVoucherConfig = false">{{ 'Close' | translate }}</ion-button>
-						<ion-button [disabled]="!pageConfig.canAddNewGeneratedVoucher" size="medium" slot="end" (click)="generatedVoucher()"
-							>{{ 'Generate' | translate }}</ion-button
-						>
+						<div slot="start">
+						
+						</div>
+						<div slot="end">
+							<ion-button [strong]="true" [disabled]="!pageConfig.canAddNewGeneratedVoucher"  (click)="generatedVoucher()">
+								{{ 'Generate' | translate }}
+							</ion-button>
+							<ion-button fill="outline" color="warning" (click)="isModalVoucherConfig = false">
+								{{ 'Cancel' | translate }}
+							</ion-button>
+						</div>
+						
 					</ion-toolbar>
 				</ion-footer>
 			</ng-template>
