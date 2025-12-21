@@ -75,18 +75,15 @@
 
 <ion-footer collapse="fade" *ngIf="Condition.Type != 'REWARD'">
 	<ion-toolbar>
-		<div slot="start">
-        </div>
-		
+		<div slot="start"></div>
+
 		<div slot="end">
-		
-			<ion-button [strong]="true" (click)="applyData()">
-				{{'Apply' | translate}}
+			<ion-button fill="outline" color="warning" (click)="closeModal()">
+				{{ 'Cancel' | translate }}
 			</ion-button>
-            <ion-button fill="outline" color="warning" (click)="closeModal()" >
-                {{'Cancel' | translate}}
-            </ion-button>
-        </div>
-		
+			<ion-button [strong]="true" (click)="applyData()">
+				{{ 'Apply' | translate }}
+			</ion-button>
+		</div>
 	</ion-toolbar>
 </ion-footer>
