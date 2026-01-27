@@ -275,7 +275,7 @@ export class PRProgramDetailPage extends PageBase {
 		this.configHaving = undefined;
 		if (code == 'CONTACT') {
 			this.schemaService.commonService
-				.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'Contact_SALE_Order', Type: 'Datamart' })
+				.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'CRM_Contact_Sales_Loyalty', Type: 'DBView' })
 				.toPromise()
 				.then((value: any) => {
 					if (value) this.schema = value;
