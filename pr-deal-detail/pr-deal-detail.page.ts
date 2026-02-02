@@ -104,7 +104,7 @@ export class PRDealDetailPage extends PageBase {
             .search({
               Take: 20,
               Skip: 0,
-              Term: term ? term : this.item.IDItem,
+              Keyword: term ? term : this.item.IDItem,
               AllUoM: true,
             })
             .pipe(
