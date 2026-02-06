@@ -30,6 +30,7 @@ export class PRProgramDetailPage extends PageBase {
 	type: any;
 	radixList = [];
 	typeList :any;
+	isCashVoucher = false;
 
 	@ViewChild('popoverPub') popoverPub;
 	@ViewChild('appFilterHavingClause') appFilterHavingClause;
@@ -98,10 +99,10 @@ export class PRProgramDetailPage extends PageBase {
 			Sort: [0],
 			FromDate: ['', Validators.required],
 			ToDate: ['', Validators.required],
-			ApplicableFromHour: [''], // , Validators.required
-			ApplicableToHour: [''], //, Validators.required
-			ExclusionFromHour: [''], // , Validators.required
-			ExclusionToHour: [''], //, Validators.required
+			ApplicableFromHour: [null], // , Validators.required
+			ApplicableToHour: [null], //, Validators.required
+			ExclusionFromHour: [null], // , Validators.required
+			ExclusionToHour: [null], //, Validators.required
 			IsPublic: [false],
 			IsAutoApply: [false],
 			IsApplyAllProduct: [true],
@@ -155,6 +156,7 @@ export class PRProgramDetailPage extends PageBase {
 
 	loadedData(event) {
 		super.loadedData();
+		this.updateCashVoucherFlag();
 
 		if (this.item?.Id) {
 			this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
@@ -454,6 +456,12 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	isGenerateVoucher() {
+		if (this.isCashVoucher && !this.formGroup.controls.IsGenerateVoucher.value) {
+			this.formGroup.controls.IsGenerateVoucher.setValue(true);
+			this.formGroup.controls.IsGenerateVoucher.markAsDirty();
+			this.saveChange();
+			return;
+		}
 		if (this.id === 0) {
 			const isGen = this.formGroup.controls.IsGenerateVoucher.value;
 			if (isGen) {
@@ -471,6 +479,45 @@ export class PRProgramDetailPage extends PageBase {
 			}
 		}
 		this.saveChange();
+	}
+
+	onTypeChange() {
+		this.updateCashVoucherFlag();
+		if (this.isCashVoucher) {
+			this.resetCashVoucher();
+			if (!this.formGroup.controls.IsGenerateVoucher.value) {
+				this.formGroup.controls.IsGenerateVoucher.setValue(true);
+				this.formGroup.controls.IsGenerateVoucher.markAsDirty();
+			}
+			this.isGenerateVoucher();
+			return;
+		}
+		this.saveChange();
+	}
+
+	updateCashVoucherFlag() {
+		this.isCashVoucher = this.formGroup?.controls?.Type?.value === 'CashVoucher';
+	}
+
+	resetCashVoucher() {
+		const defaults: any = {
+			MaxValue: 0,
+			MaxUsagePerCustomer: 0,
+			ApplicableFromHour: null,
+			ApplicableToHour: null,
+			ExclusionFromHour: null,
+			ExclusionToHour: null,
+			IsPublic: false,
+			IsAutoApply: false,
+			IsUseWithOrthersPromotion: false,
+			IsByPercent: false,
+			IsDiscount: false,
+			IsItemPromotion: false,
+		};
+		this.formGroup.patchValue(defaults);
+		Object.keys(defaults).forEach((key) => {
+			this.formGroup.controls[key]?.markAsDirty();
+		});
 	}
 	saveVoucherConfig() {
 		if (this.id === 0) {
