@@ -29,14 +29,7 @@ export class PRProgramDetailPage extends PageBase {
 	countItem = 0;
 	type: any;
 	radixList = [];
-	typeList = [
-		{ Code: 'Voucher', Name: 'Voucher' },
-		{ Code: 'Promotion', Name: 'Promotion' },
-		{ Code: 'Discount', Name: 'Discount' },
-		{ Code: 'PromotionAndDiscount', Name: 'PromotionAndDiscount' },
-		{ Code: 'Accumulate', Name: 'Accumulate' },
-		{ Code: 'DisplayReward', Name: 'DisplayReward' },
-	];
+	typeList :any;
 
 	@ViewChild('popoverPub') popoverPub;
 	@ViewChild('appFilterHavingClause') appFilterHavingClause;
@@ -153,8 +146,9 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	preLoadData(event?: any): void {
-		Promise.all([this.env.getType('base-radix')]).then((values: any) => {
+		Promise.all([this.env.getType('base-radix'),this.env.getType('PromotionType')]).then((values: any) => {
 			this.radixList = values[0];
+			this.typeList = values[1];
 			super.preLoadData(event);
 		});
 	}
