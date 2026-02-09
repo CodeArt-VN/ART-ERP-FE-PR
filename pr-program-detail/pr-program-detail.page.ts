@@ -29,14 +29,8 @@ export class PRProgramDetailPage extends PageBase {
 	countItem = 0;
 	type: any;
 	radixList = [];
-	typeList = [
-		{ Code: 'Voucher', Name: 'Voucher' },
-		{ Code: 'Promotion', Name: 'Promotion' },
-		{ Code: 'Discount', Name: 'Discount' },
-		{ Code: 'PromotionAndDiscount', Name: 'PromotionAndDiscount' },
-		{ Code: 'Accumulate', Name: 'Accumulate' },
-		{ Code: 'DisplayReward', Name: 'DisplayReward' },
-	];
+	typeList :any;
+	isCashVoucher = false;
 
 	@ViewChild('popoverPub') popoverPub;
 	@ViewChild('appFilterHavingClause') appFilterHavingClause;
@@ -105,10 +99,10 @@ export class PRProgramDetailPage extends PageBase {
 			Sort: [0],
 			FromDate: ['', Validators.required],
 			ToDate: ['', Validators.required],
-			ApplicableFromHour: [''], // , Validators.required
-			ApplicableToHour: [''], //, Validators.required
-			ExclusionFromHour: [''], // , Validators.required
-			ExclusionToHour: [''], //, Validators.required
+			ApplicableFromHour: [null], // , Validators.required
+			ApplicableToHour: [null], //, Validators.required
+			ExclusionFromHour: [null], // , Validators.required
+			ExclusionToHour: [null], //, Validators.required
 			IsPublic: [false],
 			IsAutoApply: [false],
 			IsApplyAllProduct: [true],
@@ -153,14 +147,16 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	preLoadData(event?: any): void {
-		Promise.all([this.env.getType('base-radix')]).then((values: any) => {
+		Promise.all([this.env.getType('base-radix'),this.env.getType('PromotionType')]).then((values: any) => {
 			this.radixList = values[0];
+			this.typeList = values[1];
 			super.preLoadData(event);
 		});
 	}
 
 	loadedData(event) {
 		super.loadedData();
+		this.updateCashVoucherFlag();
 
 		if (this.item?.Id) {
 			this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
@@ -460,6 +456,12 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	isGenerateVoucher() {
+		if (this.isCashVoucher && !this.formGroup.controls.IsGenerateVoucher.value) {
+			this.formGroup.controls.IsGenerateVoucher.setValue(true);
+			this.formGroup.controls.IsGenerateVoucher.markAsDirty();
+			this.saveChange();
+			return;
+		}
 		if (this.id === 0) {
 			const isGen = this.formGroup.controls.IsGenerateVoucher.value;
 			if (isGen) {
@@ -477,6 +479,45 @@ export class PRProgramDetailPage extends PageBase {
 			}
 		}
 		this.saveChange();
+	}
+
+	onTypeChange() {
+		this.updateCashVoucherFlag();
+		if (this.isCashVoucher) {
+			this.resetCashVoucher();
+			if (!this.formGroup.controls.IsGenerateVoucher.value) {
+				this.formGroup.controls.IsGenerateVoucher.setValue(true);
+				this.formGroup.controls.IsGenerateVoucher.markAsDirty();
+			}
+			this.isGenerateVoucher();
+			return;
+		}
+		this.saveChange();
+	}
+
+	updateCashVoucherFlag() {
+		this.isCashVoucher = this.formGroup?.controls?.Type?.value === 'CashVoucher';
+	}
+
+	resetCashVoucher() {
+		const defaults: any = {
+			MaxValue: 0,
+			MaxUsagePerCustomer: 0,
+			ApplicableFromHour: null,
+			ApplicableToHour: null,
+			ExclusionFromHour: null,
+			ExclusionToHour: null,
+			IsPublic: false,
+			IsAutoApply: false,
+			IsUseWithOrthersPromotion: false,
+			IsByPercent: false,
+			IsDiscount: false,
+			IsItemPromotion: false,
+		};
+		this.formGroup.patchValue(defaults);
+		Object.keys(defaults).forEach((key) => {
+			this.formGroup.controls[key]?.markAsDirty();
+		});
 	}
 	saveVoucherConfig() {
 		if (this.id === 0) {

@@ -37,7 +37,7 @@
 									form: formGroup,
 									appendTo:'#pr-program'
 									}"
-								(change)="saveChange()"
+								(change)="onTypeChange()"
 							>
 							</app-form-control>
 
@@ -98,6 +98,7 @@
 							</div>
 
 							<app-form-control
+								*ngIf="!isCashVoucher"
 								[field]="{
 									id: 'MaxValue',
 									label: 'Max value',
@@ -123,7 +124,7 @@
 							</app-form-control>
 
 							<app-form-control
-								*ngIf="!formGroup.controls.IsGenerateVoucher.value"
+								*ngIf="!formGroup.controls.IsGenerateVoucher.value && !isCashVoucher"
 								[field]="{
 									id: 'MaxUsagePerCustomer',
 									label: 'Max vouchers per customer',
@@ -206,6 +207,7 @@
 							>
 							</app-form-control>
 							<app-form-control
+								*ngIf="!isCashVoucher"
 								[field]="{
 									id: 'ApplicableFromHour',
 									label: 'Applicable time start',
@@ -216,6 +218,7 @@
 							>
 							</app-form-control>
 							<app-form-control
+								*ngIf="!isCashVoucher"
 								[field]="{
 									id: 'ApplicableToHour',
 									label: 'Applicable time end',
@@ -226,6 +229,7 @@
 							>
 							</app-form-control>
 							<app-form-control
+								*ngIf="!isCashVoucher"
 								[field]="{
 										id: 'ExclusionFromHour',
 										label: 'Exclusion time start',
@@ -236,6 +240,7 @@
 							>
 							</app-form-control>
 							<app-form-control
+								*ngIf="!isCashVoucher"
 								[field]="{
 										id: 'ExclusionToHour',
 										label: 'Exclusion time end',
@@ -247,7 +252,7 @@
 							</app-form-control>
 						</ion-col>
 					</ion-row>
-					<ion-row class="hr-group">
+					<ion-row class="hr-group" *ngIf="!isCashVoucher">
 						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
 							<ion-list-header class="ion-no-padding">
 								<ion-label color="primary">{{'Values' | translate}}</ion-label>
