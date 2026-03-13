@@ -24,6 +24,18 @@ export class PRDiscountPolicyPage extends PageBase {
 		super();
 		Object.assign(this.query, { Type: 'Discount' });
 	}
+	approve() {
+		this.changeStatus('Approved');
+	}
+
+	disapprove() {
+		this.changeStatus('Rejected');
+	}
+
+	submitForApproval() {
+		this.changeStatus('Pending');
+	}
+
 	changeStatus(Status) {
 		let text = 'Gửi Duyệt';
 		let message = 'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
