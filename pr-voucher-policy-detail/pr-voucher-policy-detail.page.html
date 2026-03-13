@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-	<app-detail-toolbar [page]="this">
+	<app-toolbar [page]="this">
 		<ion-button
 			title="{{'Open voucher list' | translate}}"
 			(click)="openVoucherList()"
@@ -7,7 +7,7 @@
 		>
 			<ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
 		</ion-button>
-	</app-detail-toolbar>
+	</app-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" appScrollbarTheme class="ion-padding">
