@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   
   <app-toolbar
     [page]="this"
@@ -12,7 +12,7 @@
 
 </ion-header>
 
-<ion-content appScrollbarTheme class="header-table">
+<ion-content [fullscreen]="true" appScrollbarTheme class="header-table">
   <!-- <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
   <app-data-table
   style="width: fit-content; min-width: calc(100% - 32px)"

@@ -1,4 +1,4 @@
-<ion-header collapse="fade">
+<ion-header [translucent]="true" collapse="fade">
 	<ion-toolbar color="primary">
 		<ion-title>{{ Condition.Title }}</ion-title>
 		<ion-buttons slot="primary">
@@ -12,7 +12,7 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content appScrollbarTheme class="ion-padding">
+<ion-content [fullscreen]="true" appScrollbarTheme class="ion-padding">
 	<app-page-message [itemsLength]="ConditionForm.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 	<div id="pr-condition" style="position: absolute; z-index: 30005"></div>
 	<div class="table-contain">

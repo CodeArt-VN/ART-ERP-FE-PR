@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<app-detail-toolbar [page]="this">
 		<ion-button
 			title="{{'Open voucher list' | translate}}"
@@ -10,7 +10,7 @@
 	</app-detail-toolbar>
 </ion-header>
 
-<ion-content appScrollbarTheme class="ion-padding">
+<ion-content [fullscreen]="true" appScrollbarTheme class="ion-padding">
 	<div id="pr-program" style="position: absolute; z-index: 30005"></div>
 	<div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
 		<div class="row-full shadow full-screen">
@@ -326,7 +326,7 @@
 									</div>
 									<ion-modal [isOpen]="isModalProduct" (willDismiss)="isModalProduct=false">
 										<ng-template>
-											<ion-header>
+											<ion-header [translucent]="true">
 												<ion-toolbar>
 													<ion-title>{{'Filter' | translate}} </ion-title>
 													<ion-buttons slot="end">

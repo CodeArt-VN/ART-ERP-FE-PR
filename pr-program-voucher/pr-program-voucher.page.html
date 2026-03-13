@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<ion-toolbar>
 		<ion-title>{{'Program voucher' | translate}}</ion-title>
 
@@ -23,7 +23,7 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content appScrollbarTheme class="ion-padding">
+<ion-content [fullscreen]="true" appScrollbarTheme class="ion-padding">
 	<div class="main-view">
 		<div class="row-full shadow full-screen">
 			<div class="ion-padding">
@@ -69,7 +69,7 @@
 
 		<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
 			<ng-template>
-				<ion-header collapse="fade">
+				<ion-header [translucent]="true" collapse="fade">
 					<ion-toolbar>
 						<ion-title>{{'Voucher configuration' | translate}} </ion-title>
 						<ion-buttons slot="end">
