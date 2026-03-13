@@ -326,4 +326,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 				alert.present();
 			});
 	}
+
+	//TODO: Remove empty functions
+	isModalProduct = false;
 }

@@ -15,6 +15,9 @@ import { BRA_BranchProvider, PR_ProgramProvider, PR_ProgramVoucherProvider } fro
 	standalone: false,
 })
 export class ProgramVoucherPage extends PageBase {
+	//TODO: Remove empty functions
+	noCheckDirty = false;
+
 	@ViewChild('importfile') importfile: any;
 	IDProgram = 0;
 	isModalVoucherConfig = false;
