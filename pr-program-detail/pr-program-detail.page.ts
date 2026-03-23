@@ -111,6 +111,7 @@ export class PRProgramDetailPage extends PageBase {
 			MinOrderValue: [0],
 			IsByPercent: [false],
 			MaxValue: [0],
+			IsUnlimitedMaxValue: [false],
 			Value: ['', Validators.required],
 			NumberOfCopy: [0],
 			MaxUsagePerCustomer: [0],
@@ -133,6 +134,7 @@ export class PRProgramDetailPage extends PageBase {
 			VoucherBreakPartLength: [4],
 			VoucherBreakChar: ['-'],
 			VoucherRadix: ['36'],
+			IsNoExpiry: [false],
 			Remark: [''],
 			CreatedBy: new FormControl({ value: '', disabled: true }),
 			CreatedDate: new FormControl({ value: '', disabled: true }),
@@ -160,17 +162,32 @@ export class PRProgramDetailPage extends PageBase {
 
 		if (this.item?.Id) {
 			this.item.FromDate = lib.dateFormat(this.item.FromDate, 'yyyy-mm-dd');
-			this.item.ToDate = lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd');
+			this.item.ToDate = this.item.ToDate ? lib.dateFormat(this.item.ToDate, 'yyyy-mm-dd') : null;
 			if (this.formGroup.controls.IsGenerateVoucher.value) {
 				this.formGroup.get('Code').clearValidators();
 				this.formGroup.get('Code').updateValueAndValidity();
 			}
 		} else {
+			this.formGroup.controls.IsUnlimitedMaxValue.setValue(false);
+			this.formGroup.controls.IsNoExpiry.setValue(false);
 			this.formGroup.controls.IsApplyAllBranch.markAsDirty();
 			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
 			this.formGroup.controls.IsApplyAllProduct.markAsDirty();
 			this.formGroup.controls.Status.markAsDirty();
 			this.formGroup.controls.Type.markAsDirty();
+			this.formGroup.controls.IsUnlimitedMaxValue.markAsDirty();
+			this.formGroup.controls.IsNoExpiry.markAsDirty();
+			this.formGroup.controls.MaxValue.markAsDirty();
+		}
+
+		if (this.item?.Id) {
+			this.formGroup.controls.IsUnlimitedMaxValue.setValue(
+				this.formGroup.controls.IsUnlimitedMaxValue.value === true || this.formGroup.controls.MaxValue.value == null,
+				{ emitEvent: false }
+			);
+			this.formGroup.controls.IsNoExpiry.setValue(this.formGroup.controls.IsNoExpiry.value === true || this.formGroup.controls.ToDate.value == null, {
+				emitEvent: false,
+			});
 		}
 
 		if (!this.formGroup.get('IsGenerateVoucher').value) {
@@ -187,11 +204,8 @@ export class PRProgramDetailPage extends PageBase {
 		this.markNestedNode(this.ListBranches, this.env.selectedBranch);
 
 		console.log(this.ListBranches);
-		if (!this.formGroup.controls.IsByPercent.value) {
-			this.formGroup.controls.MaxValue.disable();
-		} else {
-			this.formGroup.controls.MaxValue.enable();
-		}
+		this.updateToDateValidators();
+		this.updateCtrlStates();
 
 		this._measureMethodDataSource = [
 			{ Code: 'count', Name: 'Count {0}', icon: '' },
@@ -499,6 +513,90 @@ export class PRProgramDetailPage extends PageBase {
 		this.isCashVoucher = this.formGroup?.controls?.Type?.value === 'CashVoucher';
 	}
 
+	getUsageDisplay() {
+		const used = this.item?.NumberOfUsed ?? 0;
+		const limit = this.formGroup.controls.IsGenerateVoucher.value
+			? this.formGroup.controls.NumberOfGeneratedVoucher.value ?? 0
+			: this.formGroup.controls.NumberOfCopy.value ?? 0;
+
+		return `${used || 0}/${limit || 0}`;
+	}
+
+	toggleMaxValueDisabled(checked: boolean) {
+		const maxValueControl = this.formGroup.controls.MaxValue;
+		this.formGroup.controls.IsUnlimitedMaxValue.setValue(checked);
+		this.formGroup.controls.IsUnlimitedMaxValue.markAsDirty();
+
+		if (checked) {
+			maxValueControl.setValue(null);
+		} else if (maxValueControl.value == null) {
+			maxValueControl.setValue(0);
+		}
+
+		maxValueControl.markAsDirty();
+		this.updateCtrlStates();
+		this.saveChange();
+	}
+
+	toggleToDateDisabled(checked: boolean) {
+		const toDateControl = this.formGroup.controls.ToDate;
+		this.formGroup.controls.IsNoExpiry.setValue(checked);
+		this.formGroup.controls.IsNoExpiry.markAsDirty();
+
+		if (checked) {
+			toDateControl.setValue(null);
+		} else if (!toDateControl.value) {
+			toDateControl.setValue(this.formGroup.controls.FromDate.value || null);
+		}
+
+		toDateControl.markAsDirty();
+		this.updateToDateValidators();
+		this.updateCtrlStates();
+		this.saveChange();
+	}
+
+	updateToDateValidators() {
+		if (this.formGroup.controls.IsNoExpiry.value) {
+			this.formGroup.controls.ToDate.clearValidators();
+		} else {
+			this.formGroup.controls.ToDate.setValidators([Validators.required]);
+		}
+
+		this.formGroup.controls.ToDate.updateValueAndValidity({ emitEvent: false });
+	}
+
+	updateCtrlStates() {
+		const isReadOnly = this.formGroup.disabled || this.formGroup.controls.Status.value !== 'New';
+		const shouldDisableMaxValue = isReadOnly || this.formGroup.controls.IsUnlimitedMaxValue.value;
+		const shouldDisableUnlimitedMaxValue = isReadOnly;
+		const shouldDisableNoExpiry = isReadOnly;
+		const shouldDisableToDate = isReadOnly || this.formGroup.controls.IsNoExpiry.value;
+
+		if (shouldDisableMaxValue) {
+			this.formGroup.controls.MaxValue.disable({ emitEvent: false });
+		} else {
+			this.formGroup.controls.MaxValue.enable({ emitEvent: false });
+		}
+
+		if (shouldDisableUnlimitedMaxValue) {
+			this.formGroup.controls.IsUnlimitedMaxValue.disable({ emitEvent: false });
+		} else {
+			this.formGroup.controls.IsUnlimitedMaxValue.enable({ emitEvent: false });
+		}
+
+		if (shouldDisableNoExpiry) {
+			this.formGroup.controls.IsNoExpiry.disable({ emitEvent: false });
+		} else {
+			this.formGroup.controls.IsNoExpiry.enable({ emitEvent: false });
+		}
+
+		if (shouldDisableToDate) {
+			this.formGroup.controls.ToDate.disable({ emitEvent: false });
+		} else {
+			this.formGroup.controls.ToDate.enable({ emitEvent: false });
+		}
+	}
+
 	resetCashVoucher() {
 		const defaults: any = {
 			MaxValue: 0,
@@ -514,6 +612,8 @@ export class PRProgramDetailPage extends PageBase {
 			IsDiscount: false,
 			IsItemPromotion: false,
 		};
+		this.formGroup.controls.IsUnlimitedMaxValue.setValue(false);
+		this.formGroup.controls.IsNoExpiry.setValue(false);
 		this.formGroup.patchValue(defaults);
 		Object.keys(defaults).forEach((key) => {
 			this.formGroup.controls[key]?.markAsDirty();
@@ -574,11 +674,7 @@ export class PRProgramDetailPage extends PageBase {
 			this.formGroup.controls.Value.markAsDirty();
 		}
 
-		if (!this.formGroup.controls.IsByPercent.value) {
-			this.formGroup.controls.MaxValue.disable();
-		} else {
-			this.formGroup.controls.MaxValue.enable();
-		}
+		this.updateToDateValidators();
 		if (this.formGroup.controls.NumberOfGeneratedVoucher.value == '') {
 			this.formGroup.controls.NumberOfGeneratedVoucher.patchValue(0);
 			this.formGroup.controls.NumberOfGeneratedVoucher.markAsDirty();

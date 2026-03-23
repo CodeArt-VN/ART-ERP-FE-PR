@@ -62,7 +62,13 @@
 							>
 							</app-form-control>
 
-							<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value"
+							<div class="c-control">
+								<label class="c-label" for="UsageSummary">{{'Used/limit' | translate}}</label>
+								<input id="UsageSummary" class="c-input" type="text" [value]="getUsageDisplay()" disabled />
+							</div>
+
+							<app-form-control
+								*ngIf="!formGroup.controls.IsGenerateVoucher.value"
 								[field]="{
 									id: 'NumberOfCopy',
 									label: 'Number of copy',
@@ -97,17 +103,33 @@
 								</app-input-control>
 							</div>
 
-							<app-form-control
-								*ngIf="!isCashVoucher"
-								[field]="{
-									id: 'MaxValue',
-									label: 'Max value',
-									type: 'text',
-									form: formGroup
-								}"
-								(change)="saveChange()"
-							>
-							</app-form-control>
+							<div class="c-control" *ngIf="!isCashVoucher">
+								<label class="c-label c-label-custom" for="MaxValue">
+									<ion-text class="ion-float-left">{{'Max value' | translate}}</ion-text>
+									<span class="ion-float-right">
+										<app-input-control
+											[field]="{
+												id: 'IsUnlimitedMaxValue',
+												type: 'checkbox',
+												form: formGroup
+											}"
+											(change)="toggleMaxValueDisabled(formGroup.controls.IsUnlimitedMaxValue.value)"
+										>
+										</app-input-control>
+										<label class="c-label checkbox c-checkbox-custom" for="IsUnlimitedMaxValue">{{'No max value' | translate}}</label>
+									</span>
+								</label>
+								<app-input-control
+									[field]="{
+										id: 'MaxValue',
+										label: '',
+										type: 'text',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-input-control>
+							</div>
 
 							<app-form-control
 								[field]="{
@@ -196,16 +218,34 @@
 								(change)="saveChange()"
 							>
 							</app-form-control>
-							<app-form-control
-								[field]="{
-								id: 'ToDate',
-								label: 'End',
-								type: 'datetime-local',
-								form: formGroup
-							}"
-								(change)="saveChange()"
-							>
-							</app-form-control>
+							<div class="c-control">
+								<label class="c-label c-label-custom" for="ToDate">
+									<ion-text class="ion-float-left">{{'End' | translate}}</ion-text>
+									<span class="ion-float-right">
+										<app-input-control
+											[field]="{
+												id: 'IsNoExpiry',
+												type: 'checkbox',
+												form: formGroup
+											}"
+											(change)="toggleToDateDisabled(formGroup.controls.IsNoExpiry.value)"
+										>
+										</app-input-control>
+										<label class="c-label checkbox c-checkbox-custom" for="IsNoExpiry">{{'No expiry' | translate}}</label>
+									</span>
+								</label>
+
+								<app-input-control
+									[field]="{
+										id: 'ToDate',
+										label: '',
+										type: 'datetime-local',
+										form: formGroup
+									}"
+									(change)="saveChange()"
+								>
+								</app-input-control>
+							</div>
 							<app-form-control
 								*ngIf="!isCashVoucher"
 								[field]="{

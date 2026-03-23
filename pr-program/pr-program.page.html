@@ -77,7 +77,16 @@
     <ng-template datatable-filter-template> </ng-template>
     <ng-template let-i="row" datatable-cell-template>
       <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-date cell">
-        {{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
+        {{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate ? (i.ToDate | date: 'dd/MM/yyyy') : ('No expiry' | translate)}}
+      </div>
+    </ng-template>
+  </datatable-column>
+
+  <datatable-column class="col-status cell" name="Used/Limit" property="NumberOfCopy">
+    <ng-template datatable-filter-template> </ng-template>
+    <ng-template let-i="row" datatable-cell-template>
+      <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-status cell">
+        {{i.NumberOfUsed || 0}}/{{i.NumberOfCopy != null ? i.NumberOfCopy : (i.NumberOfGeneratedVoucher != null ? i.NumberOfGeneratedVoucher : 0)}}
       </div>
     </ng-template>
   </datatable-column>
