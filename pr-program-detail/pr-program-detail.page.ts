@@ -167,6 +167,13 @@ export class PRProgramDetailPage extends PageBase {
 				this.formGroup.get('Code').clearValidators();
 				this.formGroup.get('Code').updateValueAndValidity();
 			}
+			this.formGroup.controls.IsUnlimitedMaxValue.setValue(
+				this.formGroup.controls.IsUnlimitedMaxValue.value === true || this.formGroup.controls.MaxValue.value == null,
+				{ emitEvent: false }
+			);
+			this.formGroup.controls.IsNoExpiry.setValue(this.formGroup.controls.IsNoExpiry.value === true || this.formGroup.controls.ToDate.value == null, {
+				emitEvent: false,
+			});
 		} else {
 			this.formGroup.controls.IsUnlimitedMaxValue.setValue(false);
 			this.formGroup.controls.IsNoExpiry.setValue(false);
@@ -178,16 +185,6 @@ export class PRProgramDetailPage extends PageBase {
 			this.formGroup.controls.IsUnlimitedMaxValue.markAsDirty();
 			this.formGroup.controls.IsNoExpiry.markAsDirty();
 			this.formGroup.controls.MaxValue.markAsDirty();
-		}
-
-		if (this.item?.Id) {
-			this.formGroup.controls.IsUnlimitedMaxValue.setValue(
-				this.formGroup.controls.IsUnlimitedMaxValue.value === true || this.formGroup.controls.MaxValue.value == null,
-				{ emitEvent: false }
-			);
-			this.formGroup.controls.IsNoExpiry.setValue(this.formGroup.controls.IsNoExpiry.value === true || this.formGroup.controls.ToDate.value == null, {
-				emitEvent: false,
-			});
 		}
 
 		if (!this.formGroup.get('IsGenerateVoucher').value) {
