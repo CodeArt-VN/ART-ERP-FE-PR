@@ -160,4 +160,32 @@ export class PRProgramPage extends PageBase {
 			this.ShowSubmit = this.ShowApprove = this.ShowDisapprove = false;
 		}
 	}
+
+	copy() {
+		if (this.submitAttempt) return;
+		if (!this.selectedItems.length) return;
+
+		this.submitAttempt = true;
+		const selectedIds = this.selectedItems.map((x) => x.Id);
+
+		this.env
+			.showLoading(
+				'Please wait for a few moments',
+				this.pageProvider.commonService.connect('POST', ApiSetting.apiDomain('PR/Program/CopyProgram/'), selectedIds).toPromise()
+			)
+			.then((result: boolean) => {
+				this.submitAttempt = false;
+				if (!result) {
+					this.env.showMessage('Cannot copy, please try again', 'danger');
+					return;
+				}
+				this.env.showMessage('Copy success', 'success');
+				this.refresh();
+			})
+			.catch((err) => {
+				this.submitAttempt = false;
+				this.env.showMessage('Cannot copy, please try again', 'danger');
+				console.log(err);
+			});
+	}
 }

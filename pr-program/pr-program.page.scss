@@ -1,3 +1,11 @@
+::ng-deep {
+
+	.col-date {
+		text-overflow: ellipsis;
+		min-width: 220px !important;
+		max-width: 220px !important;
+	}
+}
 .table {
 	.row {
 		padding-right: 6px;
@@ -22,11 +30,7 @@
 		max-width: 100px !important;
 		min-width: 100px !important;
 	}
-	.col-date {
-		text-overflow: ellipsis;
-		min-width: 160px !important;
-		max-width: 160px !important;
-	}
+
 	.col-max {
 		min-width: 90px !important;
 		max-width: 90px !important;

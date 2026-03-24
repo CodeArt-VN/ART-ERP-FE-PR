@@ -101,3 +101,13 @@ ion-checkbox::part(container) {
 		align-self: flex-end;
 	}
 }
+.c-label-custom {
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.c-checkbox-custom {
+	padding-right: 1em !important;
+}
+
+ 
