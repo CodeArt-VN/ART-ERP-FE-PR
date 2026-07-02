@@ -24,12 +24,13 @@ export class PRProgramDetailPage extends PageBase {
 	ListItem = [];
 	ListBranches = [];
 	schema: any;
+	schemaContact: any;
 	isModalFilter = false;
 	tempItemList: any;
 	countItem = 0;
 	type: any;
 	radixList = [];
-	typeList :any;
+	typeList: any;
 	isCashVoucher = false;
 
 	@ViewChild('popoverPub') popoverPub;
@@ -140,6 +141,7 @@ export class PRProgramDetailPage extends PageBase {
 			CreatedDate: new FormControl({ value: '', disabled: true }),
 			ModifiedBy: new FormControl({ value: '', disabled: true }),
 			ModifiedDate: new FormControl({ value: '', disabled: true }),
+			MaxGeneratePerCustomer: [0],
 		});
 		this.formGroupMeasureBy = this.formBuilder.group({
 			Method: [''],
@@ -149,7 +151,7 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	preLoadData(event?: any): void {
-		Promise.all([this.env.getType('base-radix'),this.env.getType('PromotionType')]).then((values: any) => {
+		Promise.all([this.env.getType('base-radix'), this.env.getType('PromotionType')]).then((values: any) => {
 			this.radixList = values[0];
 			this.typeList = values[1];
 			super.preLoadData(event);
@@ -212,6 +214,11 @@ export class PRProgramDetailPage extends PageBase {
 			{ Code: 'min', Name: 'Min of {0}', icon: '' },
 			{ Code: 'average', Name: 'Average {0}', icon: '' },
 		];
+	}
+
+	loadData(event?: any): void {
+		this.loadSchema();
+		super.loadData(event);
 	}
 
 	async openVoucherList() {
@@ -355,6 +362,42 @@ export class PRProgramDetailPage extends PageBase {
 		}
 	}
 
+	loadSchema() {
+		this.config = undefined;
+		this.MeasureBy = [];
+		this._dataSouceDimension = undefined;
+		this.configHaving = undefined;
+
+		this.schemaService.commonService
+			.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'CRM_Contact_Sales_Loyalty', Type: 'DBView' })
+			.toPromise()
+			.then((value: any) => {
+				if (value) this.schemaContact = value;
+				if (this.formGroup.controls.ConfigContact.value) {
+					let configData = JSON.parse(this.formGroup.controls.ConfigContact.value);
+					this.config = configData.Transform.Filter;
+					this.MeasureBy = configData.MeasureBy;
+					if (this.MeasureBy?.length > 0) {
+						this._dataSouceDimension = {
+							Fields: [
+								...this.MeasureBy.map((x) => {
+									return {
+										PropertyType: 'Field',
+										Name: `${x.Method}(${x.Property})`,
+										Code: `${x.Method}(${x.Property})`,
+										DataType: 'decimal',
+									};
+								}),
+							],
+						};
+					}
+					this.configHaving = configData.HavingClause;
+				}
+				this._schemaDetailsList = this.schemaContact?.Fields;
+				console.log(this.schemaContact);
+			});
+	}
+
 	getSchemaDetailType(form) {
 		let field = this.schema.Fields.find((x) => x.Code == form.get('Dimension')?.value);
 		return field?.DataType;
@@ -364,52 +407,51 @@ export class PRProgramDetailPage extends PageBase {
 		let apiPath = '';
 		let config: any;
 		let _schema = {
-			Id: this.schema.Id,
-			Code: this.schema.Code,
-			Name: this.schema.Name,
-			Type: this.schema.Type,
+			Id: this.schemaContact.Id,
+			Code: this.schemaContact.Code,
+			Name: this.schemaContact.Name,
+			Type: this.schemaContact.Type,
 		};
-		if (this.type == 'CONTACT') {
-			apiPath = 'ApplyContact';
-			if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
-			config = {
-				Schema: _schema,
-				CompareBy: [{ Property: 'IDContact' }],
-				MeasureBy: this.MeasureBy,
-				HavingClause: this._havingClause,
-				Transform: { Filter: e },
-			};
-			this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
-			this.formGroup.controls.ConfigContact.markAsDirty();
-			this.formGroup.controls.IsApplyAllCustomer.setValue(false);
-			this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
-		} else if (this.type == 'ITEM') {
-			apiPath = 'ApplyItem';
-			config = {
-				Schema: _schema,
-				CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
-				// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
-				Transform: { Filter: e },
-			};
-			this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
-			this.formGroup.controls.ConfigItem.markAsDirty();
-			this.formGroup.controls.IsApplyAllProduct.setValue(false);
-			this.formGroup.controls.IsApplyAllProduct.markAsDirty();
-		} else {
-			apiPath = 'ApplyBranch';
-			if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
-			config = {
-				Schema: _schema,
-				CompareBy: [{ Property: 'IDBranch' }],
-				MeasureBy: this.MeasureBy,
-				HavingClause: this._havingClause,
-				Transform: { Filter: e },
-			};
-			this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
-			this.formGroup.controls.ConfigBranch.markAsDirty();
-			this.formGroup.controls.IsApplyAllBranch.setValue(false);
-			this.formGroup.controls.IsApplyAllBranch.markAsDirty();
-		}
+		apiPath = 'ApplyContact';
+		if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
+		config = {
+			Schema: _schema,
+			CompareBy: [{ Property: 'IDContact' }],
+			MeasureBy: this.MeasureBy,
+			HavingClause: this._havingClause,
+			Transform: { Filter: e },
+		};
+		this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
+		this.formGroup.controls.ConfigContact.markAsDirty();
+		this.formGroup.controls.IsApplyAllCustomer.setValue(false);
+		this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
+
+		// apiPath = 'ApplyItem';
+		// config = {
+		// 	Schema: _schema,
+		// 	CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
+		// 	// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
+		// 	Transform: { Filter: e },
+		// };
+		// this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
+		// this.formGroup.controls.ConfigItem.markAsDirty();
+		// this.formGroup.controls.IsApplyAllProduct.setValue(false);
+		// this.formGroup.controls.IsApplyAllProduct.markAsDirty();
+
+		// apiPath = 'ApplyBranch';
+		// if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
+		// config = {
+		// 	Schema: _schema,
+		// 	CompareBy: [{ Property: 'IDBranch' }],
+		// 	MeasureBy: this.MeasureBy,
+		// 	HavingClause: this._havingClause,
+		// 	Transform: { Filter: e },
+		// };
+		// this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
+		// this.formGroup.controls.ConfigBranch.markAsDirty();
+		// this.formGroup.controls.IsApplyAllBranch.setValue(false);
+		// this.formGroup.controls.IsApplyAllBranch.markAsDirty();
+
 		this.saveChange();
 		// this.env
 		//   .showLoading(
@@ -516,7 +558,7 @@ export class PRProgramDetailPage extends PageBase {
 			? this.formGroup.controls.NumberOfGeneratedVoucher.value ?? 0
 			: this.formGroup.controls.NumberOfCopy.value ?? 0;
 
-		return `${used || 0}/${limit || 0}`;
+		return `${used || 0}`;
 	}
 
 	toggleMaxValueDisabled(checked: boolean) {
@@ -608,6 +650,7 @@ export class PRProgramDetailPage extends PageBase {
 			IsByPercent: false,
 			IsDiscount: false,
 			IsItemPromotion: false,
+			MaxGeneratePerCustomer: 0
 		};
 		this.formGroup.controls.IsUnlimitedMaxValue.setValue(false);
 		this.formGroup.controls.IsNoExpiry.setValue(false);
