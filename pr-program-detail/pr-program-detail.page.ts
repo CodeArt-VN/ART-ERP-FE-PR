@@ -23,9 +23,6 @@ export class PRProgramDetailPage extends PageBase {
 	Bonus = [];
 	ListItem = [];
 	ListBranches = [];
-	schema: any;
-	schemaContact: any;
-	hasFilterContact = false;
 	isModalFilter = false;
 	tempItemList: any;
 	countItem = 0;
@@ -47,6 +44,15 @@ export class PRProgramDetailPage extends PageBase {
 	config;
 	configHaving;
 	_dataSouceDimension: any;
+
+	schema: any;
+	schema_Contact: any;
+	hasFilterContact = false;
+	config_Contact: any;
+	MeasureBy_Contact: any = [];
+	_dataSouceDimension_Contact: any;
+	_havingClause_Contact: any;
+	configHaving_Contact: any;
 	transformOperators = [
 		{ code: 'TextGroup', name: 'Text', icon: '', disabled: true },
 		{ code: '=', name: '= is', icon: '' },
@@ -259,10 +265,10 @@ export class PRProgramDetailPage extends PageBase {
 			Value: [],
 		});
 		if (apply) {
-			this.MeasureBy = [...this.MeasureBy, this.formGroupMeasureBy.getRawValue()];
-			this._dataSouceDimension = {
+			this.MeasureBy_Contact = [...this.MeasureBy_Contact, this.formGroupMeasureBy.getRawValue()];
+			this._dataSouceDimension_Contact = {
 				Fields: [
-					...this.MeasureBy.map((x) => {
+					...this.MeasureBy_Contact.map((x) => {
 						return {
 							PropertyType: 'Field',
 							Name: `${x.Method}(${x.Property})`,
@@ -278,8 +284,8 @@ export class PRProgramDetailPage extends PageBase {
 
 	removeForm(e, fg): void {
 		e.preventDefault();
-		let index = this.MeasureBy.indexOf(fg);
-		this.MeasureBy.splice(index, 1);
+		let index = this.MeasureBy_Contact.indexOf(fg);
+		this.MeasureBy_Contact.splice(index, 1);
 	}
 
 	openModalFilter(code) {
@@ -365,25 +371,24 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	loadSchema() {
-		this.config = undefined;
-		this.MeasureBy = [];
-		this._dataSouceDimension = undefined;
-		this.configHaving = undefined;
+		this.config_Contact = undefined;
+		this.MeasureBy_Contact = [];
+		this._dataSouceDimension_Contact = undefined;
+		this.configHaving_Contact = undefined;
 
 		this.schemaService.commonService
 			.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'CRM_Contact_Sales_Loyalty', Type: 'DBView' })
 			.toPromise()
 			.then((value: any) => {
-				if (value) this.schemaContact = value;
+				if (value) this.schema_Contact = value;
 				if (this.formGroup.controls.ConfigContact.value) {
-					this.hasFilterContact = true;
 					let configData = JSON.parse(this.formGroup.controls.ConfigContact.value);
-					this.config = configData.Transform.Filter;
-					this.MeasureBy = configData.MeasureBy;
-					if (this.MeasureBy?.length > 0) {
-						this._dataSouceDimension = {
+					this.config_Contact = configData.Transform.Filter;
+					this.MeasureBy_Contact = configData.MeasureBy;
+					if (this.MeasureBy_Contact?.length > 0) {
+						this._dataSouceDimension_Contact = {
 							Fields: [
-								...this.MeasureBy.map((x) => {
+								...this.MeasureBy_Contact.map((x) => {
 									return {
 										PropertyType: 'Field',
 										Name: `${x.Method}(${x.Property})`,
@@ -394,10 +399,15 @@ export class PRProgramDetailPage extends PageBase {
 							],
 						};
 					}
-					this.configHaving = configData.HavingClause;
+					this.configHaving_Contact = configData.HavingClause;
 				}
-				this._schemaDetailsList = this.schemaContact?.Fields;
-				console.log(this.schemaContact);
+				this._schemaDetailsList = this.schema_Contact?.Fields;
+				console.log(this.schema_Contact);
+				if (this.config.Logicals.length > 0 ||
+					this.MeasureBy_Contact?.length > 0 ||
+					this.configHaving_Contact?.Logicals?.length > 0) {
+					this.hasFilterContact = true;
+				}
 			});
 	}
 
@@ -410,25 +420,35 @@ export class PRProgramDetailPage extends PageBase {
 		let apiPath = '';
 		let config: any;
 		let _schema = {
-			Id: this.schemaContact.Id,
-			Code: this.schemaContact.Code,
-			Name: this.schemaContact.Name,
-			Type: this.schemaContact.Type,
+			Id: this.schema_Contact.Id,
+			Code: this.schema_Contact.Code,
+			Name: this.schema_Contact.Name,
+			Type: this.schema_Contact.Type,
 		};
-		
+
 		apiPath = 'ApplyContact';
-		if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
+		if (this._dataSouceDimension_Contact) this.appFilterHavingClause.onFormSubmit();
 		config = {
 			Schema: _schema,
 			CompareBy: [{ Property: 'IDContact' }],
-			MeasureBy: this.MeasureBy,
-			HavingClause: this._havingClause,
+			MeasureBy: this.MeasureBy_Contact,
+			HavingClause: this._havingClause_Contact,
 			Transform: { Filter: e },
 		};
 		this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
 		this.formGroup.controls.ConfigContact.markAsDirty();
 		this.formGroup.controls.IsApplyAllCustomer.setValue(false);
 		this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
+
+		if (config.Transform.Filter.Logicals.length > 0 ||
+			config.MeasureBy?.length > 0 ||
+			config.HavingClause?.Logicals?.length > 0
+		) {
+			this.hasFilterContact = true;
+		}
+		else {
+			this.hasFilterContact = false;
+		}
 
 		// apiPath = 'ApplyItem';
 		// config = {
@@ -858,17 +878,5 @@ export class PRProgramDetailPage extends PageBase {
 
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
-	}
-
-	addFilter(type: string) {
-		if (type == 'ITEM') {
-
-		}
-		else if (type == 'CONTACT') {
-			this.hasFilterContact = true;
-		}
-		else if (type == 'BRANCH') {
-
-		}
 	}
 }

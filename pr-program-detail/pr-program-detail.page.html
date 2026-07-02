@@ -310,27 +310,43 @@
 								</ion-button>
 								-->
 							</div>
+
 							<div class="c-control modal-filter">
 								<div class="c-input" [ngClass]="{
 									'disable': formGroup.controls.Status.value !== 'New',
 									'clickable': formGroup.controls.Status.value === 'New'
-								}" (click)="formGroup.controls.Status.value === 'New' && addFilter('CONTACT')">
+								}" (click)="formGroup.controls.Status.value === 'New'">
 									<ion-label>{{'Customer applies' | translate}}</ion-label>
 									<ion-text class="ion-float-right" *ngIf="!hasFilterContact">{{'All customers' |
 										translate}}</ion-text>
 								</div>
-								<!--
-								<ion-button size="small" slot="end" color="danger"
-									[disabled]="formGroup.controls.Status.value !== 'New'"
-									(click)="resetConfig('IsApplyAllCustomer')">
-									<ion-icon slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-								-->
-								<app-filter #appFilter [schema]="schemaContact" [item]="config" [smallWidth]="true"
+								<app-filter #appFilter [schema]="schema_Contact" [item]="config_Contact" [smallWidth]="true"
 									[ngClass]="{
 									'disable-app-filter': formGroup.controls.Status.value !== 'New'
 								}" (submit)="filterConfig($event)"></app-filter>
+								<div class="c-control" *ngIf="schema_Contact">
+									<label class="c-label">{{ 'Measure By' | translate }}</label>
+									<span class="c-input" style="flex-wrap: wrap; height: auto">
+										<ion-chip color="warning" *ngFor="let c of MeasureBy_Contact"
+											style="height: auto; margin: 0; margin-right: 2px">
+											<ion-label (click)="presentPopover($event, c, 'MeasureBy_Contact')">{{c.Title ||
+												c.Property
+												}}</ion-label>
+											<ion-icon name="close" (click)="removeForm($event, c)"></ion-icon>
+										</ion-chip>
+										<ion-button fill="clear" size="small"
+											(click)="addNewForm($event, 'MeasureBy')"><ion-icon
+												name="add-circle-outline"></ion-icon></ion-button>
+									</span>
+								</div>
+
+								<div class="c-control"
+									*ngIf="_dataSouceDimension_Contact">
+									<label class="c-label">{{ 'Having clause' | translate }}</label>
+									<app-filter #appFilterHavingClause [schema]="_dataSouceDimension_Contact"
+										[item]="configHaving_Contact" [smallWidth]="true"
+										(submit)="_havingClause_Contact = $event"></app-filter>
+								</div>
 							</div>
 							<div class="c-control modal-filter">
 								<div class="c-input" [ngClass]="{
