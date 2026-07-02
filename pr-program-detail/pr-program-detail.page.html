@@ -314,12 +314,11 @@
 								<div class="c-input" [ngClass]="{
 									'disable': formGroup.controls.Status.value !== 'New',
 									'clickable': formGroup.controls.Status.value === 'New'
-								}" (click)="formGroup.controls.Status.value === 'New' && openModalFilter('CONTACT')">
+								}" (click)="formGroup.controls.Status.value === 'New' && addFilter('CONTACT')">
 									<ion-label>{{'Customer applies' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All customers' | translate}}</ion-text>
+									<ion-text class="ion-float-right" *ngIf="!hasFilterContact">{{'All customers' |
+										translate}}</ion-text>
 								</div>
-								<app-filter #appFilter [schema]="schemaContact" [item]="config" [smallWidth]="true"
-									(submit)="filterConfig($event)"></app-filter>
 								<!--
 								<ion-button size="small" slot="end" color="danger"
 									[disabled]="formGroup.controls.Status.value !== 'New'"
@@ -328,6 +327,10 @@
 									{{'Reset' | translate}}
 								</ion-button>
 								-->
+								<app-filter #appFilter [schema]="schemaContact" [item]="config" [smallWidth]="true"
+									[ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" (submit)="filterConfig($event)"></app-filter>
 							</div>
 							<div class="c-control modal-filter">
 								<div class="c-input" [ngClass]="{

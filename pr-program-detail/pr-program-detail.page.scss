@@ -110,4 +110,9 @@ ion-checkbox::part(container) {
 	padding-right: 1em !important;
 }
 
+.disable-app-filter {
+	pointer-events: none;
+	opacity: 0.6;
+}
+
  

@@ -25,6 +25,7 @@ export class PRProgramDetailPage extends PageBase {
 	ListBranches = [];
 	schema: any;
 	schemaContact: any;
+	hasFilterContact = false;
 	isModalFilter = false;
 	tempItemList: any;
 	countItem = 0;
@@ -214,10 +215,11 @@ export class PRProgramDetailPage extends PageBase {
 			{ Code: 'min', Name: 'Min of {0}', icon: '' },
 			{ Code: 'average', Name: 'Average {0}', icon: '' },
 		];
+
+		this.loadSchema();
 	}
 
 	loadData(event?: any): void {
-		this.loadSchema();
 		super.loadData(event);
 	}
 
@@ -374,6 +376,7 @@ export class PRProgramDetailPage extends PageBase {
 			.then((value: any) => {
 				if (value) this.schemaContact = value;
 				if (this.formGroup.controls.ConfigContact.value) {
+					this.hasFilterContact = true;
 					let configData = JSON.parse(this.formGroup.controls.ConfigContact.value);
 					this.config = configData.Transform.Filter;
 					this.MeasureBy = configData.MeasureBy;
@@ -412,6 +415,7 @@ export class PRProgramDetailPage extends PageBase {
 			Name: this.schemaContact.Name,
 			Type: this.schemaContact.Type,
 		};
+		
 		apiPath = 'ApplyContact';
 		if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
 		config = {
@@ -854,5 +858,17 @@ export class PRProgramDetailPage extends PageBase {
 
 	openModalVoucherConfig() {
 		this.isModalVoucherConfig = true;
+	}
+
+	addFilter(type: string) {
+		if (type == 'ITEM') {
+
+		}
+		else if (type == 'CONTACT') {
+			this.hasFilterContact = true;
+		}
+		else if (type == 'BRANCH') {
+
+		}
 	}
 }
