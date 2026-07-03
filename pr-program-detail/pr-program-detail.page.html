@@ -290,25 +290,27 @@
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="8">
 							<div class="c-control modal-filter">
-								<ion-button size="small" slot="end" (click)="appFilter.onFormSubmit()">{{'Save' |
-									translate}}</ion-button>
-							</div>
-							<div class="c-control modal-filter">
 								<div class="c-input" [ngClass]="{
 									'disable': formGroup.controls.Status.value !== 'New',
 									'clickable': formGroup.controls.Status.value === 'New'
-								}" (click)="formGroup.controls.Status.value === 'New' && openModalFilter('ITEM')">
+								}" (click)="formGroup.controls.Status.value === 'New'">
 									<ion-label>{{'Applicable products' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All products' | translate}}</ion-text>
+									<ion-text class="ion-float-right" *ngIf="!hasFilterItem">{{'All products' |
+										translate}}</ion-text>
 								</div>
-								<!--
-								<ion-button size="small" slot="end" color="danger"
-									[disabled]="formGroup.controls.Status.value !== 'New'"
-									(click)="resetConfig('IsApplyAllProduct')">
-									<ion-icon slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-								-->
+
+								<div *ngIf="formGroup.controls.Status.value === 'New' || hasFilterItem"
+									class="c-control modal-filter">
+									<app-filter #appFilter_Item [schema]="schema_Item" [item]="config_Item"
+										[smallWidth]="true" [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" (submit)="filterConfig_Item($event)"></app-filter>
+
+									<ion-button *ngIf="formGroup.controls.Status.value === 'New'" size="small"
+										slot="end" (click)="appFilter_Item.onFormSubmit()">{{'Save'
+										|
+										translate}}</ion-button>
+								</div>
 							</div>
 
 							<div class="c-control modal-filter">
@@ -320,53 +322,99 @@
 									<ion-text class="ion-float-right" *ngIf="!hasFilterContact">{{'All customers' |
 										translate}}</ion-text>
 								</div>
-								<app-filter #appFilter [schema]="schema_Contact" [item]="config_Contact" [smallWidth]="true"
-									[ngClass]="{
-									'disable-app-filter': formGroup.controls.Status.value !== 'New'
-								}" (submit)="filterConfig($event)"></app-filter>
-								<div class="c-control" *ngIf="schema_Contact">
-									<label class="c-label">{{ 'Measure By' | translate }}</label>
-									<span class="c-input" style="flex-wrap: wrap; height: auto">
-										<ion-chip color="warning" *ngFor="let c of MeasureBy_Contact"
-											style="height: auto; margin: 0; margin-right: 2px">
-											<ion-label (click)="presentPopover($event, c, 'MeasureBy_Contact')">{{c.Title ||
-												c.Property
-												}}</ion-label>
-											<ion-icon name="close" (click)="removeForm($event, c)"></ion-icon>
-										</ion-chip>
-										<ion-button fill="clear" size="small"
-											(click)="addNewForm($event, 'MeasureBy')"><ion-icon
-												name="add-circle-outline"></ion-icon></ion-button>
-									</span>
-								</div>
 
-								<div class="c-control"
-									*ngIf="_dataSouceDimension_Contact">
-									<label class="c-label">{{ 'Having clause' | translate }}</label>
-									<app-filter #appFilterHavingClause [schema]="_dataSouceDimension_Contact"
-										[item]="configHaving_Contact" [smallWidth]="true"
-										(submit)="_havingClause_Contact = $event"></app-filter>
+								<div *ngIf="formGroup.controls.Status.value === 'New' || hasFilterContact"
+									class="c-control modal-filter">
+									<app-filter #appFilter_Contact [schema]="schema_Contact" [item]="config_Contact"
+										[smallWidth]="true" [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" (submit)="filterConfig_Contact($event)"></app-filter>
+									<div class="c-control" [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" *ngIf="schema_Contact">
+										<label class="c-label">{{ 'Measure By' | translate }}</label>
+										<span class="c-input" style="flex-wrap: wrap; height: auto">
+											<ion-chip color="warning" *ngFor="let c of MeasureBy_Contact"
+												style="height: auto; margin: 0; margin-right: 2px">
+												<ion-label
+													(click)="presentPopover($event, c, 'MeasureBy_Contact', 'Contact')">{{c.Title
+													||
+													c.Property
+													}}</ion-label>
+												<ion-icon name="close"
+													(click)="removeForm($event, c, 'Contact')"></ion-icon>
+											</ion-chip>
+											<ion-button fill="clear" size="small"
+												(click)="addNewForm($event, 'MeasureBy', 'Contact')"><ion-icon
+													name="add-circle-outline"></ion-icon></ion-button>
+										</span>
+									</div>
+
+									<div class="c-control" *ngIf="_dataSouceDimension_Contact">
+										<label class="c-label">{{ 'Having clause' | translate }}</label>
+										<app-filter #appFilterHavingClause [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" [schema]="_dataSouceDimension_Contact" [item]="configHaving_Contact" [smallWidth]="true"
+											(submit)="_havingClause_Contact = $event"></app-filter>
+									</div>
+									<ion-button *ngIf="formGroup.controls.Status.value === 'New'" size="small"
+										slot="end" (click)="appFilter_Contact.onFormSubmit()">{{'Save' |
+										translate}}</ion-button>
 								</div>
 							</div>
+
 							<div class="c-control modal-filter">
 								<div class="c-input" [ngClass]="{
 									'disable': formGroup.controls.Status.value !== 'New',
 									'clickable': formGroup.controls.Status.value === 'New'
-								}" (click)="formGroup.controls.Status.value === 'New' && openModalFilter('BRANCH')">
+								}" (click)="formGroup.controls.Status.value === 'New'">
 									<ion-label>{{'Branch applies' | translate}}</ion-label>
-									<ion-text class="ion-float-right">{{'All branches' | translate}}</ion-text>
+									<ion-text class="ion-float-right" *ngIf="!hasFilterBranch">{{'All branches' |
+										translate}}</ion-text>
 								</div>
-								<!--
-								<ion-button size="small" slot="end" color="danger"
-									[disabled]="formGroup.controls.Status.value !== 'New'"
-									(click)="resetConfig('IsApplyAllBranch')">
-									<ion-icon slot="start" name="close-circle-outline"></ion-icon>
-									{{'Reset' | translate}}
-								</ion-button>
-								-->
+
+								<div *ngIf="formGroup.controls.Status.value === 'New' || hasFilterBranch"
+									class="c-control modal-filter">
+									<app-filter #appFilter_Branch [schema]="schema_Branch" [item]="config_Branch"
+										[smallWidth]="true" [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" (submit)="filterConfig_Branch($event)"></app-filter>
+									<div class="c-control" [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" *ngIf="schema_Branch">
+										<label class="c-label">{{ 'Measure By' | translate }}</label>
+										<span class="c-input" style="flex-wrap: wrap; height: auto">
+											<ion-chip color="warning" *ngFor="let c of MeasureBy_Branch"
+												style="height: auto; margin: 0; margin-right: 2px">
+												<ion-label
+													(click)="presentPopover($event, c, 'MeasureBy_Branch', 'Branch')">{{c.Title
+													||
+													c.Property
+													}}</ion-label>
+												<ion-icon name="close"
+													(click)="removeForm($event, c, 'Branch')"></ion-icon>
+											</ion-chip>
+											<ion-button fill="clear" size="small"
+												(click)="addNewForm($event, 'MeasureBy', 'Branch')"><ion-icon
+													name="add-circle-outline"></ion-icon></ion-button>
+										</span>
+									</div>
+
+									<div class="c-control" *ngIf="_dataSouceDimension_Branch">
+										<label class="c-label">{{ 'Having clause' | translate }}</label>
+										<app-filter #appFilterHavingClause [ngClass]="{
+									'disable-app-filter': formGroup.controls.Status.value !== 'New'
+								}" [schema]="_dataSouceDimension_Branch" [item]="configHaving_Branch" [smallWidth]="true"
+											(submit)="_havingClause_Branch = $event"></app-filter>
+									</div>
+									<ion-button *ngIf="formGroup.controls.Status.value === 'New'" size="small"
+										slot="end" (click)="appFilter_Branch.onFormSubmit()">{{'Save' |
+										translate}}</ion-button>
+								</div>
 							</div>
 						</ion-col>
 					</ion-row>
+
 					<ion-row class="hr-group"
 						*ngIf="formGroup.controls.IsDiscount.value || formGroup.controls.IsItemPromotion.value">
 						<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
@@ -494,7 +542,7 @@
 			</ion-grid>
 		</div>
 	</div>
-
+	<!--
 	<ion-modal [isOpen]="isModalFilter" (willDismiss)="isModalFilter = false">
 		<ng-template>
 			<ion-header [translucent]="true">
@@ -541,7 +589,7 @@
 			</ion-footer>
 		</ng-template>
 	</ion-modal>
-
+-->
 	<ion-modal [isOpen]="isModalVoucherConfig" (willDismiss)="isModalVoucherConfig = false">
 		<ng-template>
 			<ion-header [translucent]="true">
@@ -648,7 +696,7 @@
 		</ng-template>
 	</ion-modal>
 
-	<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover" (didDismiss)="dismissPopover()">
+	<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover_Contact" (didDismiss)="dismissPopover()">
 		<ng-template>
 			<ion-content class="ion-padding">
 				<ng-container *ngIf="pickerGroupName == 'MeasureBy'">
@@ -656,7 +704,37 @@
 							id: 'Property',
 							label: 'Property',
 							type: 'ng-select',
-							dataSource: _schemaDetailsList,
+							dataSource: _schemaDetailsList_Contact,
+							bindValue: 'Code',
+							bindLabel: 'Name',
+							form: formGroupMeasureBy,
+							appendTo:'#ng-select-holder'
+						}"></app-form-control>
+					<app-form-control [field]="{
+							id: 'Method',
+							label: 'Method',
+							type: 'ng-select',
+							dataSource: _measureMethodDataSource,
+							bindValue: 'Code',
+							bindLabel: 'Code',
+							form: formGroupMeasureBy,
+							appendTo:'#ng-select-holder'
+							}"></app-form-control>
+				</ng-container>
+				<ion-button size="small" expand="block" (click)="dismissPopover(true)">Apply</ion-button>
+			</ion-content>
+		</ng-template>
+	</ion-popover>
+
+	<ion-popover class="w300" #popoverPub [isOpen]="isOpenPopover_Branch" (didDismiss)="dismissPopover()">
+		<ng-template>
+			<ion-content class="ion-padding">
+				<ng-container *ngIf="pickerGroupName == 'MeasureBy'">
+					<app-form-control [field]="{
+							id: 'Property',
+							label: 'Property',
+							type: 'ng-select',
+							dataSource: _schemaDetailsList_Branch,
 							bindValue: 'Code',
 							bindLabel: 'Name',
 							form: formGroupMeasureBy,

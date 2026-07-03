@@ -46,6 +46,12 @@ export class PRProgramDetailPage extends PageBase {
 	_dataSouceDimension: any;
 
 	schema: any;
+
+	schema_Item: any;
+	hasFilterItem = false;
+	config_Item: any;
+	_schemaDetailsList_Item: any;
+
 	schema_Contact: any;
 	hasFilterContact = false;
 	config_Contact: any;
@@ -53,6 +59,18 @@ export class PRProgramDetailPage extends PageBase {
 	_dataSouceDimension_Contact: any;
 	_havingClause_Contact: any;
 	configHaving_Contact: any;
+	_schemaDetailsList_Contact: any;
+	isOpenPopover_Contact = false;
+
+	schema_Branch: any;
+	hasFilterBranch = false;
+	config_Branch: any;
+	MeasureBy_Branch: any = [];
+	_dataSouceDimension_Branch: any;
+	_havingClause_Branch: any;
+	configHaving_Branch: any;
+	_schemaDetailsList_Branch: any;
+	isOpenPopover_Branch = false;
 	transformOperators = [
 		{ code: 'TextGroup', name: 'Text', icon: '', disabled: true },
 		{ code: '=', name: '= is', icon: '' },
@@ -225,10 +243,6 @@ export class PRProgramDetailPage extends PageBase {
 		this.loadSchema();
 	}
 
-	loadData(event?: any): void {
-		super.loadData(event);
-	}
-
 	async openVoucherList() {
 		const modal = await this.modalController.create({
 			component: ProgramVoucherPage,
@@ -240,31 +254,36 @@ export class PRProgramDetailPage extends PageBase {
 		await modal.present();
 	}
 
-	addNewForm(e, type) {
+	addNewForm(e, type, filter) {
 		let group = this.formBuilder.group({
 			Property: [''],
 			Method: [''],
 		});
 		if (type == 'MeasureBy') {
-			this.presentPopover(e, group, 'MeasureBy');
+			this.presentPopover(e, group, 'MeasureBy', filter);
 		}
 	}
 
-	presentPopover(event, fg, groupName) {
+	presentPopover(event, fg, groupName, filter) {
 		this.pickerGroupName = groupName;
 		this.formGroupMeasureBy = fg;
-		this.isOpenPopover = true;
+		if (filter == "Contact") {
+			this.isOpenPopover_Contact = true;
+		}
+		else if (filter == "Branch") {
+			this.isOpenPopover_Branch = true;
+		}
 		this.popoverPub.event = event;
 	}
 
 	dismissPopover(apply: boolean = false) {
-		if (!this.isOpenPopover) return;
+		if (!this.isOpenPopover_Contact && !this.isOpenPopover_Branch) return;
 		let group = this.formBuilder.group({
 			Dimension: [],
 			Operator: [],
 			Value: [],
 		});
-		if (apply) {
+		if (apply && this.isOpenPopover_Contact) {
 			this.MeasureBy_Contact = [...this.MeasureBy_Contact, this.formGroupMeasureBy.getRawValue()];
 			this._dataSouceDimension_Contact = {
 				Fields: [
@@ -279,13 +298,33 @@ export class PRProgramDetailPage extends PageBase {
 				],
 			};
 		}
-		this.isOpenPopover = false;
+		else if (apply && this.isOpenPopover_Branch) {
+			this.MeasureBy_Branch = [...this.MeasureBy_Branch, this.formGroupMeasureBy.getRawValue()];
+			this._dataSouceDimension_Branch = {
+				Fields: [
+					...this.MeasureBy_Branch.map((x) => {
+						return {
+							PropertyType: 'Field',
+							Name: `${x.Method}(${x.Property})`,
+							Code: `${x.Method}(${x.Property})`,
+							DataType: 'decimal',
+						};
+					}),
+				],
+			};
+		}
+		this.isOpenPopover_Contact = false;
+		this.isOpenPopover_Branch = false;
 	}
 
-	removeForm(e, fg): void {
+	removeForm(e, fg, filter): void {
 		e.preventDefault();
-		let index = this.MeasureBy_Contact.indexOf(fg);
-		this.MeasureBy_Contact.splice(index, 1);
+		let index = filter === 'Contact' ? this.MeasureBy_Contact.indexOf(fg) : this.MeasureBy_Branch.indexOf(fg);
+		if (filter === 'Contact') {
+			this.MeasureBy_Contact.splice(index, 1);
+		} else {
+			this.MeasureBy_Branch.splice(index, 1);
+		}
 	}
 
 	openModalFilter(code) {
@@ -371,6 +410,24 @@ export class PRProgramDetailPage extends PageBase {
 	}
 
 	loadSchema() {
+		this.config_Item = undefined;
+
+		this.schemaService.commonService
+			.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'WMS_Item', Type: 'DBTable' })
+			.toPromise()
+			.then((value: any) => {
+				if (value) this.schema_Item = value;
+				if (this.formGroup.controls.ConfigItem.value) {
+					let configData = JSON.parse(this.formGroup.controls.ConfigItem.value);
+					this.config_Item = configData.Transform.Filter;
+				}
+				this._schemaDetailsList_Item = this.schema_Item?.Fields;
+				console.log(this.schema_Item);
+				if (this.config_Item?.Logicals.length > 0) {
+					this.hasFilterItem = true;
+				}
+			});
+
 		this.config_Contact = undefined;
 		this.MeasureBy_Contact = [];
 		this._dataSouceDimension_Contact = undefined;
@@ -401,22 +458,91 @@ export class PRProgramDetailPage extends PageBase {
 					}
 					this.configHaving_Contact = configData.HavingClause;
 				}
-				this._schemaDetailsList = this.schema_Contact?.Fields;
+				this._schemaDetailsList_Contact = this.schema_Contact?.Fields;
 				console.log(this.schema_Contact);
-				if (this.config.Logicals.length > 0 ||
+				if (this.config_Contact?.Logicals.length > 0 ||
 					this.MeasureBy_Contact?.length > 0 ||
 					this.configHaving_Contact?.Logicals?.length > 0) {
 					this.hasFilterContact = true;
 				}
 			});
+
+		this.config_Branch = undefined;
+		this.MeasureBy_Branch = [];
+		this._dataSouceDimension_Branch = undefined;
+		this.configHaving_Branch = undefined;
+
+		this.schemaService.commonService
+			.connect('GET', 'BI/Schema/GetSchemaByCode', { Code: 'SALE_Order', Type: 'DBTable' })
+			.toPromise()
+			.then((value: any) => {
+				if (value) this.schema_Branch = value;
+				if (this.formGroup.controls.ConfigBranch.value) {
+					let configData = JSON.parse(this.formGroup.controls.ConfigBranch.value);
+					this.config_Branch = configData.Transform.Filter;
+					this.MeasureBy_Branch = configData.MeasureBy;
+					if (this.MeasureBy_Branch?.length > 0) {
+						this._dataSouceDimension_Branch = {
+							Fields: [
+								...this.MeasureBy_Branch.map((x) => {
+									return {
+										PropertyType: 'Field',
+										Name: `${x.Method}(${x.Property})`,
+										Code: `${x.Method}(${x.Property})`,
+										DataType: 'decimal',
+									};
+								}),
+							],
+						};
+					}
+					this.configHaving_Branch = configData.HavingClause;
+				}
+				this._schemaDetailsList_Branch = this.schema_Branch?.Fields;
+				console.log(this.schema_Branch);
+				if (this.config_Branch?.Logicals.length > 0 ||
+					this.MeasureBy_Branch?.length > 0 ||
+					this.configHaving_Branch?.Logicals?.length > 0) {
+					this.hasFilterBranch = true;
+				}
+			});
 	}
 
-	getSchemaDetailType(form) {
-		let field = this.schema.Fields.find((x) => x.Code == form.get('Dimension')?.value);
-		return field?.DataType;
+	filterConfig_Item(e) {
+		let apiPath = '';
+		let config: any;
+		let _schema = {
+			Id: this.schema_Item.Id,
+			Code: this.schema_Item.Code,
+			Name: this.schema_Item.Name,
+			Type: this.schema_Item.Type,
+		};
+		
+		apiPath = 'ApplyItem';
+		config = {
+			Schema: _schema,
+			CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
+			// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
+			Transform: { Filter: e },
+		};
+		this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
+		this.formGroup.controls.ConfigItem.markAsDirty();
+		this.formGroup.controls.IsApplyAllProduct.setValue(false);
+		this.formGroup.controls.IsApplyAllProduct.markAsDirty();
+
+		if (config.Transform.Filter.Logicals.length > 0 ||
+			config.MeasureBy?.length > 0 ||
+			config.HavingClause?.Logicals?.length > 0
+		) {
+			this.hasFilterItem = true;
+		}
+		else {
+			this.hasFilterItem = false;
+		}
+
+		this.saveChange();
 	}
 
-	filterConfig(e) {
+	filterConfig_Contact(e) {
 		let apiPath = '';
 		let config: any;
 		let _schema = {
@@ -462,6 +588,13 @@ export class PRProgramDetailPage extends PageBase {
 		// this.formGroup.controls.IsApplyAllProduct.setValue(false);
 		// this.formGroup.controls.IsApplyAllProduct.markAsDirty();
 
+		// _schema = {
+		// 	Id: this.schema_Contact.Id,
+		// 	Code: this.schema_Contact.Code,
+		// 	Name: this.schema_Contact.Name,
+		// 	Type: this.schema_Contact.Type,
+		// };
+
 		// apiPath = 'ApplyBranch';
 		// if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
 		// config = {
@@ -476,45 +609,66 @@ export class PRProgramDetailPage extends PageBase {
 		// this.formGroup.controls.IsApplyAllBranch.setValue(false);
 		// this.formGroup.controls.IsApplyAllBranch.markAsDirty();
 
+		// if (config.Transform.Filter.Logicals.length > 0 ||
+		// 	config.MeasureBy?.length > 0 ||
+		// 	config.HavingClause?.Logicals?.length > 0
+		// ) {
+		// 	this.hasFilterContact = true;
+		// }
+		// else {
+		// 	this.hasFilterContact = false;
+		// }
+
 		this.saveChange();
-		// this.env
-		//   .showLoading(
-		//     'Please wait for a few moments',
-		//     this.pageProvider.commonService.connect('POST', 'BI/Schema/QueryReportData', config).toPromise(),
-		//   )
-		//   .then((data: any) => {
-		//     if (data) {
-		//       this.tempItemList = data.Data;
-		//       this.countItem = data.Data.length;
-		//       this.env
-		//         .showPrompt('Bạn có muốn áp dụng?', null, {
-		//           code: 'Tìm thấy {{value}} dòng dữ liệu',
-		//           value: this.countItem,
-		//         })
-		//         .then((_) => {
-		//           let obj: any = {
-		//             id: this.formGroup.get('Id').value,
-		//             items: this.tempItemList,
-		//           };
-		//           this.isModalFilter = false;
-		//           this.env
-		//             .showLoading(
-		//               'Please wait for a few moments',
-		//               this.pageProvider.commonService.connect('POST', 'PR/ProgramCondition/' + apiPath, obj).toPromise(),
-		//             )
-		//             .then((result: any) => {
-		//               if (result > 0) {
-		//                 if (this.type == 'CONTACT')
-		//                   this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
-		//                 if (this.type == 'ITEM') this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
-		//                 if (this.type == 'BRANCH') this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
-		//                 // this.refresh();
-		//               }
-		//             });
-		//         })
-		//         .catch((err) => {});
-		//     }
-		//   });
+	}
+
+	filterConfig_Branch(e) {
+		let apiPath = '';
+		let config: any;
+		let _schema = {
+			Id: this.schema_Branch.Id,
+			Code: this.schema_Branch.Code,
+			Name: this.schema_Branch.Name,
+			Type: this.schema_Branch.Type,
+		};
+
+		apiPath = 'ApplyBranch';
+		if (this._dataSouceDimension_Branch) this.appFilterHavingClause.onFormSubmit();
+		config = {
+			Schema: _schema,
+			CompareBy: [{ Property: 'IDBranch' }],
+			MeasureBy: this.MeasureBy_Branch,
+			HavingClause: this._havingClause_Branch,
+			Transform: { Filter: e },
+		};
+		this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
+		this.formGroup.controls.ConfigBranch.markAsDirty();
+		this.formGroup.controls.IsApplyAllBranch.setValue(false);
+		this.formGroup.controls.IsApplyAllBranch.markAsDirty();
+
+		if (config.Transform.Filter.Logicals.length > 0 ||
+			config.MeasureBy?.length > 0 ||
+			config.HavingClause?.Logicals?.length > 0
+		) {
+			this.hasFilterBranch = true;
+		}
+		else {
+			this.hasFilterBranch = false;
+		}
+
+		// apiPath = 'ApplyItem';
+		// config = {
+		// 	Schema: _schema,
+		// 	CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
+		// 	// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
+		// 	Transform: { Filter: e },
+		// };
+		// this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
+		// this.formGroup.controls.ConfigItem.markAsDirty();
+		// this.formGroup.controls.IsApplyAllProduct.setValue(false);
+		// this.formGroup.controls.IsApplyAllProduct.markAsDirty();
+
+		this.saveChange();
 	}
 
 	markNestedNode(ls, Id) {
