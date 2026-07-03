@@ -516,7 +516,7 @@ export class PRProgramDetailPage extends PageBase {
 			Name: this.schema_Item.Name,
 			Type: this.schema_Item.Type,
 		};
-		
+
 		apiPath = 'ApplyItem';
 		config = {
 			Schema: _schema,
@@ -526,7 +526,6 @@ export class PRProgramDetailPage extends PageBase {
 		};
 		this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
 		this.formGroup.controls.ConfigItem.markAsDirty();
-		this.formGroup.controls.IsApplyAllProduct.setValue(false);
 		this.formGroup.controls.IsApplyAllProduct.markAsDirty();
 
 		if (config.Transform.Filter.Logicals.length > 0 ||
@@ -537,6 +536,14 @@ export class PRProgramDetailPage extends PageBase {
 		}
 		else {
 			this.hasFilterItem = false;
+		}
+
+		if (config.Transform.Filter.Logicals.length <= 0
+		) {
+			this.formGroup.controls.IsApplyAllProduct.setValue(true);
+		}
+		else {
+			this.formGroup.controls.IsApplyAllProduct.setValue(false);
 		}
 
 		this.saveChange();
@@ -563,7 +570,6 @@ export class PRProgramDetailPage extends PageBase {
 		};
 		this.formGroup.controls.ConfigContact.patchValue(JSON.stringify(config));
 		this.formGroup.controls.ConfigContact.markAsDirty();
-		this.formGroup.controls.IsApplyAllCustomer.setValue(false);
 		this.formGroup.controls.IsApplyAllCustomer.markAsDirty();
 
 		if (config.Transform.Filter.Logicals.length > 0 ||
@@ -576,48 +582,14 @@ export class PRProgramDetailPage extends PageBase {
 			this.hasFilterContact = false;
 		}
 
-		// apiPath = 'ApplyItem';
-		// config = {
-		// 	Schema: _schema,
-		// 	CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
-		// 	// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
-		// 	Transform: { Filter: e },
-		// };
-		// this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
-		// this.formGroup.controls.ConfigItem.markAsDirty();
-		// this.formGroup.controls.IsApplyAllProduct.setValue(false);
-		// this.formGroup.controls.IsApplyAllProduct.markAsDirty();
-
-		// _schema = {
-		// 	Id: this.schema_Contact.Id,
-		// 	Code: this.schema_Contact.Code,
-		// 	Name: this.schema_Contact.Name,
-		// 	Type: this.schema_Contact.Type,
-		// };
-
-		// apiPath = 'ApplyBranch';
-		// if (this._dataSouceDimension) this.appFilterHavingClause.onFormSubmit();
-		// config = {
-		// 	Schema: _schema,
-		// 	CompareBy: [{ Property: 'IDBranch' }],
-		// 	MeasureBy: this.MeasureBy,
-		// 	HavingClause: this._havingClause,
-		// 	Transform: { Filter: e },
-		// };
-		// this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
-		// this.formGroup.controls.ConfigBranch.markAsDirty();
-		// this.formGroup.controls.IsApplyAllBranch.setValue(false);
-		// this.formGroup.controls.IsApplyAllBranch.markAsDirty();
-
-		// if (config.Transform.Filter.Logicals.length > 0 ||
-		// 	config.MeasureBy?.length > 0 ||
-		// 	config.HavingClause?.Logicals?.length > 0
-		// ) {
-		// 	this.hasFilterContact = true;
-		// }
-		// else {
-		// 	this.hasFilterContact = false;
-		// }
+		if (config.Transform.Filter.Logicals.length <= 0 &&
+			config.MeasureBy?.length <= 0
+		) {
+			this.formGroup.controls.IsApplyAllCustomer.setValue(true);
+		}
+		else {
+			this.formGroup.controls.IsApplyAllCustomer.setValue(false);
+		}
 
 		this.saveChange();
 	}
@@ -643,7 +615,6 @@ export class PRProgramDetailPage extends PageBase {
 		};
 		this.formGroup.controls.ConfigBranch.patchValue(JSON.stringify(config));
 		this.formGroup.controls.ConfigBranch.markAsDirty();
-		this.formGroup.controls.IsApplyAllBranch.setValue(false);
 		this.formGroup.controls.IsApplyAllBranch.markAsDirty();
 
 		if (config.Transform.Filter.Logicals.length > 0 ||
@@ -656,17 +627,14 @@ export class PRProgramDetailPage extends PageBase {
 			this.hasFilterBranch = false;
 		}
 
-		// apiPath = 'ApplyItem';
-		// config = {
-		// 	Schema: _schema,
-		// 	CompareBy: [{ Property: 'Id' }, { Property: 'Code' }, { Property: 'Name' }],
-		// 	// MeasureBy: [{ Property: 'QuantityOnHand', Method: 'sum', Title: 'CurrentQuantity' }],
-		// 	Transform: { Filter: e },
-		// };
-		// this.formGroup.controls.ConfigItem.patchValue(JSON.stringify(config));
-		// this.formGroup.controls.ConfigItem.markAsDirty();
-		// this.formGroup.controls.IsApplyAllProduct.setValue(false);
-		// this.formGroup.controls.IsApplyAllProduct.markAsDirty();
+		if (config.Transform.Filter.Logicals.length <= 0 &&
+			config.MeasureBy?.length <= 0
+		) {
+			this.formGroup.controls.IsApplyAllBranch.setValue(true);
+		}
+		else {
+			this.formGroup.controls.IsApplyAllBranch.setValue(false);
+		}
 
 		this.saveChange();
 	}
