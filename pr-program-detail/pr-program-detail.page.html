@@ -74,9 +74,24 @@
 								</app-input-control>
 							</div>
 
-							<app-form-control [field]="{
-									id:'Value',label:'Value',type:'number',form:formGroup} " (change)="saveChange()">
-							</app-form-control>
+							<div class="c-control">
+								<label class="c-label c-label-custom" for="Value">
+									<ion-text class="ion-float-left">{{'Value' | translate}}</ion-text>
+									<span class="ion-float-right">
+										<app-input-control [field]="{
+											id: 'IsByPercent',
+											type: 'checkbox',
+											form: formGroup
+										}" (change)="saveChange()">
+										</app-input-control>
+										<label class="c-label checkbox c-checkbox-custom">{{'By Percent' | translate}}</label>
+									</span>
+								</label>
+
+								<app-input-control [field]="{
+									id:'Value',label:'',type:'number',form:formGroup} " (change)="saveChange()">
+								</app-input-control>
+							</div>
 
 							<app-form-control [field]="{
 								id:'MinOrderValue',label:'Min order value',type:'number',form:formGroup} " (change)="saveChange()">
@@ -100,7 +115,7 @@
 
 							<app-form-control *ngIf="!formGroup.controls.IsGenerateVoucher.value" [field]="{
 									id: 'NumberOfCopy',
-									label: 'Number of copy (Used:' + getUsageDisplay() + ')',
+									label: 'Number of copy (Used: ' + getUsageDisplay() + ')',
 									type: 'number',
 									form: formGroup
 								}" (change)="saveChange()">
@@ -257,14 +272,6 @@
 							</app-form-control>
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
-							<app-form-control [field]="{
-									id: 'IsByPercent',
-									label: 'By percent',
-									type: 'checkbox',
-									form: formGroup
-								}" (change)="saveChange()">
-							</app-form-control>
-
 							<app-form-control *ngIf="!(this.formGroup.controls.Type.value =='Voucher')" [field]="{
 									id: 'IsDiscount',
 									label: 'Discount',
