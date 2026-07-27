@@ -37,7 +37,7 @@ export class PRDiscountPolicyPage extends PageBase {
 	}
 
 	changeStatus(Status) {
-		let text = 'Gửi Duyệt';
+		let text = 'Submit for approval';
 		let message = 'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
 		if (Status == 'Rejected') {
 			text = 'Không Duyệt';
