@@ -173,31 +173,31 @@ export class PRDealDetailPage extends PageBase {
 			return false;
 		}
 		if (this.formGroup.controls.IsByPercent.value == true && this.formGroup.controls.DiscountByPercent.value == 0) {
-			this.env.showMessage('Vui lòng nhập % giảm giá', 'warning');
+			this.env.showMessage('Please enter discount %', 'warning');
 			return false;
 		}
 		if (this.formGroup.controls.DiscountByPercent.value > 99) {
-			this.env.showMessage('% giảm giá không hợp lệ', 'warning');
+			this.env.showMessage('Invalid discount %', 'warning');
 			return false;
 		}
 		if (this.formGroup.controls.IsByPercent.value == false && this.formGroup.controls.Price.value == 0) {
-			this.env.showMessage('Vui lòng nhập giá sau giảm', 'warning');
+			this.env.showMessage('Please enter the discounted price', 'warning');
 			return false;
 		}
 		if (this.formGroup.controls.OriginalPrice.value == null || this.formGroup.controls.OriginalPrice.value == 0) {
-			this.env.showMessage('Sản phẩm chưa có giá bán', 'warning');
+			this.env.showMessage('Product has no selling price', 'warning');
 			return false;
 		}
 		if (this.formGroup.controls.Price.value > this.formGroup.controls.OriginalPrice.value) {
-			this.env.showMessage('Giá sau giảm không được lớn hơn giá gốc', 'warning');
+			this.env.showMessage('Discounted price cannot be greater than the original price', 'warning');
 			return false;
 		}
 		if (Date.parse('01/01/2011 ' + this.formGroup.controls.FromHour.value) > Date.parse('01/01/2011 ' + this.formGroup.controls.ToHour.value)) {
-			this.env.showMessage('Giờ bắt đầu phải nhỏ hơn giờ kết thúc', 'warning');
+			this.env.showMessage('Start time must be earlier than end time', 'warning');
 			return false;
 		}
 		if (new Date(this.formGroup.controls.ToDate.value).getTime() - new Date(this.formGroup.controls.FromDate.value).getTime() < 0) {
-			this.env.showMessage('ngày kết thúc phải lớn hơn ngày bắt đầu', 'warning');
+			this.env.showMessage('End date must be later than start date', 'warning');
 			return false;
 		}
 		super.saveChange2();
