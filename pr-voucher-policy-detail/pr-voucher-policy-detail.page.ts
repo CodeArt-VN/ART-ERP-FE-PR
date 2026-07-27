@@ -151,7 +151,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 
 	async condition(Type: string) {
 		if (this.id == 0) {
-			this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
+			this.env.showMessage('Please input the above information', 'warning');
 			return false;
 		}
 		let title = '';
@@ -245,7 +245,7 @@ export class PRVoucherPolicyDetailPage extends PageBase {
 	}
 
 	submit(): void {
-		let text = 'Gửi Duyệt';
+		let text = 'Submit for approval';
 		let message = 'Sau khi gửi duyệt, bạn không thể chỉnh sửa đối tượng được nữa. Bạn có chắc muốn gửi duyệt tất cả đối tượng chưa duyệt?';
 		this.changeStatus(text, message, 'Submitted');
 	}

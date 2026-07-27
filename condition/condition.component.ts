@@ -129,7 +129,7 @@ export class ConditionComponent extends PageBase {
 				this.items.splice(i, 1);
 				this.countData();
 			} else {
-				this.env.showMessage('Bạn không có quyền xóa', 'warning');
+				this.env.showMessage('You do not have permission to delete', 'warning');
 			}
 		} else {
 			this.ConditionForm.removeAt(i);
@@ -183,8 +183,8 @@ export class ConditionComponent extends PageBase {
 		if (this.pageConfig.canDelete) {
 			this.selectedItems.push(this.items[i]);
 			this.env
-				.showPrompt({ code: 'Bạn có chắc muốn xóa {{value}} đang chọn?', value: { value: this.selectedItems.length } }, null, {
-					code: 'Xóa {{value}} dòng?',
+				.showPrompt({ code: 'Are you sure you want to delete the selected {{value}}?', value: { value: this.selectedItems.length } }, null, {
+					code: 'Delete {{value}} row',
 					value: { value: this.selectedItems.length },
 				})
 				.then((_) => {

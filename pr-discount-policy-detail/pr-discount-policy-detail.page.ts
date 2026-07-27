@@ -174,7 +174,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
 	}
 	async condition(Type: string, IDParent = null, NameLevel = null) {
 		if (this.id == 0) {
-			this.env.showMessage('Vui lòng nhập thông tin phía trên', 'warning');
+			this.env.showMessage('Please input the above information', 'warning');
 			return false;
 		}
 		let title = '';
@@ -229,7 +229,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
 	}
 	addLevelDiscount(event) {
 		if (event.target.value == '') {
-			this.env.showMessage('vui lòng nhập tên hạn mức', 'danger');
+			this.env.showMessage('Please enter the quota name', 'danger');
 			return false;
 		}
 		let condition = {
@@ -250,7 +250,7 @@ export class PRDiscountPolicyDetailPage extends PageBase {
 	}
 	updateLevelDiscount(c) {
 		if (c.Name == '') {
-			this.env.showMessage('vui lòng nhập tên hạn mức', 'danger');
+			this.env.showMessage('Please enter the quota name', 'danger');
 			return false;
 		}
 		let condition = {
@@ -348,36 +348,36 @@ export class PRDiscountPolicyDetailPage extends PageBase {
 	changedIDUoM(e, submit) {}
 	saveReward(r) {
 		if (r.Type == null) {
-			this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+			this.env.showMessage('Please fill in all required information', 'danger');
 			return false;
 		}
 		if (r.Type == 'PromotionItems') {
 			if (r.IDItem == null || r.IDItemUoM == null || r.PromotionQuantity == 0) {
-				this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+				this.env.showMessage('Please fill in all required information', 'danger');
 				return false;
 			}
 		}
 		if (r.Type == 'PercentDiscount') {
 			if (r.IsRewardByOrder == false) {
 				if (r.IDItem == null || r.IDItemUoM == null) {
-					this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+					this.env.showMessage('Please fill in all required information', 'danger');
 					return false;
 				}
 			}
 			if (r.DiscountPercent <= 0 || r.MaxAmount <= 0) {
-				this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+				this.env.showMessage('Please fill in all required information', 'danger');
 				return false;
 			}
 		}
 		if (r.Type == 'AmountDiscount') {
 			if (r.IsRewardByOrder == false) {
 				if (r.IDItem == null || r.IDItemUoM == null) {
-					this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+					this.env.showMessage('Please fill in all required information', 'danger');
 					return false;
 				}
 			}
 			if (r.DiscountAmount <= 0) {
-				this.env.showMessage('vui lòng nhập đầy đủ thông tin', 'danger');
+				this.env.showMessage('Please fill in all required information', 'danger');
 				return false;
 			}
 		}
