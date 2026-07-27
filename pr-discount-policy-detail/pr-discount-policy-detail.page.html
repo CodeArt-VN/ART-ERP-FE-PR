@@ -82,7 +82,7 @@
 												class="ion-float-right clickable"
 												(click)="condition('CONTACT')"
 											>
-												<ion-text *ngIf="NumberPartner">{{NumberPartner}} {{'customer' | translate}}</ion-text>
+												<ion-text *ngIf="NumberPartner">{{NumberPartner}} {{'Customer' | translate}}</ion-text>
 												<ion-text *ngIf="NumberPartner <= 0">{{'Specific customers' | translate}}</ion-text>
 											</ion-button>
 										</div>
@@ -112,7 +112,7 @@
 									<div class="table-contain">
 										<section class="table" style="min-width: 1100px">
 											<header class="bold" style="padding-right: 0">
-												<div class="col-order cell">{{'According ĐH' | translate}}</div>
+												<div class="col-order cell">{{'Per sales order' | translate}}</div>
 												<div class="col-type cell">{{'Type' | translate}}</div>
 												<div class="col-name cell">{{'Product' | translate}}</div>
 												<div class="col-uom cell">{{'Unit' | translate}}</div>
@@ -236,7 +236,7 @@
 													<ion-button title="lưu lại" fill="none" size="small" (click)="saveReward(r)"
 														><ion-icon color="primary" name="save-outline"></ion-icon
 													></ion-button>
-													<ion-button title="Xóa" fill="none" *ngIf="r.Id != 0" size="small" (click)="deleteReward(i,j,r)"
+													<ion-button title="Delete" fill="none" *ngIf="r.Id != 0" size="small" (click)="deleteReward(i,j,r)"
 														><ion-icon color="danger" name="trash-outline"></ion-icon
 													></ion-button>
 												</div>
