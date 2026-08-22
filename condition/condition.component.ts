@@ -183,8 +183,8 @@ export class ConditionComponent extends PageBase {
 		if (this.pageConfig.canDelete) {
 			this.selectedItems.push(this.items[i]);
 			this.env
-				.showPrompt({ code: 'Are you sure you want to delete the selected {{value}}?', value: { value: this.selectedItems.length } }, null, {
-					code: 'Delete {{value}} row',
+				.showPrompt({ code: 'Are you sure you want to delete the selected {value}?', value: { value: this.selectedItems.length } }, null, {
+					code: 'Delete {value} row',
 					value: { value: this.selectedItems.length },
 				})
 				.then((_) => {
