@@ -11,28 +11,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" appScrollbarTheme class="header-table">
-  <!-- <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
-  <!-- <div *ngIf="items.length && pageConfig.showSpinner==false">
-    <section class="table">
-      <div
-        *ngFor="let i of items; let j = index;"
-        class="row"
-        [ngClass]="{odd: j % 2 != 0}"
-        [ngClass]="{selected: i.checked}"
-      >
-        <div class="col-checkbox cell">
-          <input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox" />
-        </div>
-        <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-id cell">{{i.Id}}</div>
-        <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-name cell">{{i.Name}}</div>
-        <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-date cell">
-          {{i.FromDate | date: 'dd/MM/yyyy'}} -> {{i.ToDate | date: 'dd/MM/yyyy'}}
-        </div>
-        <div (click)="nav('pr-program/'+i.Id,'forward')" class="col-status cell">{{i.Status}}</div>
-      </div>
-    </section>
-  </div> -->
-
   <app-data-table
   style="width: fit-content; min-width: calc(100% - 32px)"
   class="box-shadow responsive"
